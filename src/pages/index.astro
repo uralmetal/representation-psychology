@@ -1,0 +1,55 @@
+---
+import Layout from '../components/Layout.astro';
+import Viz from '../islands/Viz.svelte';
+import { strings } from '../lib/i18n';
+import { codebookFile, scenesFile, worksFile } from '../lib/data';
+import { vizSpec } from '../lib/vizspec';
+
+const base = import.meta.env.BASE_URL;
+const works = worksFile().works;
+const scenes = scenesFile().scenes;
+const entries = codebookFile().entries;
+const spec = vizSpec('corpus-timeline', works, scenes, entries)!;
+const yearMin = Math.min(...works.map((w) => w.year_start));
+const yearMax = Math.max(...works.map((w) => w.year_end));
+---
+
+<Layout title={strings.siteTitle} description={strings.tagline}>
+  <h1>{strings.siteTitle}</h1>
+  <p class="lead">{strings.home.thesis}</p>
+  <p>
+    <a class="btn" href={`${base}story/`}>{strings.home.ctaStory}</a>{' '}
+    <a class="btn btn--ghost" href={`${base}data/works.json`}>{strings.home.ctaData}</a>{' '}
+    <a href={`${base}method/`}>{strings.home.about}</a>
+  </p>
+
+  <Viz client:visible kind={spec.kind} title={spec.title} subtitle={spec.subtitle} caption={spec.caption} data={spec.data} />
+
+  <h2>{strings.home.timelineTitle} · {yearMin}–{yearMax}</h2>
+  <div class="grid grid--3">
+    {works.map((w) => (
+      <a class="card work-card" href={`${base}work/${w.id}/`}>
+        <strong>{w.title}</strong>
+        <span class="muted small">
+          {w.format === 'tv_series' ? 'сериал' : 'фильм'} · {w.year_start}{w.year_end !== w.year_start ? `–${w.year_end}` : ''}
+        </span>
+      </a>
+    ))}
+  </div>
+</Layout>
+
+<style>
+  .lead { font-size: 1.15rem; max-width: 44rem; }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #14161a;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .btn--ghost { background: none; color: var(--accent); border: 1px solid var(--accent); }
+  .work-card { display: flex; flex-direction: column; gap: 0.25rem; color: var(--text); text-decoration: none; }
+  .work-card:hover { border-color: var(--accent); }
+</style>

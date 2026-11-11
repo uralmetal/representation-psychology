@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://uralmetal.github.io/representation-psychology/sitemap.xml

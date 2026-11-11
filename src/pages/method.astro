@@ -1,0 +1,67 @@
+---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import MarkdownIt from 'markdown-it';
+import Layout from '../components/Layout.astro';
+import { strings } from '../lib/i18n';
+import { metaFile } from '../lib/data';
+
+const base = import.meta.env.BASE_URL;
+const raw = readFileSync(join(process.cwd(), 'src/content/method.md'), 'utf8');
+const body = raw.replace(/^---\n[\s\S]*?\n---\n/, '');
+const html = new MarkdownIt({ html: false }).render(body);
+const meta = metaFile();
+const report = JSON.parse(
+  readFileSync(join(process.cwd(), 'public/data/validation-report.json'), 'utf8'),
+);
+const files = ['works.json', 'scenes.json', 'codebook.json', 'validation-report.json', 'meta.json'];
+---
+
+<Layout title={strings.method.title} description={strings.tagline}>
+  <h1>{strings.method.title}</h1>
+  <div class="method-body" set:html={html} />
+
+  <h2>{strings.method.report}</h2>
+  <div class="card">
+    <p class="small">
+      Прогон: <time datetime={report.generated_at}>{report.generated_at}</time> · версия {report.version} ·
+      произведений: {report.works} · единиц анализа: {report.scenes} · значений словаря: {report.codebook}
+    </p>
+    <p class="small">Ошибок: {report.errors.length}</p>
+    {report.errors.length > 0 && (
+      <ul class="small">{report.errors.map((e: string) => <li>{e}</li>)}</ul>
+    )}
+    <p class="small">Предупреждений: {report.warnings.length}</p>
+    {report.warnings.length > 0 && (
+      <ul class="small">{report.warnings.map((w: string) => <li>{w}</li>)}</ul>
+    )}
+    <p class="small muted">Машинный отчёт: <a href={`${base}data/validation-report.json`}>validation-report.json</a></p>
+  </div>
+
+  <h2>{strings.method.files}</h2>
+  <ul>
+    {files.map((f) => <li><a href={`${base}data/${f}`}>{f}</a></li>)}
+  </ul>
+  <p><a class="btn" href={`${base}data/works.json`}>{strings.method.downloadData}</a></p>
+
+  <h2>{strings.method.limitations}</h2>
+  <ul class="small">
+    <li>Корпус — девять произведений. Графики показывают распределение кодов внутри этого набора и не описывают кинематограф 1975–2022 годов в целом.</li>
+    <li>Единица анализа — строка таблицы кодирования, а не каждый монтажный кадр. У части сериалов строка описывает произведение целиком.</li>
+    <li>Словарь заморожен: формулировки вне codebook не становятся кодами и остаются в примечаниях карточек.</li>
+    <li>Имена кодеров в публичные файлы не входят.</li>
+  </ul>
+</Layout>
+
+<style>
+  .method-body :global(p) { margin: 0.75rem 0; }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #14161a;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+</style>

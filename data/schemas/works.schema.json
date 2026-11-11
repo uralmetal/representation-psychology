@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "works.json",
+  "type": "object",
+  "required": ["version", "generated_at", "works"],
+  "properties": {
+    "version": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "works": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "format", "year_start", "year_end", "country", "genres", "description"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "title": { "type": "string" },
+          "original_title": { "type": "string" },
+          "format": { "enum": ["movie", "tv_series"] },
+          "year_start": { "type": "integer" },
+          "year_end": { "type": "integer" },
+          "country": { "type": "array", "items": { "type": "string" } },
+          "genres": { "type": "array", "items": { "type": "string" } },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

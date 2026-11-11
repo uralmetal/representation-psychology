@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "codebook.json",
+  "type": "object",
+  "required": ["version", "generated_at", "entries"],
+  "properties": {
+    "version": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "value", "label", "definition", "example"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z_]+\\.[a-z0-9-]+$" },
+          "category": { "type": "string" },
+          "category_label": { "type": "string" },
+          "category_definition": { "type": "string" },
+          "value": { "type": "string" },
+          "label": { "type": "string" },
+          "definition": { "type": "string" },
+          "example": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

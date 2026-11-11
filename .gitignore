@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.venv/
+data/out/
+__pycache__/
+*.pyc
+.DS_Store
+*Zone.Identifier

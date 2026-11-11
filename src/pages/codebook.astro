@@ -1,0 +1,74 @@
+---
+import Layout from '../components/Layout.astro';
+import { strings } from '../lib/i18n';
+import { codebookFile, scenesFile, worksFile } from '../lib/data';
+import type { CodebookEntry } from '../lib/types';
+
+const base = import.meta.env.BASE_URL;
+const entries = codebookFile().entries;
+const scenes = scenesFile().scenes;
+const works = new Map(worksFile().works.map((w) => [w.id, w]));
+
+const categories = [...new Set(entries.map((e) => e.category))];
+const catMeta = new Map<string, CodebookEntry>(
+  entries.map((e) => [`cat:${e.category}`, e]),
+);
+const order = ['space_type', 'therapist_archetype', 'ethical_violation', 'stigma_level', 'utterance_type', 'visual_trope'];
+const sorted = [...categories].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+
+function usedIn(entry: CodebookEntry): { sceneId: string; title: string }[] {
+  const field =
+    entry.category === 'utterance_type' ? 'utterance_types'
+    : entry.category === 'visual_trope' ? 'visual_tropes'
+    : entry.category === 'therapist_archetype' ? 'therapist_archetype'
+    : entry.category;
+  return scenes
+    .filter((s) => {
+      const v = (s as unknown as Record<string, unknown>)[field];
+      if (Array.isArray(v)) return v.includes(entry.value);
+      return v === entry.value;
+    })
+    .map((s) => ({ sceneId: s.id, title: works.get(s.work_id)?.title ?? s.work_id }));
+}
+---
+
+<Layout title={strings.codebook.title} description={strings.tagline}>
+  <h1>{strings.codebook.title}</h1>
+  <nav aria-label={strings.codebook.categories}>
+    <ul>
+      {sorted.map((c) => <li><a href={`#cat-${c}`}>{catMeta.get(`cat:${c}`)?.category_label ?? c}</a></li>)}
+    </ul>
+  </nav>
+
+  {sorted.map((cat) => {
+    const catEntries = entries.filter((e) => e.category === cat);
+    const meta = catEntries[0];
+    return (
+      <section id={`cat-${cat}`}>
+        <h2>{meta.category_label}</h2>
+        <p class="muted">{meta.category_definition}</p>
+        <div class="grid grid--2">
+          {catEntries.map((e) => {
+            const usage = usedIn(e);
+            return (
+              <article class="card" id={e.id}>
+                <h3>{e.label}</h3>
+                <p class="small">{e.definition}</p>
+                {e.example && <p class="small muted">Пример: {e.example}</p>}
+                {usage.length > 0 && (
+                  <p class="small">
+                    {strings.codebook.usedIn}:{' '}
+                    {usage.map((u, i) => [
+                      i > 0 ? ', ' : '',
+                      <a href={`${base}scene/${u.sceneId}/`}>{u.title}</a>,
+                    ])}
+                  </p>
+                )}
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    );
+  })}
+</Layout>

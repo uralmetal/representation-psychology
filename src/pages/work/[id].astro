@@ -1,0 +1,47 @@
+---
+import Layout from '../../components/Layout.astro';
+import { strings } from '../../lib/i18n';
+import { scenesFile, worksFile } from '../../lib/data';
+import type { Work } from '../../lib/types';
+
+export function getStaticPaths() {
+  return worksFile().works.map((workItem) => ({ params: { id: workItem.id }, props: { item: workItem } }));
+}
+
+const base = import.meta.env.BASE_URL;
+const { item: workItem } = Astro.props;
+const scenes = scenesFile().scenes.filter((s) => s.work_id === workItem.id);
+const formatLabel = workItem.format === 'tv_series' ? strings.work.formatSeries : strings.work.formatMovie;
+const years = workItem.year_start === workItem.year_end ? String(workItem.year_start) : `${workItem.year_start}–${workItem.year_end}`;
+---
+
+<Layout title={workItem.title} description={workItem.description.slice(0, 160)}>
+  <p><a href={`${base}`}>← {strings.siteTitle}</a></p>
+  <h1>{workItem.title}</h1>
+  {workItem.original_title && <p class="muted">{workItem.original_title}</p>}
+  <div class="card">
+    <dl class="work-meta">
+      <div><dt>Формат</dt><dd>{formatLabel}</dd></div>
+      <div><dt>{strings.work.years}</dt><dd>{years}</dd></div>
+      <div><dt>{strings.work.country}</dt><dd>{workItem.country.join(', ')}</dd></div>
+      <div><dt>{strings.work.genres}</dt><dd>{workItem.genres.join(', ')}</dd></div>
+    </dl>
+    <p>{workItem.description}</p>
+  </div>
+
+  <h2>{strings.work.units}</h2>
+  <ul>
+    {scenes.map((s) => (
+      <li>
+        <a href={`${base}scene/${s.id}/`}>{s.timecode}</a>
+        <span class="muted small"> — {s.description.slice(0, 140)}{s.description.length > 140 ? '…' : ''}</span>
+      </li>
+    ))}
+  </ul>
+</Layout>
+
+<style>
+  .work-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; margin: 0 0 1rem; }
+  .work-meta dt { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; }
+  .work-meta dd { margin: 0; }
+</style>

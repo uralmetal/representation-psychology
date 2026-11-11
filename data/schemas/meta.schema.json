@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "meta.json",
+  "type": "object",
+  "required": ["version", "generated_at", "title", "license"],
+  "properties": {
+    "version": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "title": { "type": "string" },
+    "license": { "type": "string" }
+  },
+  "additionalProperties": false
+}

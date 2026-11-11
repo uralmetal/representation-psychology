@@ -1,0 +1,88 @@
+---
+import { strings } from '../lib/i18n';
+import { metaFile } from '../lib/data';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const meta = metaFile();
+const pageTitle = title === strings.siteTitle ? title : `${title} — ${strings.siteTitle}`;
+const desc = description ?? strings.tagline;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(`${base.replace(/\/$/, '')}/og.png`, Astro.site);
+const citeUrl = `${Astro.site?.origin ?? ''}${base}`.replace(/\/$/, '');
+const nav = [
+  { href: `${base}story/`, label: strings.nav.story },
+  { href: `${base}codebook/`, label: strings.nav.codebook },
+  { href: `${base}method/`, label: strings.nav.method },
+  { href: `${base}data/works.json`, label: strings.nav.data },
+];
+const current = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="alternate" type="application/json" href={`${base}data/works.json`} title="works.json" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{strings.common.skip}</a>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="site-header__title" href={`${base}`}>{strings.siteTitle}</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+          {strings.common.menu}
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
+          {nav.map((item) => (
+            <a href={item.href} aria-current={current.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>
+          ))}
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <p>{strings.footer.disclaimer}</p>
+        <p class="small">{strings.footer.licenseText}</p>
+        <p class="small">
+          {strings.footer.datasetVersion}: <code>{meta.version}</code> · {strings.footer.generatedAt}:{' '}
+          <time datetime={meta.generated_at}>{meta.generated_at.slice(0, 10)}</time>
+        </p>
+        <p class="small">
+          {strings.footer.cite}:{' '}
+          <span>{strings.footer.citeText.replace('{url}', citeUrl)}</span>
+        </p>
+        <p class="small">
+          <a href="https://github.com/uralmetal/representation-psychology">GitHub</a>
+        </p>
+      </div>
+    </footer>
+    <script>
+      const toggle = document.querySelector('[data-nav-toggle]');
+      const nav = document.getElementById('site-nav');
+      toggle?.addEventListener('click', () => {
+        const open = nav?.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(!!open));
+      });
+    </script>
+  </body>
+</html>

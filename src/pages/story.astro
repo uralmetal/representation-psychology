@@ -1,0 +1,58 @@
+---
+import Layout from '../components/Layout.astro';
+import Progress from '../islands/Progress.svelte';
+import SceneDialog from '../islands/SceneDialog.svelte';
+import Viz from '../islands/Viz.svelte';
+import { strings } from '../lib/i18n';
+import { getChapters } from '../lib/chapters';
+import { codebookFile, scenesFile, worksFile } from '../lib/data';
+import { vizSpec } from '../lib/vizspec';
+
+const base = import.meta.env.BASE_URL;
+const chapters = getChapters().sort((a, b) => a.order - b.order);
+const works = worksFile().works;
+const scenes = scenesFile().scenes;
+const entries = codebookFile().entries;
+const specs = new Map(
+  chapters.filter((c) => c.viz).map((c) => [c.viz!, vizSpec(c.viz!, works, scenes, entries)]),
+);
+---
+
+<Layout title={strings.nav.story} description={strings.tagline}>
+  <Progress client:idle />
+  <SceneDialog client:load {base} />
+
+  <h1>{strings.story.title}</h1>
+  <nav aria-label={strings.story.contents}>
+    <ol class="toc">
+      {chapters.map((c) => (
+        <li><a href={`#${c.anchor}`}>{c.title}</a></li>
+      ))}
+    </ol>
+  </nav>
+
+  <article class="story">
+    {chapters.map((c) => (
+      <section class="chapter" id={c.anchor}>
+        <h2>{c.title}</h2>
+        <div class="chapter__body" set:html={c.html} />
+        {c.viz && specs.get(c.viz) && (
+          <Viz
+            client:visible
+            kind={specs.get(c.viz)!.kind}
+            title={specs.get(c.viz)!.title}
+            subtitle={specs.get(c.viz)!.subtitle}
+            caption={specs.get(c.viz)!.caption}
+            data={specs.get(c.viz)!.data}
+          />
+        )}
+      </section>
+    ))}
+  </article>
+</Layout>
+
+<style>
+  .chapter { margin-bottom: 3rem; }
+  .chapter__body :global(p) { margin: 0.75rem 0; }
+  .chapter__body :global(strong) { color: var(--accent); }
+</style>

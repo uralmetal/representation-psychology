@@ -1,0 +1,24 @@
+---
+import SceneCard from '../../components/SceneCard.svelte';
+import Layout from '../../components/Layout.astro';
+import { strings } from '../../lib/i18n';
+import { codebookFile, scenesFile, worksFile } from '../../lib/data';
+import type { Scene } from '../../lib/types';
+
+export function getStaticPaths() {
+  return scenesFile().scenes.map((scene) => ({ params: { id: scene.id }, props: { item: scene } }));
+}
+
+const base = import.meta.env.BASE_URL;
+const { item: scene } = Astro.props;
+const workItem = worksFile().works.find((w) => w.id === scene.work_id);
+const entries = codebookFile().entries;
+---
+
+<Layout title={workItem?.title ?? scene.id} description={scene.description.slice(0, 160)}>
+  <p><a href={`${base}story/`}>← {strings.nav.story}</a></p>
+  <SceneCard {scene} work={workItem} {entries} {base} />
+  {workItem && (
+    <p><a href={`${base}work/${workItem.id}/`}>Все единицы: {workItem.title}</a></p>
+  )}
+</Layout>

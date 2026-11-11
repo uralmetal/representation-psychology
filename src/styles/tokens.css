@@ -1,0 +1,17 @@
+:root {
+  --bg: #14161a;
+  --bg-elev: #1c1f26;
+  --bg-card: #20242e;
+  --text: #e8e6e1;
+  --text-dim: #a8a49b;
+  --accent: #d8a24a;
+  --accent-soft: #d8a24a33;
+  --border: #333845;
+  --stigma-high: #c75b5b;
+  --stigma-medium: #d8a24a;
+  --stigma-low: #6fae7c;
+  --scene: #7fa8d9;
+  --overall: #9a8fd0;
+  --font: "PT Root UI", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Code", monospace;
+}

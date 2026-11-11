@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "scenes.json",
+  "type": "object",
+  "required": ["version", "generated_at", "scenes"],
+  "properties": {
+    "version": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "scenes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id", "work_id", "analysis_unit", "timecode", "description",
+          "therapist_archetype", "utterance_types", "visual_tropes", "scene_function", "note"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "work_id": { "type": "string" },
+          "analysis_unit": { "enum": ["scene", "work_overall"] },
+          "timecode": { "type": "string" },
+          "description": { "type": "string" },
+          "space_type": { "type": ["string", "null"] },
+          "therapist_archetype": { "type": "array", "items": { "type": "string" } },
+          "ethical_violation": { "enum": ["yes", "partial", "no", null] },
+          "stigma_level": { "enum": ["high", "medium", "low", null] },
+          "utterance_types": { "type": "array", "items": { "type": "string" } },
+          "visual_tropes": { "type": "array", "items": { "type": "string" } },
+          "scene_function": { "type": "array", "items": { "type": "string" } },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

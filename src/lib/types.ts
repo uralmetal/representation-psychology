@@ -70,3 +70,15 @@ export interface Chapter {
   scene_ids: string[];
   html: string;
 }
+
+export interface StoryStep {
+  anchor: string;
+  title: string;
+  order: number;
+  html: string;
+  kind: 'chapter' | 'film';
+  tag: 'prologue' | 'content' | 'epilogue' | 'film';
+  kicker: string;
+  workIds: string[];
+  workId: string | null;
+}

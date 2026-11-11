@@ -38,7 +38,7 @@ const files = ['works.json', 'scenes.json', 'codebook.json', 'validation-report.
     <p class="small muted">Машинный отчёт: <a href={`${base}data/validation-report.json`}>validation-report.json</a></p>
   </div>
 
-  <h2>{strings.method.files}</h2>
+  <h2 id="files">{strings.method.files}</h2>
   <ul>
     {files.map((f) => <li><a href={`${base}data/${f}`}>{f}</a></li>)}
   </ul>
@@ -55,13 +55,4 @@ const files = ['works.json', 'scenes.json', 'codebook.json', 'validation-report.
 
 <style>
   .method-body :global(p) { margin: 0.75rem 0; }
-  .btn {
-    display: inline-block;
-    background: var(--accent);
-    color: #14161a;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 600;
-  }
 </style>

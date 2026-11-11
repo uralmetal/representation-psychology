@@ -53,6 +53,22 @@ body {
   color: var(--text);
   background: var(--bg-elev);
 }
+.site-header__actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #14161a;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.btn--ghost { background: none; color: var(--accent); border: 1px solid var(--accent); }
+.btn--sm { padding: 0.3rem 0.7rem; font-size: 0.85rem; }
 .nav-toggle {
   display: none;
   background: none;

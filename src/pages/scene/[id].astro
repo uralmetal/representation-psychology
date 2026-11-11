@@ -16,7 +16,7 @@ const entries = codebookFile().entries;
 ---
 
 <Layout title={workItem?.title ?? scene.id} description={scene.description.slice(0, 160)}>
-  <p><a href={`${base}story/`}>← {strings.nav.story}</a></p>
+  <p><a href={`${base}`}>← {strings.nav.story}</a></p>
   <SceneCard {scene} work={workItem} {entries} {base} />
   {workItem && (
     <p><a href={`${base}work/${workItem.id}/`}>Все единицы: {workItem.title}</a></p>

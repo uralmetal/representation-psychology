@@ -1,0 +1,46 @@
+---
+import Layout from '../components/Layout.astro';
+import Viz from '../islands/Viz.svelte';
+import { strings } from '../lib/i18n';
+import { codebookFile, scenesFile, worksFile } from '../lib/data';
+import { vizSpec } from '../lib/vizspec';
+
+const works = worksFile().works;
+const scenes = scenesFile().scenes;
+const entries = codebookFile().entries;
+
+const ORDER = [
+  'corpus-timeline',
+  'archetype-counts',
+  'space-matrix',
+  'ethics-counts',
+  'stigma-timeline',
+  'utterance-counts',
+];
+const specs = ORDER.map((id) => vizSpec(id, works, scenes, entries)).filter(
+  (s): s is NonNullable<typeof s> => Boolean(s),
+);
+---
+
+<Layout title={strings.infographics.title} description={strings.infographics.intro}>
+  <h1>{strings.infographics.title}</h1>
+  <p class="lead">{strings.infographics.intro}</p>
+
+  {specs.map((spec) => (
+    <section class="infographic" id={spec.kind}>
+      <Viz
+        client:visible
+        kind={spec.kind}
+        title={spec.title}
+        subtitle={spec.subtitle}
+        caption={spec.caption}
+        data={spec.data}
+      />
+    </section>
+  ))}
+</Layout>
+
+<style>
+  .lead { font-size: 1.05rem; max-width: 44rem; color: var(--text-dim); }
+  .infographic { margin-top: 1rem; }
+</style>

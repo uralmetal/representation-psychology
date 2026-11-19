@@ -10,6 +10,7 @@ export interface VizSpec {
 }
 
 const BASE_NOTE = 'Полный учтённый набор прототипа (9 единиц анализа), а не выборка кинематографа.';
+const SHARE_NOTE = 'Длина бара — доля единиц внутри своей группы (n/N); для многозначных полей доли не обязаны суммироваться до 100%.';
 
 interface UnitGroup {
   label: string;
@@ -27,11 +28,16 @@ function unitGroups(scenes: Scene[]): { label: string; units: number; scenes: Sc
     .map((g) => ({ label: g.label, units: g.scenes.length, scenes: g.scenes }));
 }
 
-function matrixData(scenes: Scene[], entries: CodebookEntry[]) {
+// Оси матрицы едины для обеих групп: порядок строк/колонок берётся из
+// объединения кодов, отсутствующие сочетания показываются как 0.
+function unifiedMatrix(scenes: Scene[], entries: CodebookEntry[], allScenes: Scene[]) {
+  const all = spaceMatrix(allScenes, entries);
+  const rows = all.archetypes.map((a) => ({ id: a.id, label: a.label }));
+  const cols = all.spaces.map((s) => ({ id: s.id, label: s.label }));
   const m = spaceMatrix(scenes, entries);
   return {
-    rows: m.archetypes.map((a) => ({ id: a.id, label: a.label })),
-    cols: m.spaces.map((s) => ({ id: s.id, label: s.label })),
+    rows,
+    cols,
     cells: m.cells.map((c) => ({ row: c.archetype, col: c.space, count: c.count })),
   };
 }
@@ -61,7 +67,7 @@ export function vizSpec(id: string, works: Work[], scenes: Scene[], entries: Cod
         kind: 'archetype-counts',
         title: 'Архетипы профессиональных персонажей',
         subtitle: 'Число единиц анализа на каждый архетип — функцию персонажа в сюжете.',
-        caption: `${BASE_NOTE} «Опасный метод» посчитан один раз — как «Романтизированный учёный».`,
+        caption: `${BASE_NOTE} «Опасный метод» посчитан один раз — как «Романтизированный учёный». ${SHARE_NOTE}`,
         data: {
           groups: groups.map((g) => ({
             label: g.label,
@@ -80,7 +86,7 @@ export function vizSpec(id: string, works: Work[], scenes: Scene[], entries: Cod
           groups: groups.map((g) => ({
             label: g.label,
             units: g.units,
-            matrix: matrixData(g.scenes, entries),
+            matrix: unifiedMatrix(g.scenes, entries, scenes),
           })),
         },
       };
@@ -89,7 +95,7 @@ export function vizSpec(id: string, works: Work[], scenes: Scene[], entries: Cod
         kind: 'ethics-counts',
         title: 'Этическое нарушение',
         subtitle: 'Распределение единиц по кодам «Да / Частично / Нет», отдельно для каждого типа единицы.',
-        caption: BASE_NOTE,
+        caption: `${BASE_NOTE} ${SHARE_NOTE}`,
         data: {
           groups: groups.map((g) => ({
             label: g.label,
@@ -103,7 +109,7 @@ export function vizSpec(id: string, works: Work[], scenes: Scene[], entries: Cod
         kind: 'stigma-counts',
         title: 'Уровень стигмы',
         subtitle: 'Распределение единиц анализа по уровням стигмы репрезентации профессии, отдельно для каждого типа единицы.',
-        caption: `${BASE_NOTE} Стигма относится к изображению профессии на экране, а не к пациентам.`,
+        caption: `${BASE_NOTE} Стигма относится к изображению профессии на экране, а не к пациентам. ${SHARE_NOTE}`,
         data: {
           groups: groups.map((g) => ({
             label: g.label,
@@ -117,7 +123,7 @@ export function vizSpec(id: string, works: Work[], scenes: Scene[], entries: Cod
         kind: 'utterance-counts',
         title: 'Типы реплик и визуальные тропы',
         subtitle: 'Частоты кодов в таблице кодирования, отдельно для каждого типа единицы.',
-        caption: `${BASE_NOTE} Токены вне словаря в подсчёт не входят — они остаются в примечаниях карточек.`,
+        caption: `${BASE_NOTE} Токены вне словаря в подсчёт не входят — они остаются в примечаниях карточек. ${SHARE_NOTE}`,
         data: {
           groups: groups.map((g) => ({
             label: g.label,

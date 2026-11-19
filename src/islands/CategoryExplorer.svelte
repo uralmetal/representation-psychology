@@ -71,8 +71,10 @@
     const v = selected[catKey];
     if (!v) return '';
     const e = entryOf(entries, def.cat, v);
-    const n = evidenceFor(catKey, v).length;
-    return `${e?.label ?? v}. Записей в корпусе: ${n}.`;
+    const ev = evidenceFor(catKey, v);
+    const nScene = ev.filter((s) => s.analysis_unit === 'scene').length;
+    const nOverall = ev.filter((s) => s.analysis_unit === 'work_overall').length;
+    return `${e?.label ?? v}. Сцены: ${nScene}, произведения целиком: ${nOverall}.`;
   }
 
   function detailEntry(catKey: string): CodebookEntry | undefined {
@@ -127,6 +129,8 @@
       {#if selected[catKey]}
         {@const e = detailEntry(catKey)}
         {@const evScenes = evidenceFor(catKey, selected[catKey])}
+        {@const evSceneUnits = evScenes.filter((s) => s.analysis_unit === 'scene')}
+        {@const evOverallUnits = evScenes.filter((s) => s.analysis_unit === 'work_overall')}
         <p class="sr-only" role="status">{statusText(catKey, def)}</p>
         <div class="explorer__detail">
           {#if e}
@@ -134,18 +138,28 @@
             {#if e.example}<p class="explorer__example muted small">Пример из словаря: {e.example}</p>{/if}
           {/if}
           {#if evScenes.length}
-            <div class="explorer__evidence">
-              {#each evScenes as s}
-                <EvidenceCard
-                  scene={s}
-                  work={workById.get(s.work_id)}
-                  {entries}
-                  {base}
-                  catKey={catKey}
-                  highlight={selected[catKey]}
-                />
-              {/each}
-            </div>
+            {#each [
+              { label: 'Сцены', list: evSceneUnits },
+              { label: 'Произведения целиком', list: evOverallUnits },
+            ] as grp}
+              <p class="explorer__ev-label">{grp.label} · {grp.list.length}</p>
+              {#if grp.list.length}
+                <div class="explorer__evidence">
+                  {#each grp.list as s}
+                    <EvidenceCard
+                      scene={s}
+                      work={workById.get(s.work_id)}
+                      {entries}
+                      {base}
+                      catKey={catKey}
+                      highlight={selected[catKey]}
+                    />
+                  {/each}
+                </div>
+              {:else}
+                <p class="explorer__empty muted small">Нет записей этого типа единиц.</p>
+              {/if}
+            {/each}
           {:else}
             <p class="explorer__empty muted small">{strings.story.noExamples}</p>
           {/if}
@@ -218,6 +232,7 @@
   }
   .explorer__def { margin: 0 0 0.4rem; font-size: 0.92rem; }
   .explorer__example { margin: 0 0 0.8rem; }
+  .explorer__ev-label { margin: 0.7rem 0 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--text-dim); }
   .explorer__evidence {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));

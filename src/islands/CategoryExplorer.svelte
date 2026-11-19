@@ -28,6 +28,9 @@
   );
   const workById = $derived(new Map(works.map((w) => [w.id, w])));
 
+  // catKeys уникальны для каждого экземпляра на странице — детерминированный
+  // id, совпадающий между SSR и гидратацией.
+  const uid = catKeys.join('-');
   let activeTab = $state(0);
   let selected = $state<Record<string, string>>({});
 
@@ -57,7 +60,9 @@
         <button
           type="button"
           role="tab"
+          id={`${uid}-tab-${i}`}
           aria-selected={i === activeTab}
+          aria-controls={`${uid}-panel-${i}`}
           class:is-active={i === activeTab}
           onclick={() => (activeTab = i)}
         >{p.def.tab}</button>
@@ -69,7 +74,13 @@
     {@const catKey = p.key}
     {@const def = p.def}
     {@const visible = di === activeTab}
-    <div class="explorer__pane" class:hidden={!visible} role="tabpanel">
+    <div
+      class="explorer__pane"
+      class:hidden={!visible}
+      role="tabpanel"
+      id={`${uid}-panel-${di}`}
+      aria-labelledby={`${uid}-tab-${di}`}
+    >
       <div class="explorer__options" role="group" aria-label={def.tab}>
         {#each entriesOfCategory(entries, def.cat) as e}
           <button

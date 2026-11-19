@@ -61,10 +61,11 @@
           {#if vals.length}
             {#each vals as v}
               {@const e = entryOf(entries, def.cat, v)}
-              <a
-                class:is-highlight={v === highlight}
-                href={e ? `${base}codebook/#${e.id}` : '#'}
-              >{labelOf(entries, def.cat, v)}</a>{' '}
+              {#if e}
+                <a class:is-highlight={v === highlight} href={`${base}codebook/#${e.id}`}>{labelOf(entries, def.cat, v)}</a>{' '}
+              {:else}
+                <span class="evidence__ood" title={strings.catalog.outOfDictionary}>{labelOf(entries, def.cat, v)}</span>{' '}
+              {/if}
             {/each}
           {:else}
             <span class="muted">—</span>
@@ -140,4 +141,8 @@
   .evidence__notes dt { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-dim); }
   .evidence__notes dd { margin: 0.1rem 0 0; color: var(--text-dim); }
   .evidence__links { margin: 0; }
+  .evidence__ood {
+    border-bottom: 1px dashed var(--orange);
+    cursor: help;
+  }
 </style>

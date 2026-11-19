@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { strings } from '../lib/i18n';
   import type { CodebookEntry, Scene, Work } from '../lib/types';
 
@@ -73,18 +74,38 @@
     return v ? [v] : [];
   }
 
-  let q = $state(param('q') ?? '');
-  let format = $state(param('format') ?? 'all');
-  let unit = $state(param('unit') ?? 'all');
-  let sort = $state(param('sort') ?? 'year');
-  let yearFrom = $state<number | null>(numParam('year_from'));
-  let yearTo = $state<number | null>(numParam('year_to'));
+  // Начальное состояние — дефолтное, чтобы SSR и гидратация совпадали;
+  // параметры URL применяются в onMount.
+  let q = $state('');
+  let format = $state('all');
+  let unit = $state('all');
+  let sort = $state('year');
+  let yearFrom = $state<number | null>(null);
+  let yearTo = $state<number | null>(null);
   let filters = $state<Record<string, string>>(
-    Object.fromEntries(CATS.map((c) => [c.key, param(c.key) ?? ''])),
+    Object.fromEntries(CATS.map((c) => [c.key, ''])),
   );
 
+  // paramsApplied защищает от гонки: эффект записи URL не должен сработать
+  // (и стереть query) раньше, чем onMount прочитает параметры.
+  let paramsApplied = $state(false);
+  onMount(() => {
+    const p = new URLSearchParams(window.location.search);
+    q = p.get('q') ?? '';
+    format = p.get('format') ?? 'all';
+    unit = p.get('unit') ?? 'all';
+    sort = p.get('sort') ?? 'year';
+    yearFrom = numParam('year_from');
+    yearTo = numParam('year_to');
+    filters = {
+      ...filters,
+      ...Object.fromEntries(CATS.map((c) => [c.key, p.get(c.key) ?? ''])),
+    };
+    paramsApplied = true;
+  });
+
   $effect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || !paramsApplied) return;
     const p = new URLSearchParams();
     if (q.trim()) p.set('q', q.trim());
     if (format !== 'all') p.set('format', format);

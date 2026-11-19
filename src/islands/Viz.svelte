@@ -22,14 +22,25 @@
     analysis_unit: string;
     stigma: string | null;
   }
-  const points = $derived((data.points as Point[]) ?? []);
-  const counts = $derived((data.counts as { id: string; label: string; count: number }[]) ?? []);
-  const matrix = $derived(data.matrix as {
+  interface NamedCount {
+    id: string;
+    label: string;
+    count: number;
+  }
+  interface MatrixData {
     rows: { id: string; label: string }[];
     cols: { id: string; label: string }[];
     cells: { row: string; col: string; count: number }[];
-  } | undefined);
-  const tropes = $derived((data.tropes as { id: string; label: string; count: number }[]) ?? []);
+  }
+  interface VizGroup {
+    label: string;
+    units: number;
+    counts?: NamedCount[];
+    tropes?: NamedCount[];
+    matrix?: MatrixData;
+  }
+  const points = $derived((data.points as Point[]) ?? []);
+  const groups = $derived((data.groups as VizGroup[]) ?? []);
 
   const W = 720;
   const H = 260;
@@ -52,8 +63,15 @@
     return { x, y, ticks, x0, x1 };
   });
 
-  const maxCount = $derived(Math.max(1, ...counts.map((c) => c.count)));
-  const barW = $derived(kind === 'ethics-counts' ? 200 : 280);
+  function unitWord(n: number): string {
+    const mod10 = n % 10;
+    const mod100 = n % 100;
+    if (mod10 === 1 && mod100 !== 11) return 'единица';
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'единицы';
+    return 'единиц';
+  }
+
+  const barW = 280;
 
   function wrapLabel(label: string, max = 30): string[] {
     if (label.length <= max) return [label];
@@ -72,7 +90,7 @@
     return lines.slice(0, 2);
   }
 
-  function cellCount(row: string, col: string) {
+  function cellCount(matrix: MatrixData | undefined, row: string, col: string) {
     return matrix?.cells.find((c) => c.row === row && c.col === col)?.count ?? 0;
   }
 </script>
@@ -80,12 +98,6 @@
 <div class="viz-block">
   <h3 class="viz-title">{title}</h3>
   {#if subtitle}<p class="muted small">{subtitle}</p>{/if}
-
-  {#if kind === 'ethics-counts' && counts.length}
-    <p class="viz-ethics-counts">
-      {#each counts as c}{c.label}: <strong>{c.count}</strong>{c.id !== counts[counts.length - 1].id ? ' · ' : ''}{/each}
-    </p>
-  {/if}
 
   {#if timeline}
     {@const tl = timeline!}
@@ -96,7 +108,7 @@
       { label: 'Произведения целиком', pts: overallPts, kind: 'rect' },
     ] as grp}
       {#if grp.pts.length}
-        <h4 class="viz-sub">{grp.label} · {grp.pts.length} {grp.pts.length === 1 ? 'единица' : 'единиц'}</h4>
+        <h4 class="viz-sub">{grp.label} · {grp.pts.length} {unitWord(grp.pts.length)}</h4>
         <svg viewBox="0 0 {W} {H}" role="img" aria-label="{title} — {grp.label}">
           <title>{title} — {grp.label}</title>
           {#each tl.ticks as t}
@@ -138,56 +150,73 @@
         {/each}
       </tbody>
     </table>
-  {:else if matrix}
-    <table class="matrix">
-      <caption>{caption}</caption>
-      <thead>
-        <tr><th>Архетип \ Пространство</th>{#each matrix.cols as c}<th>{c.label}</th>{/each}</tr>
-      </thead>
-      <tbody>
-        {#each matrix.rows as r}
-          <tr>
-            <th>{r.label}</th>
-            {#each matrix.cols as c}
-              {@const n = cellCount(r.id, c.id)}
-              <td class="matrix__cell" style:background-color={n ? `color-mix(in srgb, var(--accent) ${Math.min(80, n * 25)}%, transparent)` : 'transparent'}>
-                {n || ''}
-              </td>
+  {:else if groups.length}
+    {#each groups as g}
+      <h4 class="viz-sub">{g.label} · {g.units} {unitWord(g.units)}</h4>
+
+      {#if g.counts?.length}
+        {#if kind === 'ethics-counts'}
+          <p class="viz-ethics-counts">
+            {#each g.counts as c}{c.label}: <strong>{c.count}</strong>{c.id !== g.counts[g.counts.length - 1].id ? ' · ' : ''}{/each}
+          </p>
+        {/if}
+        {@const gMax = Math.max(1, ...g.counts.map((c) => c.count))}
+        <svg viewBox="0 0 720 {Math.max(120, g.counts.length * 44 + 30)}" role="img" aria-label="{title} — {g.label}">
+          <title>{title} — {g.label}</title>
+          {#each g.counts as c, i}
+            {@const y = 20 + i * 44}
+            {#each wrapLabel(c.label) as line, li}
+              <text x="0" y={y + 10 + li * 13} fill="var(--text)" font-size="11.5">{line}</text>
             {/each}
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  {:else}
-    <svg viewBox="0 0 720 {Math.max(120, counts.length * 44 + 30)}" role="img" aria-label={title}>
-      <title>{title}</title>
-      {#each counts as c, i}
-        {@const y = 20 + i * 44}
-        {#each wrapLabel(c.label) as line, li}
-          <text x="0" y={y + 10 + li * 13} fill="var(--text)" font-size="11.5">{line}</text>
-        {/each}
-        <rect x={barW} y={y} width={(c.count / maxCount) * (W - barW - 50)} height="18" fill="var(--accent)">
-          <title>{c.label}: {c.count}</title>
-        </rect>
-        <text x={barW + (c.count / maxCount) * (W - barW - 50) + 6} y={y + 14} fill="var(--text-dim)" font-size="12">{c.count}</text>
-      {/each}
-    </svg>
-    <table>
-      <caption>{caption}</caption>
-      <thead><tr><th>Значение</th><th>Число единиц</th></tr></thead>
-      <tbody>
-        {#each counts as c}<tr><td>{c.label}</td><td>{c.count}</td></tr>{/each}
-      </tbody>
-    </table>
-    {#if tropes.length}
-      <h4 class="viz-sub">Визуальные тропы</h4>
-      <table>
-        <thead><tr><th>Троп</th><th>Число единиц</th></tr></thead>
-        <tbody>
-          {#each tropes as t}<tr><td>{t.label}</td><td>{t.count}</td></tr>{/each}
-        </tbody>
-      </table>
-    {/if}
+            <rect x={barW} y={y} width={(c.count / gMax) * (W - barW - 50)} height="18" fill="var(--accent)">
+              <title>{c.label}: {c.count}</title>
+            </rect>
+            <text x={barW + (c.count / gMax) * (W - barW - 50) + 6} y={y + 14} fill="var(--text-dim)" font-size="12">{c.count}</text>
+          {/each}
+        </svg>
+        <table>
+          <caption>{g.label}</caption>
+          <thead><tr><th>Значение</th><th>Число единиц</th></tr></thead>
+          <tbody>
+            {#each g.counts as c}<tr><td>{c.label}</td><td>{c.count}</td></tr>{/each}
+          </tbody>
+        </table>
+      {/if}
+
+      {#if g.tropes?.length}
+        <h4 class="viz-sub">Визуальные тропы · {g.label}</h4>
+        <table>
+          <caption>Визуальные тропы — {g.label}</caption>
+          <thead><tr><th>Троп</th><th>Число единиц</th></tr></thead>
+          <tbody>
+            {#each g.tropes as t}<tr><td>{t.label}</td><td>{t.count}</td></tr>{/each}
+          </tbody>
+        </table>
+      {/if}
+
+      {#if g.matrix}
+        <table class="matrix">
+          <caption>{g.label}</caption>
+          <thead>
+            <tr><th>Архетип \ Пространство</th>{#each g.matrix.cols as c}<th>{c.label}</th>{/each}</tr>
+          </thead>
+          <tbody>
+            {#each g.matrix.rows as r}
+              <tr>
+                <th>{r.label}</th>
+                {#each g.matrix.cols as c}
+                  {@const n = cellCount(g.matrix, r.id, c.id)}
+                  <td class="matrix__cell" style:background-color={n ? `color-mix(in srgb, var(--accent) ${Math.min(80, n * 25)}%, transparent)` : 'transparent'}>
+                    {n || ''}
+                  </td>
+                {/each}
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      {/if}
+    {/each}
+    <p class="viz-note muted small">{caption}</p>
   {/if}
 </div>
 
@@ -196,6 +225,7 @@
   .viz-ethics-counts { margin: 0.25rem 0 0.75rem; font-size: 0.95rem; }
   .viz-legend text { font-family: var(--font); }
   .viz-sub { margin: 1rem 0 0.25rem; font-size: 0.95rem; }
+  .viz-note { margin-top: 0.75rem; }
   .matrix td, .matrix th { text-align: center; }
   .matrix__cell { min-width: 3.5rem; }
 </style>

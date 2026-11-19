@@ -67,7 +67,7 @@
               {/if}
             {/each}
           {:else}
-            <span class="muted">—</span>
+            <span class="muted">Нет кода</span>
           {/if}
         </dd>
       </div>

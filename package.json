@@ -6,8 +6,9 @@
   "description": "Репрезентация психологии в кино — статический DH-сайт прототипа",
   "scripts": {
     "data": "sh scripts/etl.sh",
-    "dev": "npm run data && astro dev",
-    "build": "sh scripts/etl.sh && astro build",
+    "validate:media": "python3 scripts/validate_media.py",
+    "dev": "npm run validate:media && npm run data && astro dev",
+    "build": "npm run validate:media && sh scripts/etl.sh && astro build",
     "preview": "astro preview"
   },
   "dependencies": {

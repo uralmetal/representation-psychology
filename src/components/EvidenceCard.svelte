@@ -9,18 +9,17 @@
     work: Work | undefined;
     entries: CodebookEntry[];
     base: string;
-    /** ключ CAT_DEFS — показывать только эту категорию; без неё — все */
+    /** ключ CAT_DEFS выбранного значения — только для подсветки, коды показываются все */
     catKey?: string;
-    /** значение, которое нужно выделить внутри категории */
+    /** значение, которое нужно выделить внутри своей категории */
     highlight?: string;
     /** id якоря для прямых ссылок */
     anchorId?: string;
   }
   let { scene, work, entries, base, catKey, highlight, anchorId }: Props = $props();
 
-  const defs: CatDef[] = $derived(
-    catKey ? [CAT_DEFS[catKey]] : Object.values(CAT_DEFS),
-  );
+  const defs: CatDef[] = $derived(Object.values(CAT_DEFS));
+  const highlightCat = $derived(catKey ? CAT_DEFS[catKey]?.cat : undefined);
   const isOverall = $derived(scene.analysis_unit === 'work_overall');
   const unitLabel = $derived(isOverall ? strings.story.unitOverall : strings.story.unitScene);
   const years = $derived(
@@ -62,7 +61,7 @@
             {#each vals as v}
               {@const e = entryOf(entries, def.cat, v)}
               {#if e}
-                <a class:is-highlight={v === highlight} href={`${base}codebook/#${e.id}`}>{labelOf(entries, def.cat, v)}</a>{' '}
+                <a class:is-highlight={def.cat === highlightCat && v === highlight} href={`${base}codebook/#${e.id}`}>{labelOf(entries, def.cat, v)}</a>{' '}
               {:else}
                 <span class="evidence__ood" title={strings.catalog.outOfDictionary}>{labelOf(entries, def.cat, v)}</span>{' '}
               {/if}

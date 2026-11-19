@@ -36,6 +36,7 @@
   </div>
 
   {#if selected}
+    <p class="sr-only" role="status">Выбрано: {selected.label}.</p>
     <div class="picker__detail">
       <p class="picker__text">{selected.text}</p>
       {#if selected.href}

@@ -19,8 +19,8 @@ const entries = codebookFile().entries;
   <SceneDialog client:load {base} />
 
   <header class="hero">
-    <p class="hero__kicker">{strings.tagline}</p>
-    <h1>{strings.siteTitle}</h1>
+    <p class="hero__kicker">{strings.siteTitle}</p>
+    <h1 class="hero__question">{strings.home.question}</h1>
     <p class="lead">{strings.home.thesis}</p>
     <p class="hero__entries">
       <a class="btn" href="#prologue">{strings.home.entryStory}</a>
@@ -73,6 +73,12 @@ const entries = codebookFile().entries;
     margin: 0 0 0.4rem;
   }
   .lead { font-size: 1.15rem; max-width: 44rem; }
+  .hero__question {
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.15;
+    max-width: 22ch;
+    margin-bottom: 0.75rem;
+  }
   .hero__entries { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.1rem 0 0.6rem; }
   .hero__cue { margin-top: 0.4rem; font-size: 0.9rem; }
   .hero__tasks {

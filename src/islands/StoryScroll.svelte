@@ -44,13 +44,6 @@
     communication: { keys: ['utterance_type', 'visual_trope'] },
   };
 
-  const CHAPTER_CAT: Record<string, string | undefined> = {
-    archetype: 'therapist_archetype',
-    space: 'space_type',
-    ethics: 'ethical_violation',
-    stigma: 'stigma_level',
-  };
-
   const HASH_ALIAS: Record<string, string> = { language: 'communication' };
 
   function resolveAnchor(hash: string): { index: number; workId: string | null } {
@@ -192,18 +185,33 @@
           {/if}
 
           {#if stepScenes(s).length}
+            {@const ev = stepScenes(s)}
             <h3 class="step__ev-title">{strings.story.evidence}</h3>
             <div class="step__evidence">
-              {#each stepScenes(s) as sc}
+              {#each ev.slice(0, 2) as sc}
                 <EvidenceCard
                   scene={sc}
                   work={workById.get(sc.work_id)}
                   {entries}
                   {base}
-                  catKey={CHAPTER_CAT[s.anchor]}
                 />
               {/each}
             </div>
+            {#if ev.length > 2}
+              <details class="step__evidence-more">
+                <summary>{strings.story.evidenceAll} · {ev.length}</summary>
+                <div class="step__evidence">
+                  {#each ev.slice(2) as sc}
+                    <EvidenceCard
+                      scene={sc}
+                      work={workById.get(sc.work_id)}
+                      {entries}
+                      {base}
+                    />
+                  {/each}
+                </div>
+              </details>
+            {/if}
           {/if}
 
           {#if i < sorted.length - 1}
@@ -261,6 +269,14 @@
     gap: 0.6rem;
   }
   .step__next { margin-top: 1.5rem; font-size: 0.92rem; }
+  .step__evidence-more { margin-top: 0.75rem; }
+  .step__evidence-more summary {
+    cursor: pointer;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .step__evidence-more .step__evidence { margin-top: 0.75rem; }
 
   .story-toc {
     padding: 0.9rem 1.1rem;

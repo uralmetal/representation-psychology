@@ -122,6 +122,21 @@ a { color: var(--accent); }
 .muted { color: var(--text-dim); }
 .small { font-size: 0.85rem; }
 
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ood {
+  border-bottom: 1px dashed var(--orange);
+  cursor: help;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -159,8 +174,9 @@ th { background: var(--bg-elev); }
   z-index: 90;
 }
 
-@media (max-width: 40rem) {
+@media (max-width: 60rem) {
   .nav-toggle { display: inline-block; }
+  .site-header__context { display: none; }
   .site-nav {
     display: none;
     width: 100%;

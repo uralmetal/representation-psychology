@@ -3,7 +3,7 @@ title: Уровень стигмы
 order: 5
 kind: content
 anchor: stigma
-viz: stigma-timeline
+viz: stigma-counts
 scene_ids:
   - cuckoos-nest-unit
   - analyze-this-unit

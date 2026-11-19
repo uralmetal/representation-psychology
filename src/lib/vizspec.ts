@@ -1,4 +1,4 @@
-import { archetypeCounts, ethicsCounts, spaceMatrix, tropeCounts, utteranceCounts, vizPoints } from './viz';
+import { archetypeCounts, ethicsCounts, spaceMatrix, stigmaCounts, tropeCounts, utteranceCounts, vizPoints } from './viz';
 import type { CodebookEntry, Scene, Work } from './types';
 
 export interface VizSpec {
@@ -18,7 +18,7 @@ export function vizSpec(id: string, works: Work[], scenes: Scene[], entries: Cod
       return {
         kind: 'corpus-timeline',
         title: 'Корпус прототипа по годам',
-        subtitle: 'Круг — сцена, квадрат — произведение целиком. Цвет — уровень стигмы.',
+        subtitle: 'Сцены и произведения, закодированные целиком, показаны раздельными панелями. Ось Y — уровень стигмы.',
         caption: `${BASE_NOTE} Ось — годы выхода произведений, не линия тренда.`,
         data: { points },
       };
@@ -26,7 +26,7 @@ export function vizSpec(id: string, works: Work[], scenes: Scene[], entries: Cod
       return {
         kind: 'stigma-timeline',
         title: 'Стигма по годам',
-        subtitle: 'Круг — сцена, квадрат — произведение целиком.',
+        subtitle: 'Сцены и произведения, закодированные целиком, показаны раздельными панелями.',
         caption: `${BASE_NOTE} Ось — годы выхода произведений, не линия тренда.`,
         data: { points },
       };
@@ -62,6 +62,14 @@ export function vizSpec(id: string, works: Work[], scenes: Scene[], entries: Cod
         subtitle: 'Распределение единиц по кодам «Да / Частично / Нет».',
         caption: BASE_NOTE,
         data: { counts: ethicsCounts(scenes, entries) },
+      };
+    case 'stigma-counts':
+      return {
+        kind: 'stigma-counts',
+        title: 'Уровень стигмы',
+        subtitle: 'Распределение единиц анализа по уровням стигмы репрезентации профессии.',
+        caption: `${BASE_NOTE} Стигма относится к изображению профессии на экране, а не к пациентам.`,
+        data: { counts: stigmaCounts(scenes, entries) },
       };
     case 'utterance-counts':
       return {

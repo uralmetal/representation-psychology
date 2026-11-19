@@ -89,38 +89,42 @@
 
   {#if timeline}
     {@const tl = timeline!}
-    <svg viewBox="0 0 {W} {H}" role="img" aria-label={title}>
-      <title>{title}</title>
-      {#each tl.ticks as t}
-        <line x1={tl.x(t)} y1={PAD.t} x2={tl.x(t)} y2={H - PAD.b} stroke="var(--border)" stroke-width="1" />
-        <text x={tl.x(t)} y={H - PAD.b + 18} fill="var(--text-dim)" font-size="11" text-anchor="middle">{t}</text>
-      {/each}
-      {#each ['low', 'medium', 'high'] as level, i}
-        <text x={PAD.l - 8} y={tl.y(level) + 4} fill="var(--text-dim)" font-size="11" text-anchor="end">
-          {{ low: 'Низкий', medium: 'Средний', high: 'Высокий' }[level]}
-        </text>
-        <line x1={PAD.l} y1={tl.y(level)} x2={W - PAD.r} y2={tl.y(level)} stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4" />
-      {/each}
-      {#each points as p}
-        {@const cx = tl.x(p.year)}
-        {@const cy = tl.y(p.stigma)}
-        {#if p.analysis_unit === 'scene'}
-          <circle cx={cx} cy={cy} r="6" fill={STIGMA_COLOR[p.stigma ?? 'medium'] ?? 'var(--scene)'} stroke="var(--bg)" stroke-width="1.5">
-            <title>{p.title} ({p.year})</title>
-          </circle>
-        {:else}
-          <rect x={cx - 5} y={cy - 5} width="10" height="10" fill={STIGMA_COLOR[p.stigma ?? 'medium'] ?? 'var(--overall)'} stroke="var(--bg)" stroke-width="1.5">
-            <title>{p.title} ({p.year})</title>
-          </rect>
-        {/if}
-      {/each}
-      <g class="viz-legend" transform="translate({W - 200}, 10)">
-        <circle cx="6" cy="7" r="5" fill="var(--scene)" />
-        <text x="16" y="11" fill="var(--text-dim)" font-size="11">сцена</text>
-        <rect x="62" y="2" width="10" height="10" fill="var(--overall)" />
-        <text x="78" y="11" fill="var(--text-dim)" font-size="11">произведение целиком</text>
-      </g>
-    </svg>
+    {@const scenePts = points.filter((p) => p.analysis_unit === 'scene')}
+    {@const overallPts = points.filter((p) => p.analysis_unit !== 'scene')}
+    {#each [
+      { label: 'Сцены', pts: scenePts, kind: 'circle' },
+      { label: 'Произведения целиком', pts: overallPts, kind: 'rect' },
+    ] as grp}
+      {#if grp.pts.length}
+        <h4 class="viz-sub">{grp.label} · {grp.pts.length} {grp.pts.length === 1 ? 'единица' : 'единиц'}</h4>
+        <svg viewBox="0 0 {W} {H}" role="img" aria-label="{title} — {grp.label}">
+          <title>{title} — {grp.label}</title>
+          {#each tl.ticks as t}
+            <line x1={tl.x(t)} y1={PAD.t} x2={tl.x(t)} y2={H - PAD.b} stroke="var(--border)" stroke-width="1" />
+            <text x={tl.x(t)} y={H - PAD.b + 16} fill="var(--text-dim)" font-size="11" text-anchor="middle">{t}</text>
+          {/each}
+          {#each ['low', 'medium', 'high'] as level}
+            <text x={PAD.l - 8} y={tl.y(level) + 4} fill="var(--text-dim)" font-size="11" text-anchor="end">
+              {{ low: 'Низкий', medium: 'Средний', high: 'Высокий' }[level]}
+            </text>
+            <line x1={PAD.l} y1={tl.y(level)} x2={W - PAD.r} y2={tl.y(level)} stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4" />
+          {/each}
+          {#each grp.pts as p}
+            {@const cx = tl.x(p.year)}
+            {@const cy = tl.y(p.stigma)}
+            {#if grp.kind === 'circle'}
+              <circle cx={cx} cy={cy} r="6" fill={STIGMA_COLOR[p.stigma ?? 'medium'] ?? 'var(--scene)'} stroke="var(--bg)" stroke-width="1.5">
+                <title>{p.title} ({p.year})</title>
+              </circle>
+            {:else}
+              <rect x={cx - 5} y={cy - 5} width="10" height="10" fill={STIGMA_COLOR[p.stigma ?? 'medium'] ?? 'var(--overall)'} stroke="var(--bg)" stroke-width="1.5">
+                <title>{p.title} ({p.year})</title>
+              </rect>
+            {/if}
+          {/each}
+        </svg>
+      {/if}
+    {/each}
     <table>
       <caption>{caption}</caption>
       <thead><tr><th>Произведение</th><th>Год</th><th>Единица</th><th>Стигма</th></tr></thead>
@@ -185,8 +189,6 @@
       </table>
     {/if}
   {/if}
-
-  <p class="viz-caption">{caption}</p>
 </div>
 
 <style>

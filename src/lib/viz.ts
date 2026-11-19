@@ -101,6 +101,15 @@ export function ethicsCounts(scenes: Scene[], entries: CodebookEntry[]): NamedCo
     .map((id) => ({ id, label: labelOf(entries, 'ethical_violation', id) || id, count: counts.get(id)! }));
 }
 
+export function stigmaCounts(scenes: Scene[], entries: CodebookEntry[]): NamedCount[] {
+  const order = ['high', 'medium', 'low'];
+  const counts = new Map<string, number>();
+  for (const s of scenes) if (s.stigma_level) counts.set(s.stigma_level, (counts.get(s.stigma_level) ?? 0) + 1);
+  return order
+    .filter((id) => counts.has(id))
+    .map((id) => ({ id, label: labelOf(entries, 'stigma_level', id) || id, count: counts.get(id)! }));
+}
+
 export function utteranceCounts(scenes: Scene[], entries: CodebookEntry[]): NamedCount[] {
   const counts = new Map<string, number>();
   for (const s of scenes) for (const u of s.utterance_types) counts.set(u, (counts.get(u) ?? 0) + 1);

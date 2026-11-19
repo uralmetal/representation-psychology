@@ -7,6 +7,7 @@
     entryOf,
     sceneValues,
   } from '../lib/codeview';
+  import type { CatDef } from '../lib/codeview';
   import type { CodebookEntry, Scene, Work } from '../lib/types';
 
   interface Props {
@@ -47,6 +48,33 @@
     selected = { ...selected, [catKey]: value };
   }
 
+  const multi = $derived(pairs.length > 1);
+
+  function selectTab(i: number) {
+    activeTab = i;
+    document.getElementById(`${uid}-tab-${i}`)?.focus();
+  }
+
+  function onTabKey(e: KeyboardEvent, i: number) {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+    e.preventDefault();
+    const n = pairs.length;
+    const next =
+      e.key === 'ArrowRight' ? (i + 1) % n
+      : e.key === 'ArrowLeft' ? (i - 1 + n) % n
+      : e.key === 'Home' ? 0
+      : n - 1;
+    selectTab(next);
+  }
+
+  function statusText(catKey: string, def: CatDef): string {
+    const v = selected[catKey];
+    if (!v) return '';
+    const e = entryOf(entries, def.cat, v);
+    const n = evidenceFor(catKey, v).length;
+    return `${e?.label ?? v}. Записей в корпусе: ${n}.`;
+  }
+
   function detailEntry(catKey: string): CodebookEntry | undefined {
     const v = selected[catKey];
     return v ? entryOf(entries, CAT_DEFS[catKey].cat, v) : undefined;
@@ -54,8 +82,8 @@
 </script>
 
 <div class="explorer" role="group" aria-label={strings.story.interactiveLabel}>
-  {#if pairs.length > 1}
-    <div class="explorer__tabs" role="tablist">
+  {#if multi}
+    <div class="explorer__tabs" role="tablist" aria-label={strings.story.interactiveLabel}>
       {#each pairs as p, i}
         <button
           type="button"
@@ -63,8 +91,10 @@
           id={`${uid}-tab-${i}`}
           aria-selected={i === activeTab}
           aria-controls={`${uid}-panel-${i}`}
+          tabindex={i === activeTab ? 0 : -1}
           class:is-active={i === activeTab}
-          onclick={() => (activeTab = i)}
+          onclick={() => selectTab(i)}
+          onkeydown={(e) => onTabKey(e, i)}
         >{p.def.tab}</button>
       {/each}
     </div>
@@ -77,9 +107,10 @@
     <div
       class="explorer__pane"
       class:hidden={!visible}
-      role="tabpanel"
-      id={`${uid}-panel-${di}`}
-      aria-labelledby={`${uid}-tab-${di}`}
+      role={multi ? 'tabpanel' : 'group'}
+      aria-label={multi ? undefined : def.tab}
+      id={multi ? `${uid}-panel-${di}` : undefined}
+      aria-labelledby={multi ? `${uid}-tab-${di}` : undefined}
     >
       <div class="explorer__options" role="group" aria-label={def.tab}>
         {#each entriesOfCategory(entries, def.cat) as e}
@@ -96,6 +127,7 @@
       {#if selected[catKey]}
         {@const e = detailEntry(catKey)}
         {@const evScenes = evidenceFor(catKey, selected[catKey])}
+        <p class="sr-only" role="status">{statusText(catKey, def)}</p>
         <div class="explorer__detail">
           {#if e}
             <p class="explorer__def"><strong>{e.label}.</strong> {e.definition}</p>

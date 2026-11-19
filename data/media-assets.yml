@@ -1,0 +1,612 @@
+version: 1
+# Кандидатные материалы из исходной папки. Ни одна запись не разрешает публикацию сама по себе.
+# Статусы: candidate -> pending_review -> approved | rejected.
+assets:
+  - id: analyze-this-still-01
+    kind: film_still
+    status: candidate
+    work_id: analyze-this
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: analyze-this-still-02
+    kind: film_still
+    status: candidate
+    work_id: analyze-this
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 2.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: analyze-this-still-03
+    kind: film_still
+    status: candidate
+    work_id: analyze-this
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 3.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: analyze-this-still-04
+    kind: film_still
+    status: candidate
+    work_id: analyze-this
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 4.webp"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: dangerous-method-still-01
+    kind: film_still
+    status: candidate
+    work_id: dangerous-method
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 1.webp"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: dangerous-method-still-02
+    kind: film_still
+    status: candidate
+    work_id: dangerous-method
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: dangerous-method-still-03
+    kind: film_still
+    status: candidate
+    work_id: dangerous-method
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 3.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: dangerous-method-still-04
+    kind: film_still
+    status: candidate
+    work_id: dangerous-method
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 4.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: en-therapie-still-01
+    kind: film_still
+    status: candidate
+    work_id: en-therapie
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: en-therapie-still-02
+    kind: film_still
+    status: candidate
+    work_id: en-therapie
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: en-therapie-still-03
+    kind: film_still
+    status: candidate
+    work_id: en-therapie
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 3.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: en-therapie-still-04
+    kind: film_still
+    status: candidate
+    work_id: en-therapie
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 4.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: web-therapy-still-01
+    kind: film_still
+    status: candidate
+    work_id: web-therapy
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 1.jpeg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: web-therapy-still-02
+    kind: film_still
+    status: candidate
+    work_id: web-therapy
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: web-therapy-still-03
+    kind: film_still
+    status: candidate
+    work_id: web-therapy
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 3.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: web-therapy-still-04
+    kind: film_still
+    status: candidate
+    work_id: web-therapy
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 4.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: sopranos-still-01
+    kind: film_still
+    status: candidate
+    work_id: sopranos
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: sopranos-still-02
+    kind: film_still
+    status: candidate
+    work_id: sopranos
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: sopranos-still-03
+    kind: film_still
+    status: candidate
+    work_id: sopranos
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 3.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: sopranos-still-04
+    kind: film_still
+    status: candidate
+    work_id: sopranos
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 4.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: mr-robot-still-01
+    kind: film_still
+    status: candidate
+    work_id: mr-robot
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Мистер Робот (2015-2019) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: mr-robot-still-02
+    kind: film_still
+    status: candidate
+    work_id: mr-robot
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Мистер Робот (2015-2019) кадр 2.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: mr-robot-still-03
+    kind: film_still
+    status: candidate
+    work_id: mr-robot
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Мистер Робот (2015-2019) кадр 3.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: the-undoing-still-01
+    kind: film_still
+    status: candidate
+    work_id: the-undoing
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Отыграть назад (2020) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: the-undoing-still-02
+    kind: film_still
+    status: candidate
+    work_id: the-undoing
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Отыграть назад (2020) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: cuckoos-nest-still-01
+    kind: film_still
+    status: candidate
+    work_id: cuckoos-nest
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 1.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: cuckoos-nest-still-02
+    kind: film_still
+    status: candidate
+    work_id: cuckoos-nest
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 2.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: cuckoos-nest-still-03
+    kind: film_still
+    status: candidate
+    work_id: cuckoos-nest
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 3.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: cuckoos-nest-still-04
+    kind: film_still
+    status: candidate
+    work_id: cuckoos-nest
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 4.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: cuckoos-nest-still-05
+    kind: film_still
+    status: candidate
+    work_id: cuckoos-nest
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 5.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: de-gales-hus-still-01
+    kind: film_still
+    status: candidate
+    work_id: de-gales-hus
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Сумасшедший дом (2008) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: de-gales-hus-still-02
+    kind: film_still
+    status: candidate
+    work_id: de-gales-hus
+    scene_id: null
+    source_file: "materials/new_materials/Кадры из фильмов/Сумасшедший дом (2008) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null

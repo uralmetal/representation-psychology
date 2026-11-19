@@ -3,15 +3,18 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 import sys
 from typing import Any
+from urllib.parse import urlparse
 
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data" / "media-assets.yml"
 PUBLIC_MEDIA = ROOT / "public" / "media"
+PUBLIC_DATA = ROOT / "public" / "data"
 ALLOWED_STATUSES = {"candidate", "pending_review", "approved", "rejected"}
 ALLOWED_KINDS = {"film_still", "photograph"}
 APPROVED_FIELDS = (
@@ -39,6 +42,12 @@ def inside(path: Path, parent: Path) -> bool:
         return False
 
 
+def load_json(path: Path) -> dict[str, Any]:
+    if not path.is_file():
+        fail([f"required generated data not found: {path.relative_to(ROOT)}; run npm run data first"])
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def main() -> None:
     if not MANIFEST.exists():
         fail([f"manifest not found: {MANIFEST.relative_to(ROOT)}"])
@@ -51,6 +60,11 @@ def main() -> None:
 
     if not isinstance(assets, list):
         fail(["assets must be a YAML list"])
+
+    works = load_json(PUBLIC_DATA / "works.json").get("works", [])
+    scenes = load_json(PUBLIC_DATA / "scenes.json").get("scenes", [])
+    work_ids = {w.get("id") for w in works}
+    scene_by_id = {s.get("id"): s for s in scenes}
 
     for index, asset in enumerate(assets, start=1):
         prefix = f"assets[{index}]"
@@ -66,8 +80,9 @@ def main() -> None:
         else:
             ids.add(asset_id)
 
-        if asset.get("kind") not in ALLOWED_KINDS:
-            errors.append(f"{prefix} ({asset_id}): invalid kind")
+        kind = asset.get("kind")
+        if kind not in ALLOWED_KINDS:
+            errors.append(f"{prefix} ({asset_id}): invalid kind {kind!r}")
         status = asset.get("status")
         if status not in ALLOWED_STATUSES:
             errors.append(f"{prefix} ({asset_id}): invalid status {status!r}")
@@ -87,7 +102,15 @@ def main() -> None:
                 if not isinstance(value, str) or not value.strip():
                     errors.append(f"{prefix} ({asset_id}): approved asset requires {field}")
 
-            legal_review = asset.get("legal_review") or {}
+            source_url = asset.get("source_url")
+            parsed_url = urlparse(source_url) if isinstance(source_url, str) else None
+            if not parsed_url or parsed_url.scheme != "https" or not parsed_url.netloc:
+                errors.append(f"{prefix} ({asset_id}): source_url must be an absolute HTTPS URL")
+
+            legal_review = asset.get("legal_review")
+            if not isinstance(legal_review, dict):
+                errors.append(f"{prefix} ({asset_id}): approved asset requires legal_review object")
+                legal_review = {}
             for field in ("reference", "reviewer", "reviewed_at"):
                 value = legal_review.get(field)
                 if not isinstance(value, str) or not value.strip():
@@ -105,8 +128,19 @@ def main() -> None:
                 elif not target.is_file():
                     errors.append(f"{prefix} ({asset_id}): approved public file does not exist: {public_path}")
                 approved_paths.add(public_path)
-            if not isinstance(asset.get("work_id"), str) or not asset["work_id"].strip():
-                errors.append(f"{prefix} ({asset_id}): approved asset requires work_id")
+
+            work_id = asset.get("work_id")
+            if not isinstance(work_id, str) or work_id not in work_ids:
+                errors.append(f"{prefix} ({asset_id}): approved asset requires a valid work_id")
+            scene_id = asset.get("scene_id")
+            if kind == "film_still" and not scene_id:
+                errors.append(f"{prefix} ({asset_id}): film_still must be linked to a specific scene/unit")
+            if scene_id:
+                scene = scene_by_id.get(scene_id)
+                if scene is None:
+                    errors.append(f"{prefix} ({asset_id}): unknown scene_id {scene_id!r}")
+                elif scene.get("work_id") != work_id:
+                    errors.append(f"{prefix} ({asset_id}): scene_id does not belong to work_id")
         elif public_path:
             errors.append(f"{prefix} ({asset_id}): non-approved asset must not have public_path")
 

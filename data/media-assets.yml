@@ -746,3 +746,55 @@ assets:
       reference: null
       reviewer: null
       reviewed_at: null
+
+  - id: freud-practice-notice-1891
+    kind: photograph
+    status: candidate
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Freud_anuncio_consultorio.jpg"
+    source_date: "Фотография сделана 12 июня 2010 года; изображённое объявление относится к 1891 году."
+    source_notes: "Автор страницы Commons — Marjorie Apel; в описании указано, что это её собственная фотография исторического объявления о начале приёма Фрейда по адресу Berggasse 19. Текст объявления и его историческая атрибуция требуют сверки с музейным/архивным источником."
+    creator_or_rightsholder: "Marjorie Apel (автор фотографии)."
+    license: "Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)."
+    license_url: "https://creativecommons.org/licenses/by-sa/3.0/"
+    rights_notes: "При публикации фотографии требуется атрибуция, ссылка на лицензию и указание изменений; адаптации распространяются на условиях ShareAlike. Правовой режим самого исторического объявления проверяется отдельно."
+    analysis_purpose: "Показать документальный след объявления о практике Фрейда по адресу Berggasse 19; фотография сделана в 2010 году и не должна изображаться как снимок 1891 года."
+    alt: "Сфотографированное объявление на немецком языке о начале врачебной практики Зигмунда Фрейда по адресу Berggasse 19."
+    caption: "Фотография исторического объявления о практике Фрейда по адресу Berggasse 19; снимок Marjorie Apel сделан 12 июня 2010 года. Само объявление относится к 1891 году."
+    attribution: "Photo: Marjorie Apel, “Freud anuncio consultorio” (2010), CC BY-SA 3.0, via Wikimedia Commons."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+
+  - id: freud-consulting-room-door-2010
+    kind: photograph
+    status: candidate
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Puerta_Consultorio_Freud.jpg"
+    source_date: "12 июня 2010 года."
+    source_notes: "Собственная фотография Marjorie Apel; карточка Wikimedia Commons описывает входную дверь в кабинет Фрейда по адресу Berggasse 19. Это современная фотография места, не исторический снимок времён Фрейда и не изображение декораций фильма."
+    creator_or_rightsholder: "Marjorie Apel (автор фотографии)."
+    license: "Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)."
+    license_url: "https://creativecommons.org/licenses/by-sa/3.0/"
+    rights_notes: "При публикации фотографии требуется атрибуция, ссылка на лицензию и указание изменений; адаптации распространяются на условиях ShareAlike. Перед публикацией проверить лицензионные условия для конкретного размещения."
+    analysis_purpose: "Документировать современный вид входа в кабинет Фрейда на Berggasse 19; использовать только как современную фотографию места, а не реконструкцию исторического интерьера."
+    alt: "Дверь и лестничная площадка у входа в бывший кабинет Фрейда на Berggasse 19."
+    caption: "Вход к бывшему кабинету Фрейда на Berggasse 19, фотография Marjorie Apel от 12 июня 2010 года."
+    attribution: "Photo: Marjorie Apel, “Puerta Consultorio Freud” (2010), CC BY-SA 3.0, via Wikimedia Commons."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null

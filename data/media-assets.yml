@@ -1,0 +1,800 @@
+version: 1
+# Кандидатные материалы из исходной папки. Ни одна запись не разрешает публикацию сама по себе.
+# Статусы: candidate -> pending_review -> approved | rejected.
+assets:
+  - id: analyze-this-still-01
+    kind: film_still
+    status: candidate
+    work_id: analyze-this
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: analyze-this-still-02
+    kind: film_still
+    status: candidate
+    work_id: analyze-this
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 2.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: analyze-this-still-03
+    kind: film_still
+    status: candidate
+    work_id: analyze-this
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 3.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: analyze-this-still-04
+    kind: film_still
+    status: candidate
+    work_id: analyze-this
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 4.webp"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: dangerous-method-still-01
+    kind: film_still
+    status: candidate
+    work_id: dangerous-method
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 1.webp"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: dangerous-method-still-02
+    kind: film_still
+    status: candidate
+    work_id: dangerous-method
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: dangerous-method-still-03
+    kind: film_still
+    status: candidate
+    work_id: dangerous-method
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 3.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: dangerous-method-still-04
+    kind: film_still
+    status: candidate
+    work_id: dangerous-method
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 4.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: en-therapie-still-01
+    kind: film_still
+    status: candidate
+    work_id: en-therapie
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: en-therapie-still-02
+    kind: film_still
+    status: candidate
+    work_id: en-therapie
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: en-therapie-still-03
+    kind: film_still
+    status: candidate
+    work_id: en-therapie
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 3.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: en-therapie-still-04
+    kind: film_still
+    status: candidate
+    work_id: en-therapie
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 4.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: web-therapy-still-01
+    kind: film_still
+    status: candidate
+    work_id: web-therapy
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 1.jpeg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: web-therapy-still-02
+    kind: film_still
+    status: candidate
+    work_id: web-therapy
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: web-therapy-still-03
+    kind: film_still
+    status: candidate
+    work_id: web-therapy
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 3.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: web-therapy-still-04
+    kind: film_still
+    status: candidate
+    work_id: web-therapy
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 4.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: sopranos-still-01
+    kind: film_still
+    status: candidate
+    work_id: sopranos
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: sopranos-still-02
+    kind: film_still
+    status: candidate
+    work_id: sopranos
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: sopranos-still-03
+    kind: film_still
+    status: candidate
+    work_id: sopranos
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 3.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: sopranos-still-04
+    kind: film_still
+    status: candidate
+    work_id: sopranos
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 4.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: mr-robot-still-01
+    kind: film_still
+    status: candidate
+    work_id: mr-robot
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Мистер Робот (2015-2019) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: mr-robot-still-02
+    kind: film_still
+    status: candidate
+    work_id: mr-robot
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Мистер Робот (2015-2019) кадр 2.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: mr-robot-still-03
+    kind: film_still
+    status: candidate
+    work_id: mr-robot
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Мистер Робот (2015-2019) кадр 3.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: the-undoing-still-01
+    kind: film_still
+    status: candidate
+    work_id: the-undoing
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Отыграть назад (2020) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: the-undoing-still-02
+    kind: film_still
+    status: candidate
+    work_id: the-undoing
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Отыграть назад (2020) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: cuckoos-nest-still-01
+    kind: film_still
+    status: candidate
+    work_id: cuckoos-nest
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 1.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: cuckoos-nest-still-02
+    kind: film_still
+    status: candidate
+    work_id: cuckoos-nest
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 2.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: cuckoos-nest-still-03
+    kind: film_still
+    status: candidate
+    work_id: cuckoos-nest
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 3.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: cuckoos-nest-still-04
+    kind: film_still
+    status: candidate
+    work_id: cuckoos-nest
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 4.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: cuckoos-nest-still-05
+    kind: film_still
+    status: candidate
+    work_id: cuckoos-nest
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 5.png"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: de-gales-hus-still-01
+    kind: film_still
+    status: candidate
+    work_id: de-gales-hus
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Сумасшедший дом (2008) кадр 1.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+  - id: de-gales-hus-still-02
+    kind: film_still
+    status: candidate
+    work_id: de-gales-hus
+    scene_id: null
+    screen_time_reference: null
+    source_file: "materials/new_materials/Кадры из фильмов/Сумасшедший дом (2008) кадр 2.jpg"
+    public_path: null
+    source_url: null
+    creator_or_rightsholder: null
+    analysis_purpose: null
+    alt: null
+    caption: null
+    attribution: null
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+
+  - id: burghoelzli-clinic-c1890
+    kind: photograph
+    status: candidate
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Burghoelzli.PNG"
+    source_date: "Изображённая клиника датирована на Commons приблизительно 1890 годом; репродукция опубликована в источнике 1935 года."
+    source_notes: "Источник: Auguste Forel, Rückblick auf mein Leben, Zürich: Europa-Verlag, 1935. Страница Commons указывает автора как anonymous/unknown."
+    creator_or_rightsholder: "Неизвестный автор фотографии; в записи Wikimedia Commons указано anonymous/unknown."
+    license: "Public Domain Mark 1.0 по отметке Wikimedia Commons (основание — возраст); применимость статуса в юрисдикции публикации не проверена."
+    license_url: "https://creativecommons.org/publicdomain/mark/1.0/"
+    rights_notes: "Кандидат на исторический контекст «Опасного метода». Не публиковать до независимой проверки происхождения и правового статуса."
+    analysis_purpose: "Исторический контекст клинической среды Бургхёльцли; не является кадром фильма и не доказывает точное устройство интерьеров, показанных в фильме."
+    alt: "Чёрно-белое изображение здания психиатрической клиники Бургхёльцли с несколькими корпусами и деревьями на переднем плане."
+    caption: "Клиника Бургхёльцли, изображение датировано приблизительно 1890 годом; репродукция приводится в мемуарах Августа Фореля 1935 года."
+    attribution: "Автор фотографии неизвестен; источник репродукции: Auguste Forel, Rückblick auf mein Leben (1935), через Wikimedia Commons. Wikimedia Commons обозначает файл как Public Domain Mark 1.0; правовой статус требует отдельной проверки."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+
+  - id: burghoelzli-morning-report-c1900
+    kind: photograph
+    status: candidate
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Forel_Assistants.JPG"
+    source_date: "Около 1900 года; репродукция опубликована в источнике 1935 года."
+    source_notes: "Подпись Commons называет изображённое утренним обходом в Бургхёльцли и перечисляет сотрудников; автор фотографии обозначен как anonymous/unknown. Источник: Auguste Forel, Rückblick auf mein Leben, Zürich: Europa-Verlag, 1935."
+    creator_or_rightsholder: "Неизвестный автор фотографии; в записи Wikimedia Commons указано anonymous/unknown."
+    license: "Public Domain Mark 1.0 по отметке Wikimedia Commons (основание — возраст); применимость статуса в юрисдикции публикации не проверена."
+    license_url: "https://creativecommons.org/publicdomain/mark/1.0/"
+    rights_notes: "Кандидат на исторический контекст институциональной практики. Не публиковать до независимой проверки происхождения и правового статуса."
+    analysis_purpose: "Исторический контекст организации работы клиники Бургхёльцли; не выдавать фотографию за сцену или реконструкцию конкретного эпизода «Опасного метода»."
+    alt: "Группа мужчин стоит в комнате клиники; один из них держит бумаги, остальные расположены рядом в ряд."
+    caption: "Утренний врачебный обход в клинике Бургхёльцли, приблизительно 1900 год; подпись источника перечисляет сотрудников учреждения."
+    attribution: "Автор фотографии неизвестен; источник репродукции: Auguste Forel, Rückblick auf mein Leben (1935), через Wikimedia Commons. Wikimedia Commons обозначает файл как Public Domain Mark 1.0; правовой статус требует отдельной проверки."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+
+  - id: freud-waiting-room-2016
+    kind: photograph
+    status: pending_review
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Freuds_Wartezimmer_in_der_Berggasse_19.jpg"
+    source_date: "31 марта 2016 года."
+    source_notes: "Собственная фотография автора Siesta; на странице файла указана лицензия CC BY-SA 4.0. Снимок сделан в Berggasse 19, Вена. Это фотография 2016 года, а не исторический снимок начала XX века."
+    creator_or_rightsholder: "Siesta."
+    license: "Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)."
+    license_url: "https://creativecommons.org/licenses/by-sa/4.0/"
+    rights_notes: "При использовании сохранить атрибуцию, ссылку на лицензию и указать изменения; при адаптации соблюдать ShareAlike. Перед публикацией проверить лицензионные условия и требования целевой юрисдикции."
+    analysis_purpose: "Контекстный визуальный источник о зале ожидания по адресу Berggasse 19; показывать только как фотографию места в 2016 году, не как доказательство точного исторического вида или кинодекорации."
+    alt: "Зал ожидания на Berggasse 19 в Вене: светлая комната с рядом стульев и дверным проёмом."
+    caption: "Зал ожидания по адресу Berggasse 19, Вена; фотография сделана 31 марта 2016 года. Это современный снимок места, а не кадр из фильма."
+    attribution: "Photo: Siesta, “Freud's waiting room in Berggasse 19” (2016), CC BY-SA 4.0, via Wikimedia Commons."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+
+  - id: sabina-spielrein-portrait-pre1943
+    kind: photograph
+    status: candidate
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Sabina_Shpilrein.jpg"
+    source_date: "До 1943 года по карточке Wikimedia Commons; точная дата не указана."
+    source_notes: "На странице Wikimedia Commons указан размер 472 × 614 px, источник — holocaust.su, автор неизвестен. Commons обозначает произведение как общественное достояние в России со ссылкой на ст. 1281 ГК РФ и Закон №231-ФЗ. Независимое подтверждение даты первого правомерного обнародования и первоисточника ещё требуется."
+    creator_or_rightsholder: "Неизвестен; страница источника указывает, что фотография поступила с сайта holocaust.su."
+    license: "Общественное достояние в России по отметке Wikimedia Commons со ссылкой на ст. 1281 ГК РФ и Закон №231-ФЗ; применимость и фактические предпосылки статуса требуют проверки."
+    license_url: "https://www.consultant.ru/document/cons_doc_LAW_64629/675b81f0bc9b8ecd68ea332ecfd9d1562541fb98/"
+    rights_notes: "Автор неизвестен, точная дата и первое правомерное обнародование не установлены. Не публиковать до проверки первоисточника и основания общественного достояния."
+    analysis_purpose: "Исторический портрет Сабины Шпильрейн — реальной исторической фигуры, связанной с сюжетом «Опасного метода»; не путать с изображением актрисы."
+    alt: "Низкоразрешённый чёрно-белый портрет Сабины Шпильрейн крупным планом; фон изображения почти не различим."
+    caption: "Портрет Сабины Шпильрейн; Wikimedia Commons указывает автора неизвестным и датирует снимок периодом до 1943 года. Точная дата и происхождение требуют проверки."
+    attribution: "Автор неизвестен; источник, указанный на Wikimedia Commons: holocaust.su. Страница Commons обозначает файл общественным достоянием в России со ссылкой на ст. 1281 ГК РФ; статус требует независимой проверки."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+
+  - id: freud-practice-notice-1891
+    kind: photograph
+    status: pending_review
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Freud_anuncio_consultorio.jpg"
+    source_date: "Фотография сделана 12 июня 2010 года; изображённое объявление относится к 1891 году."
+    source_notes: "Автор страницы Commons — Marjorie Apel; в описании указано, что это её собственная фотография исторического объявления о начале приёма Фрейда по адресу Berggasse 19. Текст объявления и его историческая атрибуция требуют сверки с музейным/архивным источником."
+    creator_or_rightsholder: "Marjorie Apel (автор фотографии)."
+    license: "Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)."
+    license_url: "https://creativecommons.org/licenses/by-sa/3.0/"
+    rights_notes: "При публикации фотографии требуется атрибуция, ссылка на лицензию и указание изменений; адаптации распространяются на условиях ShareAlike. Правовой режим самого исторического объявления проверяется отдельно."
+    analysis_purpose: "Показать документальный след объявления о практике Фрейда по адресу Berggasse 19; фотография сделана в 2010 году и не должна изображаться как снимок 1891 года."
+    alt: "Сфотографированное объявление на немецком языке о начале врачебной практики Зигмунда Фрейда по адресу Berggasse 19."
+    caption: "Фотография исторического объявления о практике Фрейда по адресу Berggasse 19; снимок Marjorie Apel сделан 12 июня 2010 года. Само объявление относится к 1891 году."
+    attribution: "Photo: Marjorie Apel, “Freud anuncio consultorio” (2010), CC BY-SA 3.0, via Wikimedia Commons."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+
+  - id: freud-consulting-room-door-2010
+    kind: photograph
+    status: pending_review
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Puerta_Consultorio_Freud.jpg"
+    source_date: "12 июня 2010 года."
+    source_notes: "Собственная фотография Marjorie Apel; карточка Wikimedia Commons описывает входную дверь в кабинет Фрейда по адресу Berggasse 19. Это современная фотография места, не исторический снимок времён Фрейда и не изображение декораций фильма."
+    creator_or_rightsholder: "Marjorie Apel (автор фотографии)."
+    license: "Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)."
+    license_url: "https://creativecommons.org/licenses/by-sa/3.0/"
+    rights_notes: "При публикации фотографии требуется атрибуция, ссылка на лицензию и указание изменений; адаптации распространяются на условиях ShareAlike. Перед публикацией проверить лицензионные условия для конкретного размещения."
+    analysis_purpose: "Документировать современный вид входа в кабинет Фрейда на Berggasse 19; использовать только как современную фотографию места, а не реконструкцию исторического интерьера."
+    alt: "Дверь и лестничная площадка у входа в бывший кабинет Фрейда на Berggasse 19."
+    caption: "Вход к бывшему кабинету Фрейда на Berggasse 19, фотография Marjorie Apel от 12 июня 2010 года."
+    attribution: "Photo: Marjorie Apel, “Puerta Consultorio Freud” (2010), CC BY-SA 3.0, via Wikimedia Commons."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null

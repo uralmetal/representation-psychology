@@ -5,7 +5,9 @@
 ## Команды
 
 - `npm run data` — ETL: `data/source/coding.xlsx` → `public/data/*.json` + `validation-report.json` (Python через `.venv/bin/python`, пакеты из `requirements.txt`).
-- `npm run build` — ETL + `astro build` → `dist/`. Падает при ошибках валидатора.
+- `npm run validate:media` — проверяет реестр фотографий/кадров и не допускает публикацию неподтверждённых или незарегистрированных файлов.
+- `npm run test:media` — проверяет медиавалидатор регрессионными тестами.
+- `npm run build` — проверка медиареестра + ETL + `astro build` → `dist/`. Падает при ошибках валидаторов.
 - `npm run dev` — dev-сервер на `http://localhost:4321/representation-psychology/`.
 
 ## Важно
@@ -16,3 +18,4 @@
 - Имена кодеров не должны попадать в публичные файлы: столбец «Категория анализа» удалён из `data/source/coding.xlsx` и из таблиц в `materials/`; валидатор проверяет это автоматически.
 - Токены кодирования вне `codebook.yml` не становятся кодами — уходят в `note` (см. `materials/Plan.md`).
 - Исходная история проекта — `materials/Репрезентация психологии в кино.md`; главы в `src/content/chapters/` — её адаптация (карточки произведений живут в `data/source/works.yml` и на страницах `/work/`).
+- **Изображения:** единственный реестр — `data/media-assets.yml`; инструкции и очередь — `materials/media/`. Кандидаты хранятся в `materials/` и не публикуются. Только записи со статусом `approved`, полной атрибуцией и индивидуальной фиксацией правовой проверки могут иметь файл в `public/media/`. Не обходить `scripts/validate_media.py` и не переносить кадры из материалов в `public/` автоматически. См. handoff §10.1.

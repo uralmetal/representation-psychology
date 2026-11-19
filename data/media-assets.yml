@@ -721,7 +721,7 @@ assets:
       reviewer: null
       reviewed_at: null
 
-  - id: sabina-spielrein-portrait-1918
+  - id: sabina-spielrein-portrait-pre1943
     kind: photograph
     status: candidate
     work_id: dangerous-method
@@ -729,17 +729,17 @@ assets:
     scene_id: null
     source_file: null
     public_path: null
-    source_url: "https://commons.wikimedia.org/wiki/File:Sabina_Spielrein.jpg"
-    source_date: "2 января 1918 года (дата, приведённая Wikimedia Commons)."
-    source_notes: "Источник обозначен как family photo; фотограф неизвестен; размер оригинального файла на Commons — 230 × 299 px. На странице Commons указана Public Domain Mark 1.0; локальный статус прав не проверен. Не использовать AI-retouched alternate."
-    creator_or_rightsholder: "Неизвестный автор; источник обозначен как family photo."
-    license: "Public Domain Mark 1.0 по отметке Wikimedia Commons; автор неизвестен, применимость статуса в юрисдикции публикации не проверена."
-    license_url: "https://creativecommons.org/publicdomain/mark/1.0/"
-    rights_notes: "Низкое разрешение и неустановленный автор. Оставить кандидатом для проверки; не публиковать до установления происхождения и правового статуса."
-    analysis_purpose: "Исторический портрет Сабины Шпильрейн — одной из исторических фигур, показанных в «Опасном методе»; не путать с изображением актрисы."
-    alt: "Чёрно-белый портрет Сабины Шпильрейн в одежде начала XX века."
-    caption: "Сабина Шпильрейн, фотография датирована 2 января 1918 года; страница источника указывает семейное происхождение снимка."
-    attribution: "Автор неизвестен; источник обозначен как семейная фотография, Wikimedia Commons, Public Domain Mark 1.0. Атрибуция и правовой статус требуют дополнительной проверки."
+    source_url: "https://commons.wikimedia.org/wiki/File:Sabina_Shpilrein.jpg"
+    source_date: "До 1943 года по карточке Wikimedia Commons; точная дата не указана."
+    source_notes: "На странице Wikimedia Commons указан размер 472 × 614 px, источник — holocaust.su, автор неизвестен. Commons обозначает произведение как общественное достояние в России со ссылкой на ст. 1281 ГК РФ и Закон №231-ФЗ. Независимое подтверждение даты первого правомерного обнародования и первоисточника ещё требуется."
+    creator_or_rightsholder: "Неизвестен; страница источника указывает, что фотография поступила с сайта holocaust.su."
+    license: "Общественное достояние в России по отметке Wikimedia Commons со ссылкой на ст. 1281 ГК РФ и Закон №231-ФЗ; применимость и фактические предпосылки статуса требуют проверки."
+    license_url: "https://www.consultant.ru/document/cons_doc_LAW_64629/675b81f0bc9b8ecd68ea332ecfd9d1562541fb98/"
+    rights_notes: "Автор неизвестен, точная дата и первое правомерное обнародование не установлены. Не публиковать до проверки первоисточника и основания общественного достояния."
+    analysis_purpose: "Исторический портрет Сабины Шпильрейн — реальной исторической фигуры, связанной с сюжетом «Опасного метода»; не путать с изображением актрисы."
+    alt: "Низкоразрешённый чёрно-белый портрет Сабины Шпильрейн крупным планом; фон изображения почти не различим."
+    caption: "Портрет Сабины Шпильрейн; Wikimedia Commons указывает автора неизвестным и датирует снимок периодом до 1943 года. Точная дата и происхождение требуют проверки."
+    attribution: "Автор неизвестен; источник, указанный на Wikimedia Commons: holocaust.su. Страница Commons обозначает файл общественным достоянием в России со ссылкой на ст. 1281 ГК РФ; статус требует независимой проверки."
     legal_basis: null
     legal_review:
       status: not_reviewed

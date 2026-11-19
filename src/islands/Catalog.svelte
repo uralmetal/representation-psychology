@@ -2,6 +2,17 @@
   import { strings } from '../lib/i18n';
   import type { CodebookEntry, Scene, Work } from '../lib/types';
 
+  function param(name: string): string | null {
+    if (typeof window === 'undefined') return null;
+    return new URLSearchParams(window.location.search).get(name);
+  }
+  function numParam(name: string): number | null {
+    const v = param(name);
+    if (v == null || v === '') return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  }
+
   interface Props {
     works: Work[];
     scenes: Scene[];
@@ -62,38 +73,68 @@
     return v ? [v] : [];
   }
 
-  let q = $state('');
-  let format = $state('all');
-  let yearFrom = $state<number | null>(null);
-  let yearTo = $state<number | null>(null);
+  let q = $state(param('q') ?? '');
+  let format = $state(param('format') ?? 'all');
+  let unit = $state(param('unit') ?? 'all');
+  let sort = $state(param('sort') ?? 'year');
+  let yearFrom = $state<number | null>(numParam('year_from'));
+  let yearTo = $state<number | null>(numParam('year_to'));
   let filters = $state<Record<string, string>>(
-    Object.fromEntries(CATS.map((c) => [c.key, ''])),
+    Object.fromEntries(CATS.map((c) => [c.key, param(c.key) ?? ''])),
   );
 
+  $effect(() => {
+    if (typeof window === 'undefined') return;
+    const p = new URLSearchParams();
+    if (q.trim()) p.set('q', q.trim());
+    if (format !== 'all') p.set('format', format);
+    if (unit !== 'all') p.set('unit', unit);
+    if (sort !== 'year') p.set('sort', sort);
+    if (Number.isFinite(yearFrom)) p.set('year_from', String(yearFrom));
+    if (Number.isFinite(yearTo)) p.set('year_to', String(yearTo));
+    for (const cfg of CATS) {
+      if (filters[cfg.key]) p.set(cfg.key, filters[cfg.key]);
+    }
+    const qs = p.toString();
+    history.replaceState(null, '', `${window.location.pathname}${qs ? `?${qs}` : ''}`);
+  });
+
   const filtered = $derived(
-    rows.filter((row) => {
-      const w = row.work;
-      if (format !== 'all' && w?.format !== format) return false;
-      const from = Number.isFinite(yearFrom) ? (yearFrom as number) : null;
-      const to = Number.isFinite(yearTo) ? (yearTo as number) : null;
-      if (from != null && (w?.year_start ?? 0) < from) return false;
-      if (to != null && (w?.year_end ?? 9999) > to) return false;
-      const needle = q.trim().toLowerCase();
-      if (needle) {
-        const hay = [
-          w?.title, w?.original_title, w?.country.join(' '), w?.genres.join(' '),
-          row.scene.timecode, row.scene.description, row.scene.scene_function.join(' '),
-        ].join(' ').toLowerCase();
-        if (!hay.includes(needle)) return false;
-      }
-      for (const cfg of CATS) {
-        const sel = filters[cfg.key];
-        if (!sel) continue;
-        const vals = valuesOf(row, cfg);
-        if (sel === '__none__' ? vals.length > 0 : !vals.includes(sel)) return false;
-      }
-      return true;
-    }),
+    rows
+      .filter((row) => {
+        const w = row.work;
+        if (format !== 'all' && w?.format !== format) return false;
+        if (unit !== 'all' && row.scene.analysis_unit !== unit) return false;
+        const from = Number.isFinite(yearFrom) ? (yearFrom as number) : null;
+        const to = Number.isFinite(yearTo) ? (yearTo as number) : null;
+        if (from != null && (w?.year_start ?? 0) < from) return false;
+        if (to != null && (w?.year_end ?? 9999) > to) return false;
+        const needle = q.trim().toLowerCase();
+        if (needle) {
+          const hay = [
+            w?.title, w?.original_title, w?.country.join(' '), w?.genres.join(' '),
+            row.scene.timecode, row.scene.description, row.scene.scene_function.join(' '),
+          ].join(' ').toLowerCase();
+          if (!hay.includes(needle)) return false;
+        }
+        for (const cfg of CATS) {
+          const sel = filters[cfg.key];
+          if (!sel) continue;
+          const vals = valuesOf(row, cfg);
+          if (sel === '__none__' ? vals.length > 0 : !vals.includes(sel)) return false;
+        }
+        return true;
+      })
+      .sort((a, b) => {
+        if (sort === 'title') {
+          return (a.work?.title ?? a.scene.work_id).localeCompare(
+            b.work?.title ?? b.scene.work_id,
+            'ru',
+          );
+        }
+        return (a.work?.year_start ?? 0) - (b.work?.year_start ?? 0)
+          || (a.work?.title ?? '').localeCompare(b.work?.title ?? '', 'ru');
+      }),
   );
 
   let compareIds = $state<string[]>([]);
@@ -103,6 +144,9 @@
       : [...compareIds, id];
   }
   const compareRows = $derived(rows.filter((r) => compareIds.includes(r.scene.id)));
+  const compareMixed = $derived(
+    new Set(compareRows.map((r) => r.scene.analysis_unit)).size > 1,
+  );
 
   function compareKey(row: Row, cat: string): string {
     const cfg = CATS.find((c) => c.cat === cat)!;
@@ -186,6 +230,21 @@
       <span>{strings.catalog.yearTo}</span>
       <input type="number" min="1900" max="2100" bind:value={yearTo} />
     </label>
+    <label class="catalog__field">
+      <span>{strings.catalog.unit}</span>
+      <select bind:value={unit}>
+        <option value="all">{strings.catalog.unitAll}</option>
+        <option value="scene">{strings.catalog.unitScene}</option>
+        <option value="work_overall">{strings.catalog.unitOverall}</option>
+      </select>
+    </label>
+    <label class="catalog__field">
+      <span>Сортировка</span>
+      <select bind:value={sort}>
+        <option value="year">{strings.catalog.sortYear}</option>
+        <option value="title">{strings.catalog.sortTitle}</option>
+      </select>
+    </label>
     {#each CATS as cfg}
       <label class="catalog__field">
         <span>{catLabel.get(cfg.cat) ?? cfg.cat}</span>
@@ -213,6 +272,10 @@
   {#if compareIds.length >= 2}
     <div class="catalog__compare">
       <h3>{strings.catalog.compareTitle}</h3>
+      {#if compareMixed}
+        <p class="catalog__mixed" role="alert">{strings.catalog.compareMixed}</p>
+        <p><button type="button" class="btn btn--ghost btn--sm" onclick={() => (compareIds = [])}>{strings.catalog.clearCompare}</button></p>
+      {:else}
       <p class="muted small">{strings.catalog.compareHint}</p>
       <div class="catalog-table-wrap">
         <table class="catalog-table catalog-table--compare">
@@ -266,6 +329,7 @@
           {strings.catalog.clearCompare}
         </button>
       </p>
+      {/if}
     </div>
   {/if}
 
@@ -300,9 +364,6 @@
                 />
               </td>
               <td>
-                {#if row.work?.frames?.[0]}
-                  <img class="catalog__thumb" src="{base}{row.work.frames[0]}" alt="" loading="lazy" />
-                {/if}
                 <a href="{base}work/{row.scene.work_id}/">{row.work?.title ?? row.scene.work_id}</a>
                 <div class="muted small">{years(row.work)} · {row.work?.country.join(', ')}</div>
               </td>
@@ -327,7 +388,7 @@
                       {#if e}
                         <a href="{base}codebook/#{e.id}">{e.label}</a>
                       {:else}
-                        {v}
+                        <span class="catalog__ood" title={strings.catalog.outOfDictionary}>{v}</span>
                       {/if}
                     {/each}
                   {:else}
@@ -393,6 +454,17 @@
     border-radius: 8px;
   }
   .catalog__compare h3 { margin-top: 0; }
+  .catalog__mixed {
+    padding: 0.6rem 0.8rem;
+    border-left: 3px solid var(--orange);
+    background: var(--orange-soft);
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  .catalog__ood {
+    border-bottom: 1px dashed var(--orange);
+    cursor: help;
+  }
   .catalog-table-wrap { overflow-x: auto; }
   .catalog-table { min-width: 60rem; }
   .catalog-table--compare { min-width: 0; width: 100%; }
@@ -401,16 +473,6 @@
   tr.is-selected td { background: var(--accent-soft); }
   .catalog__desc { max-width: 16rem; }
   .catalog__fn { margin-top: 0.2rem; font-size: 0.78rem; }
-  .catalog__thumb {
-    display: block;
-    width: 4.5rem;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    margin-bottom: 0.3rem;
-  }
   .sr-only {
     position: absolute;
     width: 1px; height: 1px;

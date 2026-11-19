@@ -77,10 +77,12 @@ export interface StoryStep {
   anchor: string;
   title: string;
   order: number;
+  num: number;
   html: string;
-  kind: 'chapter' | 'film';
-  tag: 'prologue' | 'content' | 'epilogue' | 'film';
+  kind: 'chapter';
+  tag: 'prologue' | 'content' | 'epilogue';
   kicker: string;
+  viz: string | null;
+  sceneIds: string[];
   workIds: string[];
-  workId: string | null;
 }

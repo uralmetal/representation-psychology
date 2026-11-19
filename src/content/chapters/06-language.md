@@ -2,7 +2,7 @@
 title: Реплики и изображение
 order: 6
 kind: content
-anchor: language
+anchor: communication
 viz: utterance-counts
 scene_ids:
   - cuckoos-nest-unit

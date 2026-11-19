@@ -29,13 +29,6 @@ const years = workItem.year_start === workItem.year_end ? String(workItem.year_s
   </script>
   <h1>{workItem.title}</h1>
   {workItem.original_title && <p class="muted">{workItem.original_title}</p>}
-  {workItem.frames.length > 0 && (
-    <div class="frames">
-      {workItem.frames.map((f) => (
-        <img src={`${base}${f}`} alt={`Кадр из «${workItem.title}»`} loading="lazy" />
-      ))}
-    </div>
-  )}
   <div class="card">
     <dl class="work-meta">
       <div><dt>Формат</dt><dd>{formatLabel}</dd></div>
@@ -61,17 +54,4 @@ const years = workItem.year_start === workItem.year_end ? String(workItem.year_s
   .work-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; margin: 0 0 1rem; }
   .work-meta dt { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; }
   .work-meta dd { margin: 0; }
-  .frames {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-    gap: 0.6rem;
-    margin: 0 0 1.25rem;
-  }
-  .frames img {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-  }
 </style>

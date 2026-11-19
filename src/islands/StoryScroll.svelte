@@ -1,7 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import WorkFeature from '../components/WorkFeature.svelte';
+  import CategoryExplorer from './CategoryExplorer.svelte';
+  import EvidenceCard from '../components/EvidenceCard.svelte';
+  import NarrativePicker from './NarrativePicker.svelte';
+  import Viz from './Viz.svelte';
+  import { LENSES, buildVerdicts } from '../lib/narrative';
   import { strings } from '../lib/i18n';
+  import { vizSpec } from '../lib/vizspec';
   import type { CodebookEntry, Scene, StoryStep, Work } from '../lib/types';
 
   interface Props {
@@ -17,15 +22,45 @@
   const activeStep = $derived(sorted[active]);
 
   const workById = $derived(new Map(works.map((w) => [w.id, w])));
-  const scenesByWorkId = $derived.by(() => {
-    const map = new Map<string, Scene[]>();
-    for (const s of scenes) {
-      const list = map.get(s.work_id) ?? [];
-      list.push(s);
-      map.set(s.work_id, list);
-    }
-    return map;
-  });
+  const sceneById = $derived(new Map(scenes.map((s) => [s.id, s])));
+
+  const EXPLORER_CATS: Record<string, { keys: string[]; note?: string }> = {
+    archetype: {
+      keys: ['therapist_archetype'],
+      note: 'Сестра Рэтчед в «Пролетая над гнездом кукушки» рассматривается как носитель профессиональной власти; интерфейс не приписывает ей профессию психолога или психиатра.',
+    },
+    space: {
+      keys: ['space_type'],
+      note: 'В кодировании «Опасного метода» сохранено значение ward, тогда как пример словаря scientific-clinic относится к тому же произведению — расхождение показано как есть и не исправляется.',
+    },
+    ethics: {
+      keys: ['ethical_violation'],
+      note: '«Частично» — спорная ситуация в конкретной единице анализа, а не приговор всей практике персонажа.',
+    },
+    stigma: {
+      keys: ['stigma_level'],
+      note: 'Уровень стигмы относится к репрезентации профессии на экране, а не к пациентам и не к психическим расстройствам.',
+    },
+    communication: { keys: ['utterance_type', 'visual_trope'] },
+  };
+
+  const CHAPTER_CAT: Record<string, string | undefined> = {
+    archetype: 'therapist_archetype',
+    space: 'space_type',
+    ethics: 'ethical_violation',
+    stigma: 'stigma_level',
+  };
+
+  const HASH_ALIAS: Record<string, string> = { language: 'communication' };
+
+  function resolveAnchor(hash: string): { index: number; workId: string | null } {
+    const h = HASH_ALIAS[hash] ?? hash;
+    let i = sorted.findIndex((s) => s.anchor === h);
+    if (i >= 0) return { index: i, workId: null };
+    i = sorted.findIndex((s) => s.workIds.includes(h));
+    if (i >= 0) return { index: i, workId: h };
+    return { index: -1, workId: null };
+  }
 
   let active = $state(0);
   let root: HTMLElement | undefined = $state();
@@ -46,10 +81,18 @@
 
     const hash = decodeURIComponent(window.location.hash.replace('#', ''));
     if (hash) {
-      const i = sorted.findIndex((s) => s.anchor === hash);
-      if (i >= 0) {
-        active = i;
-        requestAnimationFrame(() => go(i));
+      const { index, workId } = resolveAnchor(hash);
+      if (index >= 0) {
+        active = index;
+        requestAnimationFrame(() => {
+          if (workId) {
+            root
+              ?.querySelector<HTMLElement>(`[data-work="${workId}"]`)
+              ?.scrollIntoView({ block: 'start' });
+          } else {
+            go(index);
+          }
+        });
       }
     }
     return () => io.disconnect();
@@ -77,75 +120,115 @@
     }
   }
 
-  function years(w: Work): string {
-    return w.year_start === w.year_end ? String(w.year_start) : `${w.year_start}–${w.year_end}`;
+  function lensItems() {
+    return LENSES.map((l) => ({
+      id: l.id,
+      label: l.label,
+      text: l.text,
+      href: `#${l.target}`,
+      hrefLabel: sorted.find((s) => s.anchor === l.target)?.title ?? l.target,
+    }));
   }
 
-  function showFilms(s: StoryStep): boolean {
-    return s.kind === 'chapter' && s.tag === 'content' && s.workIds.length > 0;
+  function stepScenes(s: StoryStep): Scene[] {
+    return s.sceneIds
+      .map((id) => sceneById.get(id))
+      .filter((sc): sc is Scene => Boolean(sc));
   }
 </script>
 
-{#snippet miniCard(w: Work)}
-  <a class="card mini-card" href="{base}work/{w.id}/">
-    <span class="mini-card__year">{years(w)}</span>
-    <span class="mini-card__body">
-      <span class="mini-card__title">{w.title}</span>
-      <span class="muted small">{w.format === 'tv_series' ? 'сериал' : 'фильм'}</span>
-    </span>
-  </a>
-{/snippet}
+<div class="story-layout">
+  <nav class="story-toc" aria-label={strings.story.contents}>
+    <p class="story-toc__title">{strings.story.contents}</p>
+    <ol class="story-toc__list">
+      {#each sorted as s, i}
+        <li>
+          <a
+            href="#{s.anchor}"
+            class:is-active={i === active}
+            aria-current={i === active ? 'true' : undefined}
+            onclick={(e) => { e.preventDefault(); go(i); }}
+          ><span class="story-toc__num">{s.num}</span>{s.title}</a>
+        </li>
+      {/each}
+    </ol>
+  </nav>
 
-<nav class="story-toc" aria-label={strings.story.contents}>
-  <p class="story-toc__title">{strings.story.contents}</p>
-  <ol class="story-toc__list">
-    {#each sorted as s, i}
-      <li>
-        <a
-          href="#{s.anchor}"
-          class:is-active={i === active}
-          aria-current={i === active ? 'true' : undefined}
-          onclick={(e) => { e.preventDefault(); go(i); }}
-        >{s.title}</a>
-      </li>
-    {/each}
-  </ol>
-</nav>
+  <div class="scrolly" bind:this={root}>
+    <div class="scrolly__steps">
+      {#each sorted as s, i}
+        <section class="step" id={s.anchor}>
+          <p class="step__kicker">{s.kicker}</p>
+          <h2 class="step__title">{s.title}</h2>
+          {#if s.html}<div class="step__body">{@html s.html}</div>{/if}
 
-<div class="scrolly" bind:this={root}>
-  <div class="scrolly__steps">
-    {#each sorted as s}
-      <section class="step" id={s.anchor}>
-        <p class="step__kicker">{s.kicker}</p>
-        <h2>{s.title}</h2>
-        {#if s.html}<div class="step__body">{@html s.html}</div>{/if}
-        {#if s.kind === 'film'}
-          {@const w = s.workId ? workById.get(s.workId) : undefined}
-          {#if w}
-            <WorkFeature work={w} scenes={scenesByWorkId.get(w.id) ?? []} {entries} {base} />
+          {#if s.tag === 'prologue'}
+            <NarrativePicker items={lensItems()} groupLabel={strings.story.lensesTitle} />
+          {:else if s.anchor === 'epilogue'}
+            <NarrativePicker items={buildVerdicts(base)} groupLabel={strings.story.verdictsTitle} />
+          {:else if EXPLORER_CATS[s.anchor]}
+            {@const cfg = EXPLORER_CATS[s.anchor]}
+            <CategoryExplorer
+              catKeys={cfg.keys}
+              scenes={scenes}
+              {works}
+              {entries}
+              {base}
+              note={cfg.note}
+            />
           {/if}
-        {/if}
-        {#if showFilms(s)}
-          <div class="step__works">
-            <p class="step__works-label">{strings.story.stepWorks}</p>
-            <div class="step__works-list">
-              {#each s.workIds as wid}
-                {@const w = workById.get(wid)}
-                {#if w}{@render miniCard(w)}{/if}
+
+          {#if s.viz}
+            {@const spec = vizSpec(s.viz, works, scenes, entries)}
+            {#if spec}
+              <Viz
+                kind={spec.kind}
+                title={spec.title}
+                subtitle={spec.subtitle}
+                caption={spec.caption}
+                data={spec.data}
+              />
+            {/if}
+          {/if}
+
+          {#if stepScenes(s).length}
+            <h3 class="step__ev-title">{strings.story.evidence}</h3>
+            <div class="step__evidence">
+              {#each stepScenes(s) as sc}
+                <EvidenceCard
+                  scene={sc}
+                  work={workById.get(sc.work_id)}
+                  {entries}
+                  {base}
+                  catKey={CHAPTER_CAT[s.anchor]}
+                />
               {/each}
             </div>
-          </div>
-        {/if}
-      </section>
-    {/each}
+          {/if}
+
+          {#if i < sorted.length - 1}
+            <p class="step__next">
+              <a href="#{sorted[i + 1].anchor}" onclick={(e) => { e.preventDefault(); go(i + 1); }}>
+                {strings.story.nextChapter}: {sorted[i + 1].title} →
+              </a>
+            </p>
+          {/if}
+        </section>
+      {/each}
+    </div>
   </div>
 </div>
 
 <style>
-  .scrolly { max-width: 56rem; }
+  .story-layout {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .scrolly { max-width: 56rem; min-width: 0; }
 
   .step {
-    margin-bottom: 7rem;
+    margin-bottom: 6rem;
     scroll-margin-top: 1rem;
   }
   .step__kicker {
@@ -153,22 +236,35 @@
     font-size: 0.78rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: var(--orange);
     margin: 0 0 0.2rem;
+  }
+  .step__title {
+    font-family: var(--serif);
+    font-size: 1.9rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.75rem;
   }
   .step__body :global(p) { margin: 0.75rem 0; }
   .step__body :global(strong) { color: var(--accent); }
-  .step__works { margin-top: 1.25rem; }
-  .step__works-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-    gap: 0.5rem;
+  .step__body :global(a) { color: var(--accent); }
+  .step__ev-title {
+    font-size: 1.05rem;
+    margin: 1.75rem 0 0.6rem;
+    font-family: var(--font);
+    font-weight: 600;
   }
+  .step__evidence {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 0.6rem;
+  }
+  .step__next { margin-top: 1.5rem; font-size: 0.92rem; }
 
   .story-toc {
-    margin: 0 0 2rem;
     padding: 0.9rem 1.1rem;
-    background: var(--bg-card);
+    background: var(--bg-elev);
     border: 1px solid var(--border);
     border-radius: 8px;
   }
@@ -195,47 +291,38 @@
   }
   .story-toc__list a:hover { color: var(--accent); border-bottom-color: var(--accent); }
   .story-toc__list a.is-active { color: var(--accent); }
-
-  .step__works-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-dim);
-    margin: 0 0 0.45rem;
-  }
-
-  .mini-card {
-    display: flex;
-    gap: 0.8rem;
-    align-items: baseline;
-    color: var(--text);
-    text-decoration: none;
-    margin-bottom: 0.5rem;
-    padding: 0.55rem 0.8rem;
-    transition:
-      border-color 0.2s ease,
-      transform 0.2s ease;
-  }
-  .mini-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-  .mini-card__year {
+  .story-toc__num {
     font-family: var(--mono);
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--accent);
-    min-width: 2.6rem;
+    font-size: 0.75rem;
+    color: var(--orange);
+    margin-right: 0.25rem;
   }
-  .mini-card__body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    min-width: 0;
+
+  @media (min-width: 60rem) {
+    .story-layout {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: 2rem;
+    }
+    .story-toc {
+      position: sticky;
+      top: 1rem;
+      align-self: start;
+    }
+    .story-toc__list {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      gap: 0.15rem;
+    }
+    .story-toc__list a { display: block; padding: 0.2rem 0; }
   }
-  .mini-card__title { font-size: 0.92rem; }
 
   @media (max-width: 60rem) {
     .step { margin-bottom: 4rem; }
+    .story-toc__list {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 0.3rem;
+    }
+    .story-toc__list a { white-space: nowrap; }
   }
 </style>

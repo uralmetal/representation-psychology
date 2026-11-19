@@ -22,7 +22,11 @@ const entries = codebookFile().entries;
     <p class="hero__kicker">{strings.tagline}</p>
     <h1>{strings.siteTitle}</h1>
     <p class="lead">{strings.home.thesis}</p>
-    <p class="muted hero__cue">{strings.home.scrollCue}</p>
+    <p class="hero__entries">
+      <a class="btn" href="#prologue">{strings.home.entryStory}</a>
+      <a class="btn btn--ghost" href={`${base}catalog/`}>{strings.home.entryCatalog}</a>
+    </p>
+    <p class="muted hero__cue">{works.length} произведений · {scenes.length} единиц анализа · {entries.length} значений словаря</p>
     <div class="hero__tasks">
       <p class="hero__tasks-title">{strings.home.tasksTitle}</p>
       <ul>
@@ -69,7 +73,8 @@ const entries = codebookFile().entries;
     margin: 0 0 0.4rem;
   }
   .lead { font-size: 1.15rem; max-width: 44rem; }
-  .hero__cue { margin-top: 1rem; font-size: 0.9rem; }
+  .hero__entries { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.1rem 0 0.6rem; }
+  .hero__cue { margin-top: 0.4rem; font-size: 0.9rem; }
   .hero__tasks {
     margin-top: 1.25rem;
     padding: 0.9rem 1.1rem;

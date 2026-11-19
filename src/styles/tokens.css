@@ -1,17 +1,22 @@
 :root {
-  --bg: #14161a;
-  --bg-elev: #1c1f26;
-  --bg-card: #20242e;
-  --text: #e8e6e1;
-  --text-dim: #a8a49b;
-  --accent: #d8a24a;
-  --accent-soft: #d8a24a33;
-  --border: #333845;
-  --stigma-high: #c75b5b;
-  --stigma-medium: #d8a24a;
-  --stigma-low: #6fae7c;
-  --scene: #7fa8d9;
-  --overall: #9a8fd0;
-  --font: "PT Root UI", "Segoe UI", system-ui, sans-serif;
+  --bg: #f5f3ed;
+  --bg-elev: #fffcf5;
+  --bg-card: #fffcf5;
+  --bg-soft: #eeece3;
+  --text: #1d2823;
+  --text-dim: #62695f;
+  --accent: #294d40;
+  --accent-ink: #fffcf5;
+  --accent-soft: #294d4022;
+  --orange: #98523d;
+  --orange-soft: #98523d1f;
+  --border: #dcd8c9;
+  --stigma-high: #9c4a3c;
+  --stigma-medium: #8a6428;
+  --stigma-low: #4a7a5c;
+  --scene: #3d6391;
+  --overall: #6b5a9e;
+  --font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
   --mono: "JetBrains Mono", "Cascadia Code", monospace;
 }

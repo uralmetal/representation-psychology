@@ -6,6 +6,7 @@
 
 - `npm run data` — ETL: `data/source/coding.xlsx` → `public/data/*.json` + `validation-report.json` (Python через `.venv/bin/python`, пакеты из `requirements.txt`).
 - `npm run validate:media` — проверяет реестр фотографий/кадров и не допускает публикацию неподтверждённых или незарегистрированных файлов.
+- `npm run test:media` — проверяет медиавалидатор регрессионными тестами.
 - `npm run build` — проверка медиареестра + ETL + `astro build` → `dist/`. Падает при ошибках валидаторов.
 - `npm run dev` — dev-сервер на `http://localhost:4321/representation-psychology/`.
 

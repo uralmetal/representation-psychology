@@ -25,6 +25,12 @@ export interface MediaAssetRecord {
   caption?: string | null;
   attribution?: string | null;
   legal_basis?: string | null;
+  legal_review?: {
+    status: 'not_reviewed' | 'approved' | 'rejected';
+    reference?: string | null;
+    reviewer?: string | null;
+    reviewed_at?: string | null;
+  } | null;
 }
 
 export type ApprovedMediaAsset = MediaAssetRecord & {
@@ -35,6 +41,13 @@ export type ApprovedMediaAsset = MediaAssetRecord & {
   alt: string;
   caption: string;
   attribution: string;
+  legal_basis: string;
+  legal_review: {
+    status: 'approved';
+    reference: string;
+    reviewer: string;
+    reviewed_at: string;
+  };
 };
 
 interface MediaManifest {
@@ -55,7 +68,12 @@ function isPublicReady(asset: MediaAssetRecord): asset is ApprovedMediaAsset {
     && typeof asset.source_url === 'string' && asset.source_url.startsWith('https://')
     && typeof asset.alt === 'string' && asset.alt.trim().length > 0
     && typeof asset.caption === 'string' && asset.caption.trim().length > 0
-    && typeof asset.attribution === 'string' && asset.attribution.trim().length > 0;
+    && typeof asset.attribution === 'string' && asset.attribution.trim().length > 0
+    && typeof asset.legal_basis === 'string' && asset.legal_basis.trim().length > 0
+    && asset.legal_review?.status === 'approved'
+    && typeof asset.legal_review.reference === 'string' && asset.legal_review.reference.trim().length > 0
+    && typeof asset.legal_review.reviewer === 'string' && asset.legal_review.reviewer.trim().length > 0
+    && typeof asset.legal_review.reviewed_at === 'string' && asset.legal_review.reviewed_at.trim().length > 0;
 }
 
 /** Only individually reviewed, fully described assets can reach a public page. */

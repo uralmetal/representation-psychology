@@ -96,16 +96,33 @@ def main() -> None:
                 errors.append(f"{prefix} ({asset_id}): source_file does not exist: {source_file}")
 
         public_path = asset.get("public_path")
+        source_url = asset.get("source_url")
+        if source_url is not None:
+            parsed_source_url = urlparse(source_url) if isinstance(source_url, str) else None
+            if not parsed_source_url or parsed_source_url.scheme != "https" or not parsed_source_url.netloc:
+                errors.append(f"{prefix} ({asset_id}): source_url must be an absolute HTTPS URL")
+
+        if kind == "photograph" and source_url:
+            for field in ("creator_or_rightsholder", "license", "license_url"):
+                value = asset.get(field)
+                if not isinstance(value, str) or not value.strip():
+                    errors.append(f"{prefix} ({asset_id}): sourced photograph requires {field}")
+            license_url = asset.get("license_url")
+            parsed_license_url = urlparse(license_url) if isinstance(license_url, str) else None
+            if not parsed_license_url or parsed_license_url.scheme != "https" or not parsed_license_url.netloc:
+                errors.append(f"{prefix} ({asset_id}): license_url must be an absolute HTTPS URL")
+
         if status == "approved":
             for field in APPROVED_FIELDS:
                 value = asset.get(field)
                 if not isinstance(value, str) or not value.strip():
                     errors.append(f"{prefix} ({asset_id}): approved asset requires {field}")
 
-            source_url = asset.get("source_url")
-            parsed_url = urlparse(source_url) if isinstance(source_url, str) else None
-            if not parsed_url or parsed_url.scheme != "https" or not parsed_url.netloc:
-                errors.append(f"{prefix} ({asset_id}): source_url must be an absolute HTTPS URL")
+            if kind == "photograph":
+                for field in ("license", "license_url"):
+                    value = asset.get(field)
+                    if not isinstance(value, str) or not value.strip():
+                        errors.append(f"{prefix} ({asset_id}): approved photograph requires {field}")
 
             legal_review = asset.get("legal_review")
             if not isinstance(legal_review, dict):
@@ -133,16 +150,24 @@ def main() -> None:
             if not isinstance(work_id, str) or work_id not in work_ids:
                 errors.append(f"{prefix} ({asset_id}): approved asset requires a valid work_id")
             scene_id = asset.get("scene_id")
-            if kind == "film_still" and not scene_id:
-                errors.append(f"{prefix} ({asset_id}): film_still must be linked to a specific analysis unit")
-            if kind == "film_still" and not asset.get("screen_time_reference"):
-                errors.append(f"{prefix} ({asset_id}): film_still requires a verified episode/timecode reference")
+            if kind == "film_still":
+                analysis_unit = asset.get("analysis_unit")
+                if not asset.get("screen_time_reference"):
+                    errors.append(f"{prefix} ({asset_id}): film_still requires an exact episode/timecode reference")
+                if asset.get("screen_time_verified") is not True:
+                    errors.append(f"{prefix} ({asset_id}): film_still requires screen_time_verified: true")
+                if scene_id and analysis_unit not in (None, "scene"):
+                    errors.append(f"{prefix} ({asset_id}): a scene-linked film_still must use analysis_unit='scene'")
+                if not scene_id and analysis_unit != "work_overall":
+                    errors.append(f"{prefix} ({asset_id}): a film_still without scene_id must explicitly use analysis_unit='work_overall'")
             if scene_id:
                 scene = scene_by_id.get(scene_id)
                 if scene is None:
                     errors.append(f"{prefix} ({asset_id}): unknown scene_id {scene_id!r}")
                 elif scene.get("work_id") != work_id:
                     errors.append(f"{prefix} ({asset_id}): scene_id does not belong to work_id")
+                elif kind == "film_still" and scene.get("analysis_unit") != "scene":
+                    errors.append(f"{prefix} ({asset_id}): film_still scene_id must reference a scene analysis unit")
         elif public_path:
             errors.append(f"{prefix} ({asset_id}): non-approved asset must not have public_path")
 

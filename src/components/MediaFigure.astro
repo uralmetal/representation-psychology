@@ -21,6 +21,9 @@ const kindLabel = asset.kind === 'film_still' ? 'Кадр из произвед�
     <p class="media-figure__attribution">
       {asset.attribution}
       · <a href={asset.source_url} target="_blank" rel="noopener noreferrer">Источник</a>
+      {asset.license && asset.license_url && (
+        <> · <a href={asset.license_url} target="_blank" rel="noopener noreferrer">{asset.license}</a></>
+      )}
     </p>
   </figcaption>
 </figure>

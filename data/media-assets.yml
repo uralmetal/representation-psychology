@@ -7,6 +7,7 @@ assets:
     status: candidate
     work_id: analyze-this
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 1.jpg"
     public_path: null
     source_url: null
@@ -26,6 +27,7 @@ assets:
     status: candidate
     work_id: analyze-this
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 2.png"
     public_path: null
     source_url: null
@@ -45,6 +47,7 @@ assets:
     status: candidate
     work_id: analyze-this
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 3.png"
     public_path: null
     source_url: null
@@ -64,6 +67,7 @@ assets:
     status: candidate
     work_id: analyze-this
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 4.webp"
     public_path: null
     source_url: null
@@ -83,6 +87,7 @@ assets:
     status: candidate
     work_id: dangerous-method
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 1.webp"
     public_path: null
     source_url: null
@@ -102,6 +107,7 @@ assets:
     status: candidate
     work_id: dangerous-method
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 2.jpg"
     public_path: null
     source_url: null
@@ -121,6 +127,7 @@ assets:
     status: candidate
     work_id: dangerous-method
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 3.jpg"
     public_path: null
     source_url: null
@@ -140,6 +147,7 @@ assets:
     status: candidate
     work_id: dangerous-method
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 4.jpg"
     public_path: null
     source_url: null
@@ -159,6 +167,7 @@ assets:
     status: candidate
     work_id: en-therapie
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 1.jpg"
     public_path: null
     source_url: null
@@ -178,6 +187,7 @@ assets:
     status: candidate
     work_id: en-therapie
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 2.jpg"
     public_path: null
     source_url: null
@@ -197,6 +207,7 @@ assets:
     status: candidate
     work_id: en-therapie
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 3.jpg"
     public_path: null
     source_url: null
@@ -216,6 +227,7 @@ assets:
     status: candidate
     work_id: en-therapie
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 4.jpg"
     public_path: null
     source_url: null
@@ -235,6 +247,7 @@ assets:
     status: candidate
     work_id: web-therapy
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 1.jpeg"
     public_path: null
     source_url: null
@@ -254,6 +267,7 @@ assets:
     status: candidate
     work_id: web-therapy
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 2.jpg"
     public_path: null
     source_url: null
@@ -273,6 +287,7 @@ assets:
     status: candidate
     work_id: web-therapy
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 3.jpg"
     public_path: null
     source_url: null
@@ -292,6 +307,7 @@ assets:
     status: candidate
     work_id: web-therapy
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 4.jpg"
     public_path: null
     source_url: null
@@ -311,6 +327,7 @@ assets:
     status: candidate
     work_id: sopranos
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 1.jpg"
     public_path: null
     source_url: null
@@ -330,6 +347,7 @@ assets:
     status: candidate
     work_id: sopranos
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 2.jpg"
     public_path: null
     source_url: null
@@ -349,6 +367,7 @@ assets:
     status: candidate
     work_id: sopranos
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 3.jpg"
     public_path: null
     source_url: null
@@ -368,6 +387,7 @@ assets:
     status: candidate
     work_id: sopranos
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 4.jpg"
     public_path: null
     source_url: null
@@ -387,6 +407,7 @@ assets:
     status: candidate
     work_id: mr-robot
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Мистер Робот (2015-2019) кадр 1.jpg"
     public_path: null
     source_url: null
@@ -406,6 +427,7 @@ assets:
     status: candidate
     work_id: mr-robot
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Мистер Робот (2015-2019) кадр 2.png"
     public_path: null
     source_url: null
@@ -425,6 +447,7 @@ assets:
     status: candidate
     work_id: mr-robot
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Мистер Робот (2015-2019) кадр 3.jpg"
     public_path: null
     source_url: null
@@ -444,6 +467,7 @@ assets:
     status: candidate
     work_id: the-undoing
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Отыграть назад (2020) кадр 1.jpg"
     public_path: null
     source_url: null
@@ -463,6 +487,7 @@ assets:
     status: candidate
     work_id: the-undoing
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Отыграть назад (2020) кадр 2.jpg"
     public_path: null
     source_url: null
@@ -482,6 +507,7 @@ assets:
     status: candidate
     work_id: cuckoos-nest
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 1.png"
     public_path: null
     source_url: null
@@ -501,6 +527,7 @@ assets:
     status: candidate
     work_id: cuckoos-nest
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 2.png"
     public_path: null
     source_url: null
@@ -520,6 +547,7 @@ assets:
     status: candidate
     work_id: cuckoos-nest
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 3.png"
     public_path: null
     source_url: null
@@ -539,6 +567,7 @@ assets:
     status: candidate
     work_id: cuckoos-nest
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 4.png"
     public_path: null
     source_url: null
@@ -558,6 +587,7 @@ assets:
     status: candidate
     work_id: cuckoos-nest
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 5.png"
     public_path: null
     source_url: null
@@ -577,6 +607,7 @@ assets:
     status: candidate
     work_id: de-gales-hus
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Сумасшедший дом (2008) кадр 1.jpg"
     public_path: null
     source_url: null
@@ -596,6 +627,7 @@ assets:
     status: candidate
     work_id: de-gales-hus
     scene_id: null
+    screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Сумасшедший дом (2008) кадр 2.jpg"
     public_path: null
     source_url: null

@@ -11,6 +11,7 @@ npm install
 npm run dev     # проверка медиареестра + ETL + astro dev
 npm run data    # только ETL: xlsx → public/data/*.json + отчёт валидации
 npm run validate:media # проверка медиареестра и запрета непроверенной публикации
+npm run test:media # регрессионные тесты медиавалидатора
 npm run build   # проверка медиареестра + ETL + astro build → dist/
 npm run preview # предпросмотр dist/
 ```

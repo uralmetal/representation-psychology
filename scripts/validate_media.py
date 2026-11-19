@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from datetime import date
 import sys
 from typing import Any
 from urllib.parse import urlparse
@@ -95,6 +96,22 @@ def main() -> None:
             elif not candidate_path.is_file():
                 errors.append(f"{prefix} ({asset_id}): source_file does not exist: {source_file}")
 
+        work_id = asset.get("work_id")
+        if work_id is not None and work_id not in work_ids:
+            errors.append(f"{prefix} ({asset_id}): unknown work_id {work_id!r}")
+
+        scene_id = asset.get("scene_id")
+        if scene_id is not None:
+            scene = scene_by_id.get(scene_id)
+            if scene is None:
+                errors.append(f"{prefix} ({asset_id}): unknown scene_id {scene_id!r}")
+            elif work_id and scene.get("work_id") != work_id:
+                errors.append(f"{prefix} ({asset_id}): scene_id does not belong to work_id")
+
+        analysis_unit = asset.get("analysis_unit")
+        if analysis_unit is not None and analysis_unit not in {"scene", "work_overall"}:
+            errors.append(f"{prefix} ({asset_id}): invalid analysis_unit {analysis_unit!r}")
+
         public_path = asset.get("public_path")
         source_url = asset.get("source_url")
         if source_url is not None:
@@ -134,40 +151,45 @@ def main() -> None:
                     errors.append(f"{prefix} ({asset_id}): approved asset requires legal_review.{field}")
             if legal_review.get("status") != "approved":
                 errors.append(f"{prefix} ({asset_id}): legal_review.status must be 'approved'")
+            reviewed_at = legal_review.get("reviewed_at")
+            if isinstance(reviewed_at, str) and reviewed_at.strip():
+                try:
+                    date.fromisoformat(reviewed_at[:10])
+                except ValueError:
+                    errors.append(f"{prefix} ({asset_id}): legal_review.reviewed_at must start with an ISO date (YYYY-MM-DD)")
 
             if not isinstance(public_path, str) or not public_path.startswith("/media/"):
                 errors.append(f"{prefix} ({asset_id}): approved asset public_path must start with /media/")
             else:
+                if public_path in approved_paths:
+                    errors.append(f"{prefix} ({asset_id}): public_path is already assigned to another asset: {public_path}")
                 relative = public_path.lstrip("/")
                 target = (ROOT / "public" / relative).resolve()
                 if not inside(target, PUBLIC_MEDIA):
                     errors.append(f"{prefix} ({asset_id}): public_path escapes public/media")
                 elif not target.is_file():
                     errors.append(f"{prefix} ({asset_id}): approved public file does not exist: {public_path}")
+                elif target.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp", ".avif"}:
+                    errors.append(f"{prefix} ({asset_id}): public_path must use a supported image extension")
                 approved_paths.add(public_path)
 
-            work_id = asset.get("work_id")
             if not isinstance(work_id, str) or work_id not in work_ids:
                 errors.append(f"{prefix} ({asset_id}): approved asset requires a valid work_id")
-            scene_id = asset.get("scene_id")
             if kind == "film_still":
-                analysis_unit = asset.get("analysis_unit")
                 if not asset.get("screen_time_reference"):
                     errors.append(f"{prefix} ({asset_id}): film_still requires an exact episode/timecode reference")
                 if asset.get("screen_time_verified") is not True:
                     errors.append(f"{prefix} ({asset_id}): film_still requires screen_time_verified: true")
-                if scene_id and analysis_unit not in (None, "scene"):
-                    errors.append(f"{prefix} ({asset_id}): a scene-linked film_still must use analysis_unit='scene'")
-                if not scene_id and analysis_unit != "work_overall":
-                    errors.append(f"{prefix} ({asset_id}): a film_still without scene_id must explicitly use analysis_unit='work_overall'")
-            if scene_id:
-                scene = scene_by_id.get(scene_id)
-                if scene is None:
-                    errors.append(f"{prefix} ({asset_id}): unknown scene_id {scene_id!r}")
-                elif scene.get("work_id") != work_id:
-                    errors.append(f"{prefix} ({asset_id}): scene_id does not belong to work_id")
-                elif kind == "film_still" and scene.get("analysis_unit") != "scene":
-                    errors.append(f"{prefix} ({asset_id}): film_still scene_id must reference a scene analysis unit")
+                if analysis_unit == "scene":
+                    if not scene_id:
+                        errors.append(f"{prefix} ({asset_id}): analysis_unit='scene' requires scene_id")
+                    elif scene_by_id.get(scene_id, {}).get("analysis_unit") != "scene":
+                        errors.append(f"{prefix} ({asset_id}): film_still scene_id must reference a scene analysis unit")
+                elif analysis_unit == "work_overall":
+                    if scene_id:
+                        errors.append(f"{prefix} ({asset_id}): work_overall film_still must not set scene_id")
+                else:
+                    errors.append(f"{prefix} ({asset_id}): film_still requires explicit analysis_unit='scene' or 'work_overall'")
         elif public_path:
             errors.append(f"{prefix} ({asset_id}): non-approved asset must not have public_path")
 

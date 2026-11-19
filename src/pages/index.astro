@@ -23,16 +23,34 @@ const entries = codebookFile().entries;
     <h1>{strings.siteTitle}</h1>
     <p class="lead">{strings.home.thesis}</p>
     <p class="muted hero__cue">{strings.home.scrollCue}</p>
+    <div class="hero__tasks">
+      <p class="hero__tasks-title">{strings.home.tasksTitle}</p>
+      <ul>
+        <li>{strings.home.taskStory}</li>
+        <li>{strings.home.taskCatalog}</li>
+        <li>{strings.home.taskData}</li>
+      </ul>
+    </div>
   </header>
 
   <StoryScroll client:load {steps} {works} {scenes} {entries} {base} />
+
+  <section class="catalog-teaser" aria-labelledby="catalog-teaser-title">
+    <h2 id="catalog-teaser-title">{strings.catalogSummary.title}</h2>
+    <p class="muted">{strings.catalogSummary.text}</p>
+    <p class="catalog-teaser__stats small">
+      {works.length} произведений · {scenes.length} единиц анализа · {entries.length} значений словаря
+    </p>
+    <p><a class="btn" href={`${base}catalog/`}>{strings.catalogSummary.open} →</a></p>
+  </section>
 
   <section class="cta" aria-labelledby="cta-title">
     <h2 id="cta-title">{strings.home.ctaTitle}</h2>
     <p class="muted">{strings.home.ctaText}</p>
     <p class="cta__actions">
       <a class="btn" href={`${base}infographics/`}>{strings.nav.infographics}</a>
-      <a class="btn" href={`${base}method/#files`}>{strings.home.downloadData}</a>
+      <a class="btn" href={`${base}catalog/`}>{strings.nav.catalog}</a>
+      <a class="btn" href={`${base}data/dataset.zip`}>{strings.home.downloadData}</a>
       <a class="btn btn--ghost" href={`${base}codebook/`}>{strings.nav.codebook}</a>
       <a class="btn btn--ghost" href={`${base}method/`}>{strings.nav.method}</a>
       <a class="btn btn--ghost" href={`${base}#prologue`}>{strings.home.aboutProject}</a>
@@ -52,6 +70,31 @@ const entries = codebookFile().entries;
   }
   .lead { font-size: 1.15rem; max-width: 44rem; }
   .hero__cue { margin-top: 1rem; font-size: 0.9rem; }
+  .hero__tasks {
+    margin-top: 1.25rem;
+    padding: 0.9rem 1.1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    max-width: 44rem;
+  }
+  .hero__tasks-title {
+    margin: 0 0 0.4rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  .hero__tasks ul { margin: 0; padding-left: 1.2rem; }
+  .hero__tasks li { margin: 0.25rem 0; font-size: 0.92rem; }
+  .catalog-teaser {
+    margin-top: 3.5rem;
+    padding: 1.25rem 1.4rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .catalog-teaser__stats { margin: 0.4rem 0 1rem; }
   .cta { margin-top: 4rem; }
   .cta__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 </style>

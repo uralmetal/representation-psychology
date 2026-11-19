@@ -8,6 +8,10 @@ from etl.extract import CHAPTERS, ROOT
 
 BANNED = ("Полина", "Ира")
 CONTENT_KINDS = {"content"}
+NOTE_FIELDS = {
+    "scene_description", "space_type", "therapist_archetype", "ethical_violation",
+    "stigma_level", "utterance_type", "visual_trope", "scene_function", "general",
+}
 
 
 def validate(dataset: dict) -> list[str]:
@@ -44,6 +48,14 @@ def validate(dataset: dict) -> list[str]:
             _check(errors, scene, "visual_trope", value, codes)
         if not isinstance(scene["utterance_types"], list) or not isinstance(scene["visual_tropes"], list):
             errors.append(f"{scene['id']}: мультиполя должны быть массивами")
+        for field in (scene.get("field_notes") or {}):
+            if field not in NOTE_FIELDS:
+                errors.append(f"{scene['id']}: неизвестное поле field_notes «{field}»")
+
+    for work in works:
+        for frame in work.get("frames") or []:
+            if not (ROOT / "public" / frame).is_file():
+                errors.append(f"{work['id']}: нет файла кадра {frame}")
 
     blob = "\n".join(str(dataset[name]) for name in ("works", "scenes", "codebook"))
     for name in BANNED:

@@ -16,7 +16,17 @@ const entries = codebookFile().entries;
 ---
 
 <Layout title={workItem?.title ?? scene.id} description={scene.description.slice(0, 160)}>
-  <p><a href={`${base}`}>← {strings.nav.story}</a></p>
+  <p><a href={`${base}`} data-back>← {strings.nav.story}</a></p>
+  <script is:inline>
+    (() => {
+      const link = document.querySelector('[data-back]');
+      if (!link) return;
+      try {
+        const anchor = sessionStorage.getItem('rp:last-anchor');
+        if (anchor) link.setAttribute('href', `${link.getAttribute('href')}#${anchor}`);
+      } catch {}
+    })();
+  </script>
   <SceneCard {scene} work={workItem} {entries} {base} />
   {workItem && (
     <p><a href={`${base}work/${workItem.id}/`}>Все единицы: {workItem.title}</a></p>

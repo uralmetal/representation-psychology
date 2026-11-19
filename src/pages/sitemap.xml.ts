@@ -6,6 +6,7 @@ export const GET: APIRoute = ({ site }) => {
   const origin = (site?.origin ?? 'https://uralmetal.github.io').replace(/\/$/, '');
   const paths = [
     '',
+    'catalog/',
     'infographics/',
     'codebook/',
     'method/',

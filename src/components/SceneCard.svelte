@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { strings } from '../lib/i18n';
   import type { CodebookEntry, Scene, Work } from '../lib/types';
 
   interface Props {
@@ -29,6 +30,19 @@
 
   const unitLabel = $derived(scene.analysis_unit === 'scene' ? 'сцена' : 'произведение целиком');
   const formatLabel = $derived(work?.format === 'tv_series' ? 'сериал' : 'фильм');
+
+  const FIELD_LABELS: Record<string, string> = {
+    scene_description: 'Описание сцены',
+    space_type: 'Пространство',
+    therapist_archetype: 'Архетип',
+    ethical_violation: 'Этическое нарушение',
+    stigma_level: 'Стигма',
+    utterance_type: 'Типы реплик',
+    visual_trope: 'Визуальные тропы',
+    scene_function: 'Функция сцены',
+    general: 'Общее примечание',
+  };
+  const fieldNotes = $derived(Object.entries(scene.field_notes ?? {}));
 </script>
 
 <article class="scene-card">
@@ -106,6 +120,21 @@
     {#if scene.note}
       <div class="scene-fields__wide"><dt>Примечание</dt><dd class="note">{scene.note}</dd></div>
     {/if}
+    {#if fieldNotes.length}
+      <div class="scene-fields__wide">
+        <dt>{strings.scene.fieldNotes}</dt>
+        <dd>
+          <dl class="field-notes">
+            {#each fieldNotes as [field, text]}
+              <div class="field-notes__item">
+                <dt>{FIELD_LABELS[field] ?? field}</dt>
+                <dd>{text}</dd>
+              </div>
+            {/each}
+          </dl>
+        </dd>
+      </div>
+    {/if}
   </dl>
 </article>
 
@@ -120,4 +149,12 @@
   .stigma-medium { color: var(--stigma-medium); }
   .stigma-low { color: var(--stigma-low); }
   .stigma-high a, .stigma-medium a, .stigma-low a { color: inherit; }
+  .field-notes { margin: 0.25rem 0 0; display: grid; gap: 0.5rem; }
+  .field-notes__item dt {
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .field-notes__item dd { margin: 0.1rem 0 0; font-size: 0.9rem; color: var(--text-dim); }
 </style>

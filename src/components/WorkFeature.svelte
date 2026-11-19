@@ -32,10 +32,30 @@
     work.year_start === work.year_end ? String(work.year_start) : `${work.year_start}–${work.year_end}`,
   );
   const formatLabel = $derived(work.format === 'tv_series' ? 'сериал' : 'фильм');
+  const frames = $derived(work.frames ?? []);
+  const fieldNotes = $derived.by(() => {
+    const out: Record<string, string> = {};
+    for (const s of scenes) {
+      for (const [k, v] of Object.entries(s.field_notes ?? {})) {
+        out[k] = out[k] ? `${out[k]} ${v}` : v;
+      }
+    }
+    return Object.entries(out);
+  });
+  const FIELD_LABELS: Record<string, string> = {
+    scene_description: 'Описание',
+    space_type: 'Пространство',
+    therapist_archetype: 'Архетип',
+    ethical_violation: 'Этика',
+    stigma_level: 'Стигма',
+    utterance_type: 'Типы реплик',
+    visual_trope: 'Визуальные тропы',
+    scene_function: 'Функция сцены',
+    general: 'Общее примечание',
+  };
 </script>
 
 <article class="work-feature">
-  <h3 class="wf-title">{work.title}</h3>
   {#if work.original_title}<p class="muted small wf-original">{work.original_title}</p>{/if}
   <dl class="wf-meta">
     <div><dt>Формат</dt><dd>{formatLabel}</dd></div>
@@ -44,6 +64,14 @@
     <div class="wf-wide"><dt>Жанры</dt><dd>{work.genres.join(', ')}</dd></div>
   </dl>
   <p class="wf-desc">{work.description}</p>
+
+  {#if frames.length}
+    <div class="wf-frames">
+      {#each frames.slice(0, 3) as f}
+        <img src="{base}{f}" alt="Кадр из «{work.title}»" loading="lazy" />
+      {/each}
+    </div>
+  {/if}
 
   <dl class="wf-codes">
     <div>
@@ -94,6 +122,20 @@
     </div>
   </dl>
 
+  {#if fieldNotes.length}
+    <div class="wf-fieldnotes">
+      <h4 class="wf-fieldnotes__title">Пояснения кодирования</h4>
+      <dl>
+        {#each fieldNotes as [field, text]}
+          <div>
+            <dt>{FIELD_LABELS[field] ?? field}</dt>
+            <dd>{text}</dd>
+          </div>
+        {/each}
+      </dl>
+    </div>
+  {/if}
+
   {#if m.notes.length}
     <p class="wf-note muted small">Примечание: {m.notes.join(' ')}</p>
   {/if}
@@ -106,7 +148,6 @@
 
 <style>
   .work-feature { padding: 0.25rem 0.25rem 0.5rem; }
-  .wf-title { margin: 0 0 0.15rem; font-size: 1.25rem; }
   .wf-original { margin: 0 0 0.6rem; }
   .wf-meta {
     display: grid;
@@ -140,4 +181,29 @@
   .wf-codes dd { margin: 0.15rem 0 0; }
   .wf-note { margin: 0 0 0.6rem; }
   .wf-links { margin: 0; }
+  .wf-frames {
+    display: flex;
+    gap: 0.4rem;
+    margin: 0 0 0.9rem;
+    overflow-x: auto;
+  }
+  .wf-frames img {
+    height: 84px;
+    width: auto;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+  .wf-fieldnotes { margin: 0 0 0.8rem; font-size: 0.82rem; }
+  .wf-fieldnotes__title {
+    margin: 0 0 0.35rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+  }
+  .wf-fieldnotes dl { margin: 0; display: grid; gap: 0.4rem; }
+  .wf-fieldnotes dt { color: var(--accent); font-size: 0.75rem; }
+  .wf-fieldnotes dd { margin: 0.1rem 0 0; color: var(--text-dim); }
 </style>

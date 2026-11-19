@@ -1,0 +1,22 @@
+---
+import Layout from '../components/Layout.astro';
+import Catalog from '../islands/Catalog.svelte';
+import { strings } from '../lib/i18n';
+import { codebookFile, scenesFile, worksFile } from '../lib/data';
+---
+
+<Layout title={strings.catalog.title} description={strings.catalog.intro}>
+  <h1>{strings.catalog.title}</h1>
+  <p class="lead">{strings.catalog.intro}</p>
+  <Catalog
+    client:load
+    works={worksFile().works}
+    scenes={scenesFile().scenes}
+    entries={codebookFile().entries}
+    base={import.meta.env.BASE_URL}
+  />
+</Layout>
+
+<style>
+  .lead { font-size: 1.05rem; max-width: 44rem; color: var(--text-dim); }
+</style>

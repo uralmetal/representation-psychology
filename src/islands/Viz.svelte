@@ -81,6 +81,12 @@
   <h3 class="viz-title">{title}</h3>
   {#if subtitle}<p class="muted small">{subtitle}</p>{/if}
 
+  {#if kind === 'ethics-counts' && counts.length}
+    <p class="viz-ethics-counts">
+      {#each counts as c}{c.label}: <strong>{c.count}</strong>{c.id !== counts[counts.length - 1].id ? ' · ' : ''}{/each}
+    </p>
+  {/if}
+
   {#if timeline}
     {@const tl = timeline!}
     <svg viewBox="0 0 {W} {H}" role="img" aria-label={title}>
@@ -108,6 +114,12 @@
           </rect>
         {/if}
       {/each}
+      <g class="viz-legend" transform="translate({W - 200}, 10)">
+        <circle cx="6" cy="7" r="5" fill="var(--scene)" />
+        <text x="16" y="11" fill="var(--text-dim)" font-size="11">сцена</text>
+        <rect x="62" y="2" width="10" height="10" fill="var(--overall)" />
+        <text x="78" y="11" fill="var(--text-dim)" font-size="11">произведение целиком</text>
+      </g>
     </svg>
     <table>
       <caption>{caption}</caption>
@@ -179,6 +191,8 @@
 
 <style>
   .viz-title { margin-top: 0; }
+  .viz-ethics-counts { margin: 0.25rem 0 0.75rem; font-size: 0.95rem; }
+  .viz-legend text { font-family: var(--font); }
   .viz-sub { margin: 1rem 0 0.25rem; font-size: 0.95rem; }
   .matrix td, .matrix th { text-align: center; }
   .matrix__cell { min-width: 3.5rem; }

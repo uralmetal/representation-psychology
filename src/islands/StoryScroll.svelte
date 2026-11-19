@@ -17,16 +17,15 @@
   const activeStep = $derived(sorted[active]);
 
   const workById = $derived(new Map(works.map((w) => [w.id, w])));
-  const activeWork = $derived(
-    activeStep?.workId ? workById.get(activeStep.workId) : undefined,
-  );
-  const activeScenes = $derived(
-    activeStep?.workId ? scenes.filter((s) => s.work_id === activeStep.workId) : [],
-  );
-
-  const yearMin = $derived(Math.min(...works.map((w) => w.year_start)));
-  const yearMax = $derived(Math.max(...works.map((w) => w.year_end)));
-  const catTotal = $derived(new Set(entries.map((e) => e.category)).size);
+  const scenesByWorkId = $derived.by(() => {
+    const map = new Map<string, Scene[]>();
+    for (const s of scenes) {
+      const list = map.get(s.work_id) ?? [];
+      list.push(s);
+      map.set(s.work_id, list);
+    }
+    return map;
+  });
 
   let active = $state(0);
   let root: HTMLElement | undefined = $state();
@@ -44,6 +43,15 @@
       { rootMargin: '-30% 0px -60% 0px' },
     );
     els.forEach((el) => io.observe(el));
+
+    const hash = decodeURIComponent(window.location.hash.replace('#', ''));
+    if (hash) {
+      const i = sorted.findIndex((s) => s.anchor === hash);
+      if (i >= 0) {
+        active = i;
+        requestAnimationFrame(() => go(i));
+      }
+    }
     return () => io.disconnect();
   });
 
@@ -51,6 +59,11 @@
     const anchor = activeStep?.anchor;
     if (anchor && typeof history !== 'undefined') {
       history.replaceState(null, '', `#${anchor}`);
+      try {
+        sessionStorage.setItem('rp:last-anchor', anchor);
+      } catch {
+        /* sessionStorage недоступен */
+      }
     }
   });
 
@@ -58,6 +71,10 @@
     const el = root?.querySelectorAll<HTMLElement>('.step')[i];
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     el?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    const anchor = sorted[i]?.anchor;
+    if (anchor && typeof history !== 'undefined') {
+      history.pushState(null, '', `#${anchor}`);
+    }
   }
 
   function years(w: Work): string {
@@ -79,13 +96,35 @@
   </a>
 {/snippet}
 
+<nav class="story-toc" aria-label={strings.story.contents}>
+  <p class="story-toc__title">{strings.story.contents}</p>
+  <ol class="story-toc__list">
+    {#each sorted as s, i}
+      <li>
+        <a
+          href="#{s.anchor}"
+          class:is-active={i === active}
+          aria-current={i === active ? 'true' : undefined}
+          onclick={(e) => { e.preventDefault(); go(i); }}
+        >{s.title}</a>
+      </li>
+    {/each}
+  </ol>
+</nav>
+
 <div class="scrolly" bind:this={root}>
   <div class="scrolly__steps">
     {#each sorted as s}
       <section class="step" id={s.anchor}>
         <p class="step__kicker">{s.kicker}</p>
         <h2>{s.title}</h2>
-        <div class="step__body">{@html s.html}</div>
+        {#if s.html}<div class="step__body">{@html s.html}</div>{/if}
+        {#if s.kind === 'film'}
+          {@const w = s.workId ? workById.get(s.workId) : undefined}
+          {#if w}
+            <WorkFeature work={w} scenes={scenesByWorkId.get(w.id) ?? []} {entries} {base} />
+          {/if}
+        {/if}
         {#if showFilms(s)}
           <div class="step__works">
             <p class="step__works-label">{strings.story.stepWorks}</p>
@@ -100,65 +139,10 @@
       </section>
     {/each}
   </div>
-
-  <div class="scrolly__stage-wrap">
-    <aside class="scrolly__stage" aria-label={strings.story.title}>
-      <ol class="stage__rail">
-        {#each sorted as s, i}
-          <li>
-            <button
-              type="button"
-              class:is-active={i === active}
-              aria-current={i === active ? 'true' : undefined}
-              onclick={() => go(i)}
-            >
-              <span class="stage__num">{i + 1}</span>
-              <span class="stage__label">{s.title}</span>
-            </button>
-          </li>
-        {/each}
-      </ol>
-
-      <div class="stage__panel">
-        {#if activeStep?.kind === 'film' && activeWork}
-          {#key activeStep.anchor}
-            <WorkFeature work={activeWork} scenes={activeScenes} {entries} {base} />
-          {/key}
-        {:else if activeStep && showFilms(activeStep)}
-          <div class="stage-films">
-            <p class="stage-works__label">{strings.story.stepWorks}</p>
-            {#each activeStep.workIds as wid}
-              {@const w = workById.get(wid)}
-              {#if w}{@render miniCard(w)}{/if}
-            {/each}
-          </div>
-        {:else if activeStep?.tag === 'prologue'}
-          <div class="card stage__info">
-            <h3>{strings.siteTitle}</h3>
-            <p class="muted small">{strings.home.thesis}</p>
-            <p class="muted small">
-              {works.length} произведений · {catTotal} категорий словаря · {yearMin}–{yearMax}
-            </p>
-          </div>
-        {:else if activeStep?.tag === 'epilogue'}
-          <div class="card stage__info">
-            <h3>{strings.story.endTitle}</h3>
-            <p class="muted small">{strings.footer.disclaimer}</p>
-            <p class="small"><a href="{base}method/">{strings.nav.method} →</a></p>
-          </div>
-        {/if}
-      </div>
-    </aside>
-  </div>
 </div>
 
 <style>
-  .scrolly {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(19rem, 26rem);
-    gap: 3rem;
-    align-items: start;
-  }
+  .scrolly { max-width: 56rem; }
 
   .step {
     margin-bottom: 7rem;
@@ -174,84 +158,44 @@
   }
   .step__body :global(p) { margin: 0.75rem 0; }
   .step__body :global(strong) { color: var(--accent); }
-  .step__body :global(.film-meta) { color: var(--text-dim); font-size: 0.9rem; }
-  .step__body :global(.film-codes) {
-    list-style: none;
-    padding: 0;
-    margin: 0.75rem 0;
+  .step__works { margin-top: 1.25rem; }
+  .step__works-list {
     display: grid;
-    gap: 0.35rem;
-    font-size: 0.92rem;
-  }
-  .step__body :global(.film-codes strong) { color: var(--accent); }
-  .step__body :global(.film-note) { margin: 0.5rem 0; }
-  .step__body :global(.film-link) { margin: 0.75rem 0 0; }
-  .step__works { display: none; }
-
-  .scrolly__stage-wrap {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-  }
-  .scrolly__stage {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 0.5rem 0.25rem 1rem 0;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 0.5rem;
   }
 
-  .stage__rail {
+  .story-toc {
+    margin: 0 0 2rem;
+    padding: 0.9rem 1.1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .story-toc__title {
+    margin: 0 0 0.5rem;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+  }
+  .story-toc__list {
     list-style: none;
     margin: 0;
-    padding: 0.25rem 0 0.5rem;
-    overflow-y: auto;
-    flex: 0 1 auto;
-    max-height: 11rem;
+    padding: 0;
     display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.9rem;
   }
-  .stage__rail button {
-    display: flex;
-    gap: 0.55rem;
-    align-items: baseline;
-    width: 100%;
-    background: none;
-    border: none;
-    border-left: 2px solid var(--border);
-    padding: 0.22rem 0.55rem;
+  .story-toc__list a {
     color: var(--text-dim);
-    cursor: pointer;
-    text-align: left;
-    font: inherit;
-    font-size: 0.8rem;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-bottom: 1px dotted transparent;
   }
-  .stage__rail button:hover { color: var(--text); }
-  .stage__rail button.is-active {
-    border-left-color: var(--accent);
-    color: var(--text);
-  }
-  .stage__num {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--accent);
-    min-width: 1.1rem;
-  }
-  .stage__label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  .story-toc__list a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .story-toc__list a.is-active { color: var(--accent); }
 
-  .stage__panel {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    padding-right: 0.35rem;
-  }
-
-  .stage-works__label,
   .step__works-label {
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -291,18 +235,7 @@
   }
   .mini-card__title { font-size: 0.92rem; }
 
-  .stage__info h3 { margin-top: 0; }
-  .stage__info p { margin: 0.4rem 0; }
-
   @media (max-width: 60rem) {
-    .scrolly { grid-template-columns: 1fr; }
-    .scrolly__stage-wrap { display: none; }
     .step { margin-bottom: 4rem; }
-    .step__works { display: block; margin-top: 1.25rem; }
-    .step__works-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-      gap: 0.5rem;
-    }
   }
 </style>

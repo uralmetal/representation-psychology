@@ -14,7 +14,13 @@ const meta = metaFile();
 const report = JSON.parse(
   readFileSync(join(process.cwd(), 'public/data/validation-report.json'), 'utf8'),
 );
-const files = ['works.json', 'scenes.json', 'codebook.json', 'validation-report.json', 'meta.json'];
+const fileDescs: Record<string, string> = {
+  'works.json': strings.method.fileWorks,
+  'scenes.json': strings.method.fileScenes,
+  'codebook.json': strings.method.fileCodebook,
+  'meta.json': strings.method.fileMeta,
+  'validation-report.json': strings.method.fileReport,
+};
 ---
 
 <Layout title={strings.method.title} description={strings.tagline}>
@@ -40,9 +46,13 @@ const files = ['works.json', 'scenes.json', 'codebook.json', 'validation-report.
 
   <h2 id="files">{strings.method.files}</h2>
   <ul>
-    {files.map((f) => <li><a href={`${base}data/${f}`}>{f}</a></li>)}
+    {Object.entries(fileDescs).map(([f, desc]) => (
+      <li><a href={`${base}data/${f}`} download>{f}</a> — <span class="muted small">{desc}</span></li>
+    ))}
   </ul>
-  <p><a class="btn" href={`${base}data/works.json`}>{strings.method.downloadData}</a></p>
+  <p>
+    <a class="btn" href={`${base}data/dataset.zip`}>{strings.method.datasetZip}</a>
+  </p>
 
   <h2>{strings.method.limitations}</h2>
   <ul class="small">

@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 import yaml
 
+from etl.frames import collect_frames
 from etl.normalize import (
     analysis_unit,
     clean,
@@ -70,6 +71,7 @@ def build() -> dict:
     column = {name: index for index, name in enumerate(headers)}
     entries = load_codebook()
     meta = load_works_meta()
+    frames_map = collect_frames(meta)
     by_match = {key(item["match"]): item for item in meta}
     warnings: list[str] = []
     withheld: list[dict] = []
@@ -99,6 +101,7 @@ def build() -> dict:
             warnings.append(f"{title}: несколько таймкодов оставлены одной единицей анализа")
 
         note_parts: list[str] = []
+        field_notes: dict[str, str] = {}
         codes: dict[str, object] = {}
         for source_name, target_name in FIELD_MAP.items():
             raw = clean(row.iloc[column[source_name]])
@@ -124,7 +127,8 @@ def build() -> dict:
         ):
             text = clean(row.iloc[column[note_column]])
             if text:
-                note_parts.append(f"{note_column}: {text}")
+                field = note_column[:-5] if note_column.endswith("_note") else note_column
+                field_notes[field] = text
         tools = clean(row.iloc[column["the_use_of_DH_tools"]])
         if tools:
             withheld.append({"work_id": work_id, "the_use_of_DH_tools": tools})
@@ -143,6 +147,7 @@ def build() -> dict:
                 "country": split_list(row.iloc[column["country"]]),
                 "genres": split_list(row.iloc[column["film genre"]]),
                 "description": profile["description"].strip(),
+                "frames": frames_map.get(work_id, []),
             }
         )
         scenes.append(
@@ -160,6 +165,7 @@ def build() -> dict:
                 "visual_tropes": codes["visual_tropes"],
                 "scene_function": split_list(row.iloc[column["scene_function"]]),
                 "note": "\n\n".join(note_parts),
+                "field_notes": field_notes,
             }
         )
 

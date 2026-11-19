@@ -10,7 +10,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "title", "format", "year_start", "year_end", "country", "genres", "description"],
+        "required": ["id", "title", "format", "year_start", "year_end", "country", "genres", "description", "frames"],
         "properties": {
           "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "title": { "type": "string" },
@@ -20,7 +20,8 @@
           "year_end": { "type": "integer" },
           "country": { "type": "array", "items": { "type": "string" } },
           "genres": { "type": "array", "items": { "type": "string" } },
-          "description": { "type": "string" }
+          "description": { "type": "string" },
+          "frames": { "type": "array", "items": { "type": "string" } }
         },
         "additionalProperties": false
       }

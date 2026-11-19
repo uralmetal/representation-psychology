@@ -8,6 +8,7 @@ export interface Work {
   country: string[];
   genres: string[];
   description: string;
+  frames: string[];
 }
 
 export interface Scene {
@@ -24,6 +25,7 @@ export interface Scene {
   visual_tropes: string[];
   scene_function: string[];
   note: string;
+  field_notes: Record<string, string>;
 }
 
 export interface CodebookEntry {

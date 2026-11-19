@@ -12,7 +12,7 @@
         "type": "object",
         "required": [
           "id", "work_id", "analysis_unit", "timecode", "description",
-          "therapist_archetype", "utterance_types", "visual_tropes", "scene_function", "note"
+          "therapist_archetype", "utterance_types", "visual_tropes", "scene_function", "note", "field_notes"
         ],
         "properties": {
           "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
@@ -27,7 +27,11 @@
           "utterance_types": { "type": "array", "items": { "type": "string" } },
           "visual_tropes": { "type": "array", "items": { "type": "string" } },
           "scene_function": { "type": "array", "items": { "type": "string" } },
-          "note": { "type": "string" }
+          "note": { "type": "string" },
+          "field_notes": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
         },
         "additionalProperties": false
       }

@@ -134,7 +134,9 @@ def main() -> None:
                 errors.append(f"{prefix} ({asset_id}): approved asset requires a valid work_id")
             scene_id = asset.get("scene_id")
             if kind == "film_still" and not scene_id:
-                errors.append(f"{prefix} ({asset_id}): film_still must be linked to a specific scene/unit")
+                errors.append(f"{prefix} ({asset_id}): film_still must be linked to a specific analysis unit")
+            if kind == "film_still" and not asset.get("screen_time_reference"):
+                errors.append(f"{prefix} ({asset_id}): film_still requires a verified episode/timecode reference")
             if scene_id:
                 scene = scene_by_id.get(scene_id)
                 if scene is None:

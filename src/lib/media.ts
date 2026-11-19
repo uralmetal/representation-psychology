@@ -11,7 +11,15 @@ export interface MediaAssetRecord {
   source_file?: string | null;
   public_path?: string | null;
   source_url?: string | null;
+  source_date?: string | null;
+  source_notes?: string | null;
   creator_or_rightsholder?: string | null;
+  license?: string | null;
+  license_url?: string | null;
+  rights_notes?: string | null;
+  analysis_unit?: 'scene' | 'work_overall' | null;
+  screen_time_verified?: boolean;
+  proposed_scene_id?: string | null;
   analysis_purpose?: string | null;
   alt?: string | null;
   caption?: string | null;

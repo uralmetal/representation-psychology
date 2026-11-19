@@ -697,7 +697,7 @@ assets:
 
   - id: freud-waiting-room-2016
     kind: photograph
-    status: candidate
+    status: pending_review
     work_id: dangerous-method
     analysis_unit: work_overall
     scene_id: null
@@ -749,7 +749,7 @@ assets:
 
   - id: freud-practice-notice-1891
     kind: photograph
-    status: candidate
+    status: pending_review
     work_id: dangerous-method
     analysis_unit: work_overall
     scene_id: null
@@ -775,7 +775,7 @@ assets:
 
   - id: freud-consulting-room-door-2010
     kind: photograph
-    status: candidate
+    status: pending_review
     work_id: dangerous-method
     analysis_unit: work_overall
     scene_id: null

@@ -642,3 +642,107 @@ assets:
       reference: null
       reviewer: null
       reviewed_at: null
+
+  - id: burghoelzli-clinic-c1890
+    kind: photograph
+    status: candidate
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Burghoelzli.PNG"
+    source_date: "Изображённая клиника датирована на Commons приблизительно 1890 годом; репродукция опубликована в источнике 1935 года."
+    source_notes: "Источник: Auguste Forel, Rückblick auf mein Leben, Zürich: Europa-Verlag, 1935. Страница Commons указывает автора как anonymous/unknown."
+    creator_or_rightsholder: "Неизвестный автор фотографии; в записи Wikimedia Commons указано anonymous/unknown."
+    license: "Public Domain Mark 1.0 по отметке Wikimedia Commons (основание — возраст); применимость статуса в юрисдикции публикации не проверена."
+    license_url: "https://creativecommons.org/publicdomain/mark/1.0/"
+    rights_notes: "Кандидат на исторический контекст «Опасного метода». Не публиковать до независимой проверки происхождения и правового статуса."
+    analysis_purpose: "Исторический контекст клинической среды Бургхёльцли; не является кадром фильма и не доказывает точное устройство интерьеров, показанных в фильме."
+    alt: "Чёрно-белое изображение здания психиатрической клиники Бургхёльцли с несколькими корпусами и деревьями на переднем плане."
+    caption: "Клиника Бургхёльцли, изображение датировано приблизительно 1890 годом; репродукция приводится в мемуарах Августа Фореля 1935 года."
+    attribution: "Автор фотографии неизвестен; источник репродукции: Auguste Forel, Rückblick auf mein Leben (1935), через Wikimedia Commons. Wikimedia Commons обозначает файл как Public Domain Mark 1.0; правовой статус требует отдельной проверки."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+
+  - id: burghoelzli-morning-report-c1900
+    kind: photograph
+    status: candidate
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Forel_Assistants.JPG"
+    source_date: "Около 1900 года; репродукция опубликована в источнике 1935 года."
+    source_notes: "Подпись Commons называет изображённое утренним обходом в Бургхёльцли и перечисляет сотрудников; автор фотографии обозначен как anonymous/unknown. Источник: Auguste Forel, Rückblick auf mein Leben, Zürich: Europa-Verlag, 1935."
+    creator_or_rightsholder: "Неизвестный автор фотографии; в записи Wikimedia Commons указано anonymous/unknown."
+    license: "Public Domain Mark 1.0 по отметке Wikimedia Commons (основание — возраст); применимость статуса в юрисдикции публикации не проверена."
+    license_url: "https://creativecommons.org/publicdomain/mark/1.0/"
+    rights_notes: "Кандидат на исторический контекст институциональной практики. Не публиковать до независимой проверки происхождения и правового статуса."
+    analysis_purpose: "Исторический контекст организации работы клиники Бургхёльцли; не выдавать фотографию за сцену или реконструкцию конкретного эпизода «Опасного метода»."
+    alt: "Группа мужчин стоит в комнате клиники; один из них держит бумаги, остальные расположены рядом в ряд."
+    caption: "Утренний врачебный обход в клинике Бургхёльцли, приблизительно 1900 год; подпись источника перечисляет сотрудников учреждения."
+    attribution: "Автор фотографии неизвестен; источник репродукции: Auguste Forel, Rückblick auf mein Leben (1935), через Wikimedia Commons. Wikimedia Commons обозначает файл как Public Domain Mark 1.0; правовой статус требует отдельной проверки."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+
+  - id: freud-waiting-room-2016
+    kind: photograph
+    status: candidate
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Freuds_Wartezimmer_in_der_Berggasse_19.jpg"
+    source_date: "31 марта 2016 года."
+    source_notes: "Собственная фотография автора Siesta; на странице файла указана лицензия CC BY-SA 4.0. Снимок сделан в Berggasse 19, Вена. Это фотография 2016 года, а не исторический снимок начала XX века."
+    creator_or_rightsholder: "Siesta."
+    license: "Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)."
+    license_url: "https://creativecommons.org/licenses/by-sa/4.0/"
+    rights_notes: "При использовании сохранить атрибуцию, ссылку на лицензию и указать изменения; при адаптации соблюдать ShareAlike. Перед публикацией проверить лицензионные условия и требования целевой юрисдикции."
+    analysis_purpose: "Контекстный визуальный источник о зале ожидания по адресу Berggasse 19; показывать только как фотографию места в 2016 году, не как доказательство точного исторического вида или кинодекорации."
+    alt: "Зал ожидания на Berggasse 19 в Вене: светлая комната с рядом стульев и дверным проёмом."
+    caption: "Зал ожидания по адресу Berggasse 19, Вена; фотография сделана 31 марта 2016 года. Это современный снимок места, а не кадр из фильма."
+    attribution: "Photo: Siesta, “Freud's waiting room in Berggasse 19” (2016), CC BY-SA 4.0, via Wikimedia Commons."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null
+
+  - id: sabina-spielrein-portrait-1918
+    kind: photograph
+    status: candidate
+    work_id: dangerous-method
+    analysis_unit: work_overall
+    scene_id: null
+    source_file: null
+    public_path: null
+    source_url: "https://commons.wikimedia.org/wiki/File:Sabina_Spielrein.jpg"
+    source_date: "2 января 1918 года (дата, приведённая Wikimedia Commons)."
+    source_notes: "Источник обозначен как family photo; фотограф неизвестен; размер оригинального файла на Commons — 230 × 299 px. На странице Commons указана Public Domain Mark 1.0; локальный статус прав не проверен. Не использовать AI-retouched alternate."
+    creator_or_rightsholder: "Неизвестный автор; источник обозначен как family photo."
+    license: "Public Domain Mark 1.0 по отметке Wikimedia Commons; автор неизвестен, применимость статуса в юрисдикции публикации не проверена."
+    license_url: "https://creativecommons.org/publicdomain/mark/1.0/"
+    rights_notes: "Низкое разрешение и неустановленный автор. Оставить кандидатом для проверки; не публиковать до установления происхождения и правового статуса."
+    analysis_purpose: "Исторический портрет Сабины Шпильрейн — одной из исторических фигур, показанных в «Опасном методе»; не путать с изображением актрисы."
+    alt: "Чёрно-белый портрет Сабины Шпильрейн в одежде начала XX века."
+    caption: "Сабина Шпильрейн, фотография датирована 2 января 1918 года; страница источника указывает семейное происхождение снимка."
+    attribution: "Автор неизвестен; источник обозначен как семейная фотография, Wikimedia Commons, Public Domain Mark 1.0. Атрибуция и правовой статус требуют дополнительной проверки."
+    legal_basis: null
+    legal_review:
+      status: not_reviewed
+      reference: null
+      reviewer: null
+      reviewed_at: null

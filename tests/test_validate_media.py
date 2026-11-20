@@ -114,6 +114,58 @@ class MediaValidatorTests(unittest.TestCase):
         asset.update(overrides)
         return asset
 
+    def test_owner_requested_photograph_can_publish_without_legal_review(self) -> None:
+        asset = self.base_asset(
+            status="published_by_request",
+            source_url="https://commons.wikimedia.org/wiki/File:Example.jpg",
+            image_url="https://upload.wikimedia.org/example.jpg",
+            creator_or_rightsholder="Example Photographer",
+            license="CC BY-SA 4.0",
+            license_url="https://creativecommons.org/licenses/by-sa/4.0/",
+            analysis_purpose="Historical context for the analysis.",
+            alt="A historical photograph.",
+            caption="A historical photograph from 2010.",
+            attribution="Photo: Example Photographer, CC BY-SA 4.0.",
+            chapter_anchor="space",
+        )
+        self.write_manifest(asset)
+        validator.main()
+
+    def test_owner_requested_film_still_can_publish_without_origin_check(self) -> None:
+        asset = self.base_asset(
+            id="demo-frame",
+            kind="film_still",
+            status="published_by_request",
+            source_url=None,
+            image_url="https://raw.githubusercontent.com/example/repo/main/frame.jpg",
+            creator_or_rightsholder=None,
+            license=None,
+            license_url=None,
+            analysis_purpose="Illustrates spatial arrangement.",
+            alt="Two people sit opposite one another.",
+            caption="A film still showing the arrangement of the room.",
+            attribution=None,
+        )
+        self.write_manifest(asset)
+        validator.main()
+
+    def test_owner_requested_asset_requires_https_image_url(self) -> None:
+        asset = self.base_asset(
+            status="published_by_request",
+            source_url="https://commons.wikimedia.org/wiki/File:Example.jpg",
+            image_url="http://example.org/image.jpg",
+            creator_or_rightsholder="Example Photographer",
+            license="CC BY-SA 4.0",
+            license_url="https://creativecommons.org/licenses/by-sa/4.0/",
+            analysis_purpose="Historical context.",
+            alt="A photograph.",
+            caption="A photograph.",
+            attribution="Photo: Example Photographer.",
+        )
+        self.write_manifest(asset)
+        with self.assertRaises(SystemExit):
+            validator.main()
+
     def test_candidate_manifest_passes_without_public_images(self) -> None:
         self.write_manifest(self.base_asset())
         validator.main()

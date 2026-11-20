@@ -307,13 +307,13 @@
         <p><button type="button" class="btn btn--ghost btn--sm" onclick={() => (compareIds = [])}>{strings.catalog.clearCompare}</button></p>
       {:else}
       <p class="muted small">{strings.catalog.compareHint}</p>
-      <div class="catalog-table-wrap">
+      <div class="catalog-table-wrap catalog-table--compare-wrap">
         <table class="catalog-table catalog-table--compare">
           <thead>
             <tr>
               <th scope="col"><span class="sr-only">{strings.catalog.compare}</span></th>
               {#each compareRows as row}
-                <th>{row.work?.title ?? row.scene.work_id}</th>
+                <th scope="col">{row.work?.title ?? row.scene.work_id}</th>
               {/each}
             </tr>
           </thead>

@@ -17,7 +17,7 @@ MANIFEST = ROOT / "data" / "media-assets.yml"
 PUBLIC_MEDIA = ROOT / "public" / "media"
 CHAPTERS_DIR = ROOT / "src" / "content" / "chapters"
 PUBLIC_DATA = ROOT / "public" / "data"
-ALLOWED_STATUSES = {"candidate", "pending_review", "approved", "rejected"}
+ALLOWED_STATUSES = {"candidate", "pending_review", "approved", "published_by_request", "rejected"}
 ALLOWED_KINDS = {"film_still", "photograph"}
 APPROVED_FIELDS = (
     "source_url",
@@ -150,6 +150,29 @@ def main() -> None:
             if not parsed_license_url or parsed_license_url.scheme != "https" or not parsed_license_url.netloc:
                 errors.append(f"{prefix} ({asset_id}): license_url must be an absolute HTTPS URL")
 
+        if status == "published_by_request":
+            image_url = asset.get("image_url")
+            parsed_image_url = urlparse(image_url) if isinstance(image_url, str) else None
+            if not parsed_image_url or parsed_image_url.scheme != "https" or not parsed_image_url.netloc:
+                errors.append(f"{prefix} ({asset_id}): published_by_request asset requires an absolute HTTPS image_url")
+            if public_path is not None:
+                errors.append(f"{prefix} ({asset_id}): published_by_request uses image_url, not public_path")
+            for field in ("alt", "caption", "analysis_purpose"):
+                value = asset.get(field)
+                if not isinstance(value, str) or not value.strip():
+                    errors.append(f"{prefix} ({asset_id}): published_by_request asset requires {field}")
+            if not isinstance(work_id, str) or work_id not in work_ids:
+                errors.append(f"{prefix} ({asset_id}): published_by_request asset requires a valid work_id")
+            if kind == "photograph":
+                for field in ("source_url", "creator_or_rightsholder", "license", "license_url", "attribution"):
+                    value = asset.get(field)
+                    if not isinstance(value, str) or not value.strip():
+                        errors.append(f"{prefix} ({asset_id}): published photograph requires {field}")
+            elif kind == "film_still" and source_url:
+                parsed_source_url = urlparse(source_url)
+                if parsed_source_url.scheme != "https" or not parsed_source_url.netloc:
+                    errors.append(f"{prefix} ({asset_id}): film still source_url must be an absolute HTTPS URL")
+
         if status == "approved":
             for field in APPROVED_FIELDS:
                 value = asset.get(field)
@@ -226,7 +249,8 @@ def main() -> None:
 
     pending = sum(1 for a in assets if a.get("status") in {"candidate", "pending_review"})
     approved = sum(1 for a in assets if a.get("status") == "approved")
-    print(f"Media validation OK: {len(assets)} assets, {approved} approved, {pending} awaiting review.")
+    published_by_request = sum(1 for a in assets if a.get("status") == "published_by_request")
+    print(f"Media validation OK: {len(assets)} assets, {approved} independently approved, {published_by_request} published by owner request, {pending} awaiting review.")
 
 
 if __name__ == "__main__":

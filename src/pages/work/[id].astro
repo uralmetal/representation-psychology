@@ -46,7 +46,7 @@ const years = workItem.year_start === workItem.year_end ? String(workItem.year_s
     <section class="work-media" aria-labelledby="work-media-title">
       <h2 id="work-media-title">Фотографии и визуальные материалы</h2>
       <div class="work-media__grid">
-        {media.map((asset) => <MediaFigure asset={asset} {base} />)}
+        {media.map((asset) => <MediaFigure asset={asset} {base} workTitle={workItem.title} />)}
       </div>
     </section>
   )}

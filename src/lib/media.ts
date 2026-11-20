@@ -39,7 +39,7 @@ export interface MediaAssetRecord {
 export type PublicMediaAsset = MediaAssetRecord & {
   status: 'approved' | 'published_by_request';
   work_id: string;
-  image_url: string;
+  image_url?: string | null;
   alt: string;
   caption: string;
   analysis_purpose: string;
@@ -57,8 +57,8 @@ function manifest(): MediaManifest {
 
 /** Owner-requested publication is distinct from independent rights approval. */
 function isPublicReady(asset: MediaAssetRecord): asset is PublicMediaAsset {
-  const hasPublicImage = typeof asset.image_url === 'string'
-    && asset.image_url.startsWith('https://');
+  const hasPublicImage = (typeof asset.image_url === 'string' && asset.image_url.startsWith('https://'))
+    || (asset.status === 'approved' && typeof asset.public_path === 'string' && asset.public_path.startsWith('/media/'));
   const hasEditorialText = typeof asset.alt === 'string' && asset.alt.trim().length > 0
     && typeof asset.caption === 'string' && asset.caption.trim().length > 0
     && typeof asset.analysis_purpose === 'string' && asset.analysis_purpose.trim().length > 0;

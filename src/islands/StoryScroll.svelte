@@ -162,7 +162,13 @@
           {#if chapterAssets.length}
             <section class="step__media" aria-label="Иллюстрации к аналитическому тезису">
               {#each chapterAssets as asset}
-                <MediaFigure {asset} {base} />
+                <MediaFigure
+                  {asset}
+                  {base}
+                  workTitle={workById.get(asset.work_id)?.title ?? asset.work_id}
+                  workHref={`${base}work/${asset.work_id}/`}
+                  chapterLabel={s.title}
+                />
               {/each}
             </section>
           {/if}

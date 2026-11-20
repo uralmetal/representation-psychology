@@ -26,7 +26,7 @@ def sha1_base36(data: bytes) -> str:
 
 def validate_url(url: str) -> None:
     parsed = urllib.parse.urlparse(url)
-    if parsed.scheme != "https" or parsed.hostname != "upload.wikimedia.org":
+    if (parsed.scheme != "https" or parsed.hostname != "upload.wikimedia.org"\n            or parsed.port not in (None, 443) or parsed.username or parsed.password):
         raise ValueError(f"Unexpected download URL: {url}")
 
 def fetch_json(url: str) -> dict:

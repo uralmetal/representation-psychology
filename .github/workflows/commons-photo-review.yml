@@ -1,4 +1,4 @@
-name: Prepare Commons photo review artifact
+name: Prepare media review artifact
 
 on:
   push:
@@ -19,12 +19,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Fetch and verify allowlisted Commons originals
+      - name: Fetch Commons originals and package selected local candidates
         run: python3 scripts/fetch_commons_review_photos.py
       - name: Upload review artifact
         uses: actions/upload-artifact@v4
         with:
-          name: commons-photo-review-${{ github.run_id }}
+          name: media-review-${{ github.run_id }}
           path: media-review/
           if-no-files-found: error
           retention-days: 3

@@ -68,7 +68,9 @@
   {#if frames.length}
     <div class="wf-frames">
       {#each frames.slice(0, 3) as f}
-        <img src="{base}{f}" alt="Кадр из «{work.title}»" loading="lazy" />
+        <a class="img-zoom" href="{base}{f}" data-lightbox aria-label="Открыть кадр на весь экран">
+          <img src="{base}{f}" alt="Кадр из «{work.title}»" loading="lazy" />
+        </a>
       {/each}
     </div>
   {/if}
@@ -187,6 +189,7 @@
     margin: 0 0 0.9rem;
     overflow-x: auto;
   }
+  .wf-frames .img-zoom { flex: 0 0 auto; display: block; }
   .wf-frames img {
     height: 84px;
     width: auto;

@@ -32,7 +32,9 @@ const years = workItem.year_start === workItem.year_end ? String(workItem.year_s
   {workItem.frames.length > 0 && (
     <div class="frames">
       {workItem.frames.map((f) => (
-        <img src={`${base}${f}`} alt={`Кадр из «${workItem.title}»`} loading="lazy" />
+        <a class="img-zoom" href={`${base}${f}`} data-lightbox aria-label="Открыть кадр на весь экран">
+          <img src={`${base}${f}`} alt={`Кадр из «${workItem.title}»`} loading="lazy" />
+        </a>
       ))}
     </div>
   )}
@@ -67,6 +69,7 @@ const years = workItem.year_start === workItem.year_end ? String(workItem.year_s
     gap: 0.6rem;
     margin: 0 0 1.25rem;
   }
+  .frames .img-zoom { display: block; width: 100%; }
   .frames img {
     width: 100%;
     aspect-ratio: 16 / 9;

@@ -301,7 +301,9 @@
               </td>
               <td>
                 {#if row.work?.frames?.[0]}
-                  <img class="catalog__thumb" src="{base}{row.work.frames[0]}" alt="" loading="lazy" />
+                  <a class="img-zoom" href="{base}{row.work.frames[0]}" data-lightbox aria-label="Открыть кадр на весь экран">
+                    <img class="catalog__thumb" src="{base}{row.work.frames[0]}" alt="" loading="lazy" />
+                  </a>
                 {/if}
                 <a href="{base}work/{row.scene.work_id}/">{row.work?.title ?? row.scene.work_id}</a>
                 <div class="muted small">{years(row.work)} · {row.work?.country.join(', ')}</div>
@@ -401,9 +403,11 @@
   tr.is-selected td { background: var(--accent-soft); }
   .catalog__desc { max-width: 16rem; }
   .catalog__fn { margin-top: 0.2rem; font-size: 0.78rem; }
+  .img-zoom { display: inline-block; vertical-align: top; }
   .catalog__thumb {
     display: block;
     width: 4.5rem;
+    height: auto;
     height: auto;
     aspect-ratio: 16 / 9;
     object-fit: cover;

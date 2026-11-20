@@ -1,6 +1,11 @@
 name: Prepare Commons photo review artifact
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/commons-photo-review.yml"
+      - "scripts/fetch_commons_review_photos.py"
   workflow_dispatch:
 
 permissions:

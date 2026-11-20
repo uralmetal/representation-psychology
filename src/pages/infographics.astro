@@ -30,6 +30,7 @@ const specs = ORDER.map((id) => vizSpec(id, works, scenes, entries)).filter(
     <section class="infographic" id={spec.kind}>
       <Viz
         client:visible
+        base={import.meta.env.BASE_URL}
         kind={spec.kind}
         title={spec.title}
         subtitle={spec.subtitle}

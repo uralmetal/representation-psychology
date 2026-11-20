@@ -4,6 +4,8 @@
   import EvidenceCard from '../components/EvidenceCard.svelte';
   import NarrativePicker from './NarrativePicker.svelte';
   import Viz from './Viz.svelte';
+  import MediaFigure from '../components/MediaFigure.svelte';
+  import type { ApprovedMediaAsset } from '../lib/media';
   import { LENSES, buildVerdicts } from '../lib/narrative';
   import { strings } from '../lib/i18n';
   import { vizSpec } from '../lib/vizspec';
@@ -15,8 +17,9 @@
     scenes: Scene[];
     entries: CodebookEntry[];
     base: string;
+    chapterMedia: Record<string, ApprovedMediaAsset[]>;
   }
-  let { steps, works, scenes, entries, base }: Props = $props();
+  let { steps, works, scenes, entries, base, chapterMedia }: Props = $props();
 
   const sorted = $derived([...steps].sort((a, b) => a.order - b.order));
   const activeStep = $derived(sorted[active]);
@@ -150,10 +153,19 @@
   <div class="scrolly" bind:this={root}>
     <div class="scrolly__steps">
       {#each sorted as s, i}
+        {@const chapterAssets = chapterMedia[s.anchor] ?? []}
         <section class="step" id={s.anchor}>
           <p class="step__kicker">{s.kicker}</p>
           <h2 class="step__title">{s.title}</h2>
           {#if s.html}<div class="step__body">{@html s.html}</div>{/if}
+
+          {#if chapterAssets.length}
+            <section class="step__media" aria-label="Иллюстрации к аналитическому тезису">
+              {#each chapterAssets as asset}
+                <MediaFigure {asset} {base} />
+              {/each}
+            </section>
+          {/if}
 
           {#if s.tag === 'prologue'}
             <NarrativePicker items={lensItems()} groupLabel={strings.story.lensesTitle} />
@@ -257,6 +269,7 @@
   .step__body :global(p) { margin: 0.75rem 0; }
   .step__body :global(strong) { color: var(--accent); }
   .step__body :global(a) { color: var(--accent); }
+  .step__media { margin: 1.5rem 0; max-width: 48rem; }
   .step__ev-title {
     font-size: 1.05rem;
     margin: 1.75rem 0 0.6rem;

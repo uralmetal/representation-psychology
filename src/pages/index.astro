@@ -5,10 +5,12 @@ import SceneDialog from '../islands/SceneDialog.svelte';
 import StoryScroll from '../islands/StoryScroll.svelte';
 import { strings } from '../lib/i18n';
 import { buildSteps } from '../lib/steps';
+import { mediaForChapter } from '../lib/media';
 import { codebookFile, scenesFile, worksFile } from '../lib/data';
 
 const base = import.meta.env.BASE_URL;
 const steps = buildSteps();
+const chapterMedia = Object.fromEntries(steps.map((step) => [step.anchor, mediaForChapter(step.anchor)]));
 const works = worksFile().works;
 const scenes = scenesFile().scenes;
 const entries = codebookFile().entries;
@@ -37,7 +39,7 @@ const entries = codebookFile().entries;
     </div>
   </header>
 
-  <StoryScroll client:load {steps} {works} {scenes} {entries} {base} />
+  <StoryScroll client:load {steps} {works} {scenes} {entries} {base} {chapterMedia} />
 
   <section class="catalog-teaser" aria-labelledby="catalog-teaser-title">
     <h2 id="catalog-teaser-title">{strings.catalogSummary.title}</h2>

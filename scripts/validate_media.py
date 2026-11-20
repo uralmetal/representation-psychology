@@ -120,6 +120,8 @@ def main() -> None:
             errors.append(f"{prefix} ({asset_id}): unknown chapter_anchor {chapter_anchor!r}")
 
         scene_id = asset.get("scene_id")
+        if chapter_anchor is not None and scene_id is not None:
+            errors.append(f"{prefix} ({asset_id}): chapter_anchor and scene_id are mutually exclusive placements")
         if scene_id is not None:
             scene = scene_by_id.get(scene_id)
             if scene is None:

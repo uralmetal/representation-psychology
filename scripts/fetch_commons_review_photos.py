@@ -2,15 +2,22 @@
 """Fetch allowlisted Commons originals for internal visual review; never publication."""
 from __future__ import annotations
 
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 import hashlib
 import json
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
 
 OUT = Path("media-review")
 MAX_BYTES = 25 * 1024 * 1024
-USER_AGENT = "representation-psychology-media-review/1.0"
+USER_AGENT = (
+    "RepresentationPsychologyMediaReview/1.0 "
+    "(https://github.com/uralmetal/representation-psychology)"
+)
 FILES = (
     "Freud_anuncio_consultorio.jpg",
     "Puerta_Consultorio_Freud.jpg",
@@ -39,6 +46,42 @@ def sha1_matches(data: bytes, expected_hex: str) -> bool:
     return hashlib.sha1(data).hexdigest() == expected_hex
 
 
+def retry_delay(headers, attempt: int) -> int:
+    """Honor Retry-After; otherwise use the Wikimedia-recommended backoff."""
+    value = headers.get("Retry-After") if headers else None
+    if value:
+        try:
+            return max(0, int(value))
+        except ValueError:
+            try:
+                retry_at = parsedate_to_datetime(value)
+                if retry_at.tzinfo is None:
+                    retry_at = retry_at.replace(tzinfo=timezone.utc)
+                return max(0, int((retry_at - datetime.now(timezone.utc)).total_seconds()))
+            except (TypeError, ValueError, OverflowError):
+                pass
+    return min(60, 5 * (2 ** attempt))
+
+
+def open_with_retry(opener, request, timeout: int, label: str):
+    """Retry only throttling/transient errors and never retry sooner than requested."""
+    for attempt in range(4):
+        try:
+            return opener.open(request, timeout=timeout)
+        except urllib.error.HTTPError as error:
+            if error.code not in {429, 503} or attempt == 3:
+                raise
+            delay = retry_delay(error.headers, attempt)
+            print(
+                f"{label}: HTTP {error.code}; honoring Retry-After/backoff "
+                f"for {delay}s before retry {attempt + 1}/3",
+                flush=True,
+            )
+            error.close()
+            time.sleep(delay)
+    raise RuntimeError(f"{label}: retry loop ended unexpectedly")
+
+
 def validate_url(url: str) -> None:
     parsed = urllib.parse.urlparse(url)
     if (
@@ -60,8 +103,12 @@ class CommonsRedirectHandler(urllib.request.HTTPRedirectHandler):
 
 
 def fetch_json(url: str) -> dict:
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req, timeout=30) as response:
+    req = urllib.request.Request(
+        url,
+        headers={"User-Agent": USER_AGENT, "Api-User-Agent": USER_AGENT},
+    )
+    opener = urllib.request.build_opener()
+    with open_with_retry(opener, req, timeout=30, label="Commons API") as response:
         if response.status != 200:
             raise RuntimeError(f"Commons API HTTP {response.status}")
         payload = response.read(2 * 1024 * 1024 + 1)
@@ -96,7 +143,7 @@ def fetch_file(title: str) -> dict:
 
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     opener = urllib.request.build_opener(CommonsRedirectHandler())
-    with opener.open(req, timeout=60) as response:
+    with open_with_retry(opener, req, timeout=60, label=title) as response:
         if response.status != 200:
             raise RuntimeError(f"Image HTTP {response.status}")
         validate_url(response.geturl())

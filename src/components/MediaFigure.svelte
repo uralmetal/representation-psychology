@@ -4,9 +4,20 @@
   interface Props {
     asset: ApprovedMediaAsset;
     base: string;
+    workTitle: string;
+    workHref?: string;
+    analysisUnitLabel?: string | null;
+    chapterLabel?: string | null;
   }
 
-  let { asset, base }: Props = $props();
+  let {
+    asset,
+    base,
+    workTitle,
+    workHref,
+    analysisUnitLabel = null,
+    chapterLabel = null,
+  }: Props = $props();
   const imageSrc = `${base.replace(/\/$/, '')}${asset.public_path}`;
   const kindLabel = asset.kind === 'film_still' ? 'Кадр из произведения' : 'Фотография';
 </script>
@@ -17,6 +28,23 @@
     <p class="media-figure__caption">
       <span class="media-figure__kind">{kindLabel}</span>
       {asset.caption}
+    </p>
+    <p class="media-figure__context">
+      <strong>Произведение:</strong>
+      {#if workHref}
+        <a href={workHref}>{workTitle}</a>
+      {:else}
+        {workTitle}
+      {/if}
+      {#if asset.scene_id && analysisUnitLabel}
+        · <strong>Единица анализа:</strong>
+        <a href={`${base}scene/${asset.scene_id}/`}>{analysisUnitLabel}</a>
+      {:else if asset.analysis_unit === 'work_overall'}
+        · <strong>Уровень анализа:</strong> произведение целиком
+      {/if}
+      {#if chapterLabel}
+        · <strong>Глава:</strong> {chapterLabel}
+      {/if}
     </p>
     {#if asset.analysis_purpose}
       <p class="media-figure__purpose">
@@ -63,9 +91,22 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
+  .media-figure__context {
+    margin: 0.35rem 0 0;
+    font-size: 0.82rem;
+  }
+  .media-figure__context strong {
+    color: var(--text-dim);
+    font-weight: 600;
+  }
   .media-figure__purpose {
     margin: 0.35rem 0 0;
     font-size: 0.85rem;
+  }
+  .media-figure a:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
   .media-figure__purpose strong {
     color: var(--text-dim);

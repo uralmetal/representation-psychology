@@ -1,10 +1,11 @@
 import importlib.util
 import hashlib
+import tempfile
 import unittest
 import urllib.error
 from email.message import Message
-from unittest.mock import patch
 from pathlib import Path
+from unittest.mock import patch
 
 MODULE_PATH = Path(__file__).resolve().parents[1] / "scripts" / "fetch_commons_review_photos.py"
 SPEC = importlib.util.spec_from_file_location("fetch_commons_review_photos", MODULE_PATH)
@@ -67,6 +68,45 @@ class CommonsReviewFetcherTests(unittest.TestCase):
         self.assertEqual(response.status, 200)
         self.assertEqual(opener.calls, 2)
         sleep.assert_called_once_with(7)
+
+    def test_copies_local_png_into_review_artifact_with_checksum(self):
+        payload = b"\x89PNG\r\n\x1a\nreview-only"
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            source = root / "candidate.png"
+            source.write_bytes(payload)
+            output = root / "artifact"
+            with patch.object(MODULE, "OUT", output):
+                result = MODULE.copy_local_png_candidate(
+                    "candidate.png", "analyze-this-still-02", "analyze-this",
+                    "analyze-this-still-02.png", repo_root=root,
+                )
+            copied = output / result["file"]
+            self.assertEqual(copied.read_bytes(), payload)
+            self.assertEqual(result["sha256"], hashlib.sha256(payload).hexdigest())
+            self.assertEqual(result["registry_status"], "candidate")
+
+    def test_rejects_local_png_path_escape(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            outside = root.parent / "outside.png"
+            outside.write_bytes(b"\x89PNG\r\n\x1a\n")
+            with self.assertRaises(ValueError):
+                MODULE.copy_local_png_candidate(
+                    "../outside.png", "test-asset", "analyze-this",
+                    "test.png", repo_root=root,
+                )
+            outside.unlink(missing_ok=True)
+
+    def test_rejects_non_png_local_source(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            (root / "bad.png").write_bytes(b"not a PNG")
+            with self.assertRaises(ValueError):
+                MODULE.copy_local_png_candidate(
+                    "bad.png", "test-asset", "analyze-this",
+                    "test.png", repo_root=root,
+                )
 
 
 if __name__ == "__main__":

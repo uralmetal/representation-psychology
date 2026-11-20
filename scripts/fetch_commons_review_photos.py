@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Fetch allowlisted Commons originals for internal visual review; never publication."""
+"""Collect allowlisted material for internal visual review; never publication."""
 from __future__ import annotations
 
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 import hashlib
 import json
+import shutil
 import time
 import urllib.error
 import urllib.parse
@@ -40,6 +41,20 @@ PROVENANCE = {
         "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
     },
 }
+LOCAL_PNG_CANDIDATES = (
+    {
+        "asset_id": "analyze-this-still-02",
+        "work_id": "analyze-this",
+        "source_path": "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 2.png",
+        "destination_name": "analyze-this-still-02.png",
+    },
+    {
+        "asset_id": "analyze-this-still-03",
+        "work_id": "analyze-this",
+        "source_path": "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 3.png",
+        "destination_name": "analyze-this-still-03.png",
+    },
+)
 
 
 def sha1_matches(data: bytes, expected_hex: str) -> bool:
@@ -47,7 +62,7 @@ def sha1_matches(data: bytes, expected_hex: str) -> bool:
 
 
 def retry_delay(headers, attempt: int) -> int:
-    """Honor Retry-After; otherwise use the Wikimedia-recommended backoff."""
+    """Honor Retry-After; otherwise use conservative exponential backoff."""
     value = headers.get("Retry-After") if headers else None
     if value:
         try:
@@ -64,7 +79,7 @@ def retry_delay(headers, attempt: int) -> int:
 
 
 def open_with_retry(opener, request, timeout: int, label: str):
-    """Retry only throttling/transient errors and never retry sooner than requested."""
+    """Retry only throttling/transient errors; never retry sooner than requested."""
     for attempt in range(4):
         try:
             return opener.open(request, timeout=timeout)
@@ -169,19 +184,75 @@ def fetch_file(title: str) -> dict:
     }
 
 
+def copy_local_png_candidate(
+    source_path: str,
+    asset_id: str,
+    work_id: str,
+    destination_name: str,
+    repo_root: Path | None = None,
+) -> dict:
+    """Copy a repository-stored candidate PNG into the temporary review artifact."""
+    root = (repo_root or Path.cwd()).resolve()
+    source = (root / source_path).resolve(strict=True)
+    try:
+        source.relative_to(root)
+    except ValueError as error:
+        raise ValueError("Candidate path escapes repository root") from error
+
+    if not source.is_file():
+        raise ValueError(f"Candidate is not a regular file: {source_path}")
+    if Path(destination_name).name != destination_name or not destination_name.lower().endswith(".png"):
+        raise ValueError(f"Unsafe PNG artifact filename: {destination_name}")
+
+    size = source.stat().st_size
+    if not 0 < size <= MAX_BYTES:
+        raise ValueError(f"Unsafe candidate size for {asset_id}: {size}")
+    content = source.read_bytes()
+    if len(content) != size or not content.startswith(b"\x89PNG\r\n\x1a\n"):
+        raise ValueError(f"Invalid PNG file: {asset_id}")
+
+    relative_destination = Path("local-film-stills") / destination_name
+    destination = OUT / relative_destination
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, destination)
+    return {
+        "file": relative_destination.as_posix(),
+        "asset_id": asset_id,
+        "work_id": work_id,
+        "source_repo_path": source_path,
+        "mime": "image/png",
+        "size": size,
+        "sha256": hashlib.sha256(content).hexdigest(),
+        "registry_status": "candidate",
+        "review_scope": "internal visual review only; not publication approval or legal clearance",
+    }
+
+
 def main() -> None:
+    files = [fetch_file(title) for title in FILES]
+    root = Path.cwd()
+    files.extend(
+        copy_local_png_candidate(
+            candidate["source_path"],
+            candidate["asset_id"],
+            candidate["work_id"],
+            candidate["destination_name"],
+            repo_root=root,
+        )
+        for candidate in LOCAL_PNG_CANDIDATES
+    )
     manifest = {
         "notice": (
-            "Review artifact only: not copied to public/, not registered as approved, "
-            "and not cleared for publication."
+            "Review artifact only: source images remain outside public/media, "
+            "registry statuses are unchanged, and this artifact is not legal approval."
         ),
-        "files": [fetch_file(title) for title in FILES],
+        "files": files,
     }
     (OUT / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    print(f"Fetched and verified {len(manifest['files'])} Commons originals.")
+    print(f"Collected {len(manifest['files'])} assets for internal visual review.")
 
 
 if __name__ == "__main__":

@@ -15,6 +15,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data" / "media-assets.yml"
 PUBLIC_MEDIA = ROOT / "public" / "media"
+CHAPTERS_DIR = ROOT / "src" / "content" / "chapters"
 PUBLIC_DATA = ROOT / "public" / "data"
 ALLOWED_STATUSES = {"candidate", "pending_review", "approved", "rejected"}
 ALLOWED_KINDS = {"film_still", "photograph"}
@@ -64,6 +65,18 @@ def main() -> None:
 
     works = load_json(PUBLIC_DATA / "works.json").get("works", [])
     scenes = load_json(PUBLIC_DATA / "scenes.json").get("scenes", [])
+    chapter_anchors: set[str] = set()
+    if CHAPTERS_DIR.exists():
+        for chapter_file in CHAPTERS_DIR.glob("*.md"):
+            chapter_text = chapter_file.read_text(encoding="utf-8")
+            if chapter_text.startswith("---"):
+                _, _, remainder = chapter_text.partition("---")
+                frontmatter, separator, _ = remainder.partition("---")
+                if separator:
+                    chapter_meta = yaml.safe_load(frontmatter) or {}
+                    anchor = chapter_meta.get("anchor") or chapter_meta.get("id")
+                    if isinstance(anchor, str) and anchor.strip():
+                        chapter_anchors.add(anchor.strip())
     work_ids = {w.get("id") for w in works}
     scene_by_id = {s.get("id"): s for s in scenes}
 
@@ -100,7 +113,15 @@ def main() -> None:
         if work_id is not None and work_id not in work_ids:
             errors.append(f"{prefix} ({asset_id}): unknown work_id {work_id!r}")
 
+        chapter_anchor = asset.get("chapter_anchor")
+        if chapter_anchor is not None and (
+            not isinstance(chapter_anchor, str) or chapter_anchor not in chapter_anchors
+        ):
+            errors.append(f"{prefix} ({asset_id}): unknown chapter_anchor {chapter_anchor!r}")
+
         scene_id = asset.get("scene_id")
+        if chapter_anchor is not None and scene_id is not None:
+            errors.append(f"{prefix} ({asset_id}): chapter_anchor and scene_id are mutually exclusive placements")
         if scene_id is not None:
             scene = scene_by_id.get(scene_id)
             if scene is None:

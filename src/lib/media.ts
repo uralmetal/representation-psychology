@@ -21,6 +21,8 @@ export interface MediaAssetRecord {
   screen_time_verified?: boolean;
   proposed_scene_id?: string | null;
   analysis_purpose?: string | null;
+  /** Narrative chapter where this approved asset supports a specific analytical thesis. */
+  chapter_anchor?: string | null;
   alt?: string | null;
   caption?: string | null;
   attribution?: string | null;
@@ -42,6 +44,7 @@ export type ApprovedMediaAsset = MediaAssetRecord & {
   caption: string;
   attribution: string;
   legal_basis: string;
+  analysis_purpose: string;
   legal_review: {
     status: 'approved';
     reference: string;
@@ -68,6 +71,7 @@ function isPublicReady(asset: MediaAssetRecord): asset is ApprovedMediaAsset {
     && typeof asset.source_url === 'string' && asset.source_url.startsWith('https://')
     && typeof asset.alt === 'string' && asset.alt.trim().length > 0
     && typeof asset.caption === 'string' && asset.caption.trim().length > 0
+    && typeof asset.analysis_purpose === 'string' && asset.analysis_purpose.trim().length > 0
     && typeof asset.attribution === 'string' && asset.attribution.trim().length > 0
     && typeof asset.legal_basis === 'string' && asset.legal_basis.trim().length > 0
     && asset.legal_review?.status === 'approved'
@@ -83,10 +87,15 @@ function approvedAssets(): ApprovedMediaAsset[] {
 
 /** Work-level photos/stills belong on the work detail page, not duplicated on every scene. */
 export function mediaForWork(workId: string): ApprovedMediaAsset[] {
-  return approvedAssets().filter((asset) => asset.work_id === workId && !asset.scene_id);
+  return approvedAssets().filter((asset) => asset.work_id === workId && !asset.scene_id && !asset.chapter_anchor);
 }
 
 /** Scene-specific frames are shown only on the matching analysis-unit page. */
 export function mediaForScene(sceneId: string): ApprovedMediaAsset[] {
-  return approvedAssets().filter((asset) => asset.scene_id === sceneId);
+  return approvedAssets().filter((asset) => asset.scene_id === sceneId && !asset.chapter_anchor);
+}
+
+/** Only assets explicitly attached to a chapter appear in the narrative; never infer placements. */
+export function mediaForChapter(chapterAnchor: string): ApprovedMediaAsset[] {
+  return approvedAssets().filter((asset) => asset.chapter_anchor === chapterAnchor && !asset.scene_id);
 }

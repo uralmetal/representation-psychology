@@ -1,15 +1,15 @@
----
-import type { ApprovedMediaAsset } from '../lib/media';
+<script lang="ts">
+  import type { ApprovedMediaAsset } from '../lib/media';
 
-interface Props {
-  asset: ApprovedMediaAsset;
-  base: string;
-}
+  interface Props {
+    asset: ApprovedMediaAsset;
+    base: string;
+  }
 
-const { asset, base } = Astro.props;
-const imageSrc = `${base.replace(/\/$/, '')}${asset.public_path}`;
-const kindLabel = asset.kind === 'film_still' ? 'Кадр из произведения' : 'Фотография';
----
+  let { asset, base }: Props = $props();
+  const imageSrc = `${base.replace(/\/$/, '')}${asset.public_path}`;
+  const kindLabel = asset.kind === 'film_still' ? 'Кадр из произведения' : 'Фотография';
+</script>
 
 <figure class="media-figure">
   <img src={imageSrc} alt={asset.alt} loading="lazy" decoding="async" />
@@ -18,12 +18,17 @@ const kindLabel = asset.kind === 'film_still' ? 'Кадр из произвед�
       <span class="media-figure__kind">{kindLabel}</span>
       {asset.caption}
     </p>
+    {#if asset.analysis_purpose}
+      <p class="media-figure__purpose">
+        <strong>Аналитическая связь:</strong> {asset.analysis_purpose}
+      </p>
+    {/if}
     <p class="media-figure__attribution">
       {asset.attribution}
       · <a href={asset.source_url} target="_blank" rel="noopener noreferrer">Источник</a>
-      {asset.license && asset.license_url && (
-        <> · <a href={asset.license_url} target="_blank" rel="noopener noreferrer">{asset.license}</a></>
-      )}
+      {#if asset.license && asset.license_url}
+        · <a href={asset.license_url} target="_blank" rel="noopener noreferrer">{asset.license}</a>
+      {/if}
     </p>
   </figcaption>
 </figure>
@@ -57,6 +62,14 @@ const kindLabel = asset.kind === 'film_still' ? 'Кадр из произвед�
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+  }
+  .media-figure__purpose {
+    margin: 0.35rem 0 0;
+    font-size: 0.85rem;
+  }
+  .media-figure__purpose strong {
+    color: var(--text-dim);
+    font-weight: 600;
   }
   .media-figure__attribution {
     margin: 0.2rem 0 0;

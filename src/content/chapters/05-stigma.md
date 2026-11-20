@@ -7,9 +7,13 @@ viz: stigma-counts
 scene_ids:
   - cuckoos-nest-unit
   - analyze-this-unit
-  - sopranos-unit
-  - en-therapie-unit
   - web-therapy-unit
+  - dangerous-method-unit
+  - sopranos-unit
+  - de-gales-hus-unit
+  - mr-robot-unit
+  - en-therapie-unit
+  - the-undoing-unit
 ---
 
 Стигма (от греческого *stigma* — «клеймо», «метка») — социальный ярлык, который общество «наклеивает» на человека или группу, маркируя их как «не таких», «опасные», «неправильные». В психологии и социологии стигма ведёт к предвзятости, дискриминации и социальной изоляции.

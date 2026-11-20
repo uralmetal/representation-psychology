@@ -729,7 +729,6 @@ assets:
     status: candidate
     work_id: dangerous-method
     analysis_unit: work_overall
-    chapter_anchor: archetype
     scene_id: null
     source_file: null
     public_path: null
@@ -756,7 +755,7 @@ assets:
     status: pending_review
     work_id: dangerous-method
     analysis_unit: work_overall
-    chapter_anchor: archetype
+    chapter_anchor: space
     scene_id: null
     source_file: null
     public_path: null

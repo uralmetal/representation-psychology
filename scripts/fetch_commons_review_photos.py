@@ -57,7 +57,7 @@ def fetch_file(title: str) -> dict:
             raise RuntimeError(f"Image HTTP {response.status}")
         validate_url(response.geturl())
         content = response.read(MAX_BYTES + 1)
-    if len(content) != size or hashlib.sha1(content).hexdigest() != expected_sha1:
+    if len(content) != size or not sha1_matches(content, expected_sha1):
         raise ValueError(f"Size/SHA-1 verification failed for {title}")
     if not content.startswith(b"\xff\xd8\xff") or not content.endswith(b"\xff\xd9"):
         raise ValueError(f"Invalid JPEG signature: {title}")

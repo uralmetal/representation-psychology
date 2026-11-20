@@ -456,10 +456,10 @@
               {row.scene.analysis_unit === 'scene' ? strings.catalog.unitScene : strings.catalog.unitOverall}
             </span>
           </div>
-          <h3><a href="{base}work/{row.scene.work_id}/">{row.work?.title ?? row.scene.work_id}</a></h3>
+          <h3><a href="{base}work/{row.scene.work_id}/" onclick={rememberReturn}>{row.work?.title ?? row.scene.work_id}</a></h3>
           <p class="muted small">{years(row.work)} · {row.work?.country.join(', ')}</p>
           <p class="catalog-card__description">{row.scene.description}</p>
-          <p class="small"><strong>{strings.catalog.timecode}:</strong> <a href="{base}scene/{row.scene.id}/">{row.scene.timecode || '—'}</a></p>
+          <p class="small"><strong>{strings.catalog.timecode}:</strong> <a href="{base}scene/{row.scene.id}/" onclick={rememberReturn}>{row.scene.timecode || '—'}</a></p>
           <dl class="catalog-card__fields">
             {#each CATS as cfg}
               {@const vals = valuesOf(row, cfg)}

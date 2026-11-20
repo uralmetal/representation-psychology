@@ -29,6 +29,14 @@ class CommonsReviewFetcherTests(unittest.TestCase):
             with self.subTest(url=url), self.assertRaises(ValueError):
                 MODULE.validate_url(url)
 
+    def test_retry_after_seconds_are_respected(self):
+        self.assertEqual(MODULE.retry_delay({"Retry-After": "27"}, 0), 27)
+
+    def test_fallback_backoff_is_exponential_and_capped(self):
+        self.assertEqual(MODULE.retry_delay({}, 0), 5)
+        self.assertEqual(MODULE.retry_delay({}, 1), 10)
+        self.assertEqual(MODULE.retry_delay({}, 8), 60)
+
 
 if __name__ == "__main__":
     unittest.main()

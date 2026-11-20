@@ -179,6 +179,15 @@
     return compareRows.every((r) => compareKey(r, cat) === first);
   }
 
+  function rememberReturn() {
+    if (typeof window === 'undefined') return;
+    try {
+      sessionStorage.setItem('rp:return-url', window.location.href);
+    } catch {
+      /* sessionStorage недоступен */
+    }
+  }
+
   function years(w: Work | undefined): string {
     if (!w) return '—';
     return w.year_start === w.year_end ? String(w.year_start) : `${w.year_start}–${w.year_end}`;
@@ -333,7 +342,7 @@
             <tr>
               <th scope="row">{strings.catalog.timecode}</th>
               {#each compareRows as row}
-                <td><a href="{base}scene/{row.scene.id}/">{row.scene.timecode}</a></td>
+                <td><a href="{base}scene/{row.scene.id}/" onclick={rememberReturn}>{row.scene.timecode}</a></td>
               {/each}
             </tr>
             <tr>
@@ -385,14 +394,14 @@
                 />
               </td>
               <td>
-                <a href="{base}work/{row.scene.work_id}/">{row.work?.title ?? row.scene.work_id}</a>
+                <a href="{base}work/{row.scene.work_id}/" onclick={rememberReturn}>{row.work?.title ?? row.scene.work_id}</a>
                 <div class="muted small">{years(row.work)} · {row.work?.country.join(', ')}</div>
               </td>
               <td class="small">{row.work?.format === 'tv_series' ? 'сериал' : 'фильм'}</td>
               <td class="small">
                 {row.scene.analysis_unit === 'scene' ? strings.catalog.unitScene : strings.catalog.unitOverall}
               </td>
-              <td class="small"><a href="{base}scene/{row.scene.id}/">{row.scene.timecode}</a></td>
+              <td class="small"><a href="{base}scene/{row.scene.id}/" onclick={rememberReturn}>{row.scene.timecode}</a></td>
               <td class="small catalog__desc" title={row.scene.description}>
                 {trunc(row.scene.description)}
                 {#if row.scene.scene_function.length}
@@ -447,10 +456,10 @@
               {row.scene.analysis_unit === 'scene' ? strings.catalog.unitScene : strings.catalog.unitOverall}
             </span>
           </div>
-          <h3><a href="{base}work/{row.scene.work_id}/">{row.work?.title ?? row.scene.work_id}</a></h3>
+          <h3><a href="{base}work/{row.scene.work_id}/" onclick={rememberReturn}>{row.work?.title ?? row.scene.work_id}</a></h3>
           <p class="muted small">{years(row.work)} · {row.work?.country.join(', ')}</p>
           <p class="catalog-card__description">{row.scene.description}</p>
-          <p class="small"><strong>{strings.catalog.timecode}:</strong> <a href="{base}scene/{row.scene.id}/">{row.scene.timecode || '—'}</a></p>
+          <p class="small"><strong>{strings.catalog.timecode}:</strong> <a href="{base}scene/{row.scene.id}/" onclick={rememberReturn}>{row.scene.timecode || '—'}</a></p>
           <dl class="catalog-card__fields">
             {#each CATS as cfg}
               {@const vals = valuesOf(row, cfg)}

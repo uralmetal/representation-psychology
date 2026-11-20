@@ -429,6 +429,63 @@
         </tbody>
       </table>
     </div>
+
+    <div class="catalog-cards" aria-label="Результаты каталога">
+      {#each filtered as row (row.scene.id)}
+        <article class="catalog-card">
+          <div class="catalog-card__top">
+            <label class="catalog-card__compare">
+              <input
+                type="checkbox"
+                checked={compareIds.includes(row.scene.id)}
+                onchange={() => toggleCompare(row.scene.id)}
+                aria-label="{strings.catalog.compare}: {row.work?.title ?? row.scene.id}"
+              />
+              <span>{strings.catalog.compare}</span>
+            </label>
+            <span class="catalog-card__unit">
+              {row.scene.analysis_unit === 'scene' ? strings.catalog.unitScene : strings.catalog.unitOverall}
+            </span>
+          </div>
+          <h3><a href="{base}work/{row.scene.work_id}/">{row.work?.title ?? row.scene.work_id}</a></h3>
+          <p class="muted small">{years(row.work)} · {row.work?.country.join(', ')}</p>
+          <p class="catalog-card__description">{row.scene.description}</p>
+          <p class="small"><strong>{strings.catalog.timecode}:</strong> <a href="{base}scene/{row.scene.id}/">{row.scene.timecode || '—'}</a></p>
+          <dl class="catalog-card__fields">
+            {#each CATS as cfg}
+              {@const vals = valuesOf(row, cfg)}
+              <div>
+                <dt>{catLabel.get(cfg.cat) ?? cfg.cat}</dt>
+                <dd>
+                  {#if vals.length}
+                    {#each vals as v, i}
+                      {#if i > 0}<span>, </span>{/if}
+                      {@const e = entryOf(cfg.cat, v)}
+                      {#if e}
+                        <a href="{base}codebook/#{e.id}">{e.label}</a>
+                      {:else}
+                        <span class="catalog__ood" title={strings.catalog.outOfDictionary}>{v}</span>
+                      {/if}
+                    {/each}
+                  {:else}
+                    <span class="muted">{strings.catalog.noCode}</span>
+                  {/if}
+                </dd>
+              </div>
+            {/each}
+          </dl>
+          {#if row.scene.note || Object.keys(row.scene.field_notes ?? {}).length}
+            <details class="catalog-card__notes">
+              <summary>{strings.catalog.notes}</summary>
+              {#if row.scene.note}<p>{row.scene.note}</p>{/if}
+              {#each Object.entries(row.scene.field_notes ?? {}) as [field, note]}
+                <p><strong>{FIELD_LABELS[field] ?? field}:</strong> {note}</p>
+              {/each}
+            </details>
+          {/if}
+        </article>
+      {/each}
+    </div>
   {/if}
 </div>
 
@@ -487,6 +544,33 @@
     cursor: help;
   }
   .catalog-table-wrap { overflow-x: auto; }
+  .catalog-cards { display: none; }
+  .catalog-card {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    min-width: 0;
+  }
+  .catalog-card h3 { margin: 0.45rem 0 0.15rem; font-size: 1.05rem; }
+  .catalog-card p { margin: 0.35rem 0; }
+  .catalog-card__top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+  .catalog-card__compare { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; }
+  .catalog-card__unit {
+    display: inline-block;
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+    background: var(--accent-soft);
+    font-size: 0.75rem;
+  }
+  .catalog-card__description { line-height: 1.45; }
+  .catalog-card__fields { margin: 0.75rem 0 0; display: grid; gap: 0.55rem; }
+  .catalog-card__fields > div { display: grid; grid-template-columns: minmax(6.5rem, 0.8fr) minmax(0, 1.5fr); gap: 0.5rem; }
+  .catalog-card__fields dt { color: var(--text-dim); font-size: 0.78rem; }
+  .catalog-card__fields dd { margin: 0; overflow-wrap: anywhere; font-size: 0.85rem; }
+  .catalog-card__notes { margin-top: 0.75rem; font-size: 0.82rem; }
+  .catalog-card__notes summary { cursor: pointer; font-weight: 600; }
+  .catalog-card__notes p { overflow-wrap: anywhere; }
   .catalog-table { min-width: 60rem; }
   .catalog-table--compare { min-width: 0; width: 100%; }
   .catalog-table--compare tr.is-same td,
@@ -494,6 +578,16 @@
   tr.is-selected td { background: var(--accent-soft); }
   .catalog__desc { max-width: 16rem; }
   .catalog__fn { margin-top: 0.2rem; font-size: 0.78rem; }
+  @media (max-width: 760px) {
+    .catalog-table-wrap:not(.catalog-table--compare-wrap) { display: none; }
+    .catalog-cards { display: grid; gap: 0.75rem; }
+    .catalog__filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; }
+    .catalog__search { grid-column: 1 / -1; width: 100%; min-width: 0; box-sizing: border-box; }
+    .catalog__field { min-width: 0; }
+    .catalog__field select, .catalog__field input { max-width: none; width: 100%; min-width: 0; box-sizing: border-box; }
+    .catalog__meta { flex-wrap: wrap; }
+    .catalog__compare { overflow-x: auto; }
+  }
   .sr-only {
     position: absolute;
     width: 1px; height: 1px;

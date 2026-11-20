@@ -19,12 +19,28 @@ const media = mediaForScene(scene.id);
 ---
 
 <Layout title={workItem?.title ?? scene.id} description={scene.description.slice(0, 160)}>
-  <p><a href={`${base}`} data-back>← {strings.nav.story}</a></p>
+  <p><a href={`${base}`} data-back data-base={base}>← {strings.nav.story}</a></p>
   <script is:inline>
     (() => {
+      document.querySelectorAll('[data-return]').forEach((item) => {
+        item.addEventListener('click', () => {
+          try { sessionStorage.setItem('rp:return-url', window.location.href); } catch {}
+        });
+      });
       const link = document.querySelector('[data-back]');
       if (!link) return;
       try {
+        const returnUrl = sessionStorage.getItem('rp:return-url');
+        if (returnUrl) {
+          const parsed = new URL(returnUrl, window.location.origin);
+          const base = link.dataset.base ?? '/';
+          if (parsed.origin === window.location.origin && parsed.pathname.startsWith(base)) {
+            link.setAttribute('href', returnUrl);
+            sessionStorage.removeItem('rp:return-url');
+            return;
+          }
+          sessionStorage.removeItem('rp:return-url');
+        }
         const anchor = sessionStorage.getItem('rp:last-anchor');
         if (anchor) link.setAttribute('href', `${link.getAttribute('href')}#${anchor}`);
       } catch {}
@@ -46,7 +62,7 @@ const media = mediaForScene(scene.id);
     </section>
   )}
   {workItem && (
-    <p><a href={`${base}work/${workItem.id}/`}>Все единицы: {workItem.title}</a></p>
+    <p><a href={`${base}work/${workItem.id}/`} data-return>Все единицы: {workItem.title}</a></p>
   )}
 </Layout>
 

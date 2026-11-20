@@ -5,7 +5,7 @@
   import NarrativePicker from './NarrativePicker.svelte';
   import Viz from './Viz.svelte';
   import MediaFigure from '../components/MediaFigure.svelte';
-  import type { ApprovedMediaAsset } from '../lib/media';
+  import type { PublicMediaAsset } from '../lib/media';
   import { LENSES, buildVerdicts } from '../lib/narrative';
   import { strings } from '../lib/i18n';
   import { vizSpec } from '../lib/vizspec';
@@ -17,7 +17,7 @@
     scenes: Scene[];
     entries: CodebookEntry[];
     base: string;
-    chapterMedia: Record<string, ApprovedMediaAsset[]>;
+    chapterMedia: Record<string, PublicMediaAsset[]>;
   }
   let { steps, works, scenes, entries, base, chapterMedia }: Props = $props();
 

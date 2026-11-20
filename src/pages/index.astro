@@ -5,12 +5,10 @@ import SceneDialog from '../islands/SceneDialog.svelte';
 import StoryScroll from '../islands/StoryScroll.svelte';
 import { strings } from '../lib/i18n';
 import { buildSteps } from '../lib/steps';
-import { mediaForChapter } from '../lib/media';
 import { codebookFile, scenesFile, worksFile } from '../lib/data';
 
 const base = import.meta.env.BASE_URL;
 const steps = buildSteps();
-const chapterMedia = Object.fromEntries(steps.map((step) => [step.anchor, mediaForChapter(step.anchor)]));
 const works = worksFile().works;
 const scenes = scenesFile().scenes;
 const entries = codebookFile().entries;
@@ -21,14 +19,10 @@ const entries = codebookFile().entries;
   <SceneDialog client:load {base} />
 
   <header class="hero">
-    <p class="hero__kicker">{strings.siteTitle}</p>
-    <h1 class="hero__question">{strings.home.question}</h1>
+    <p class="hero__kicker">{strings.tagline}</p>
+    <h1>{strings.siteTitle}</h1>
     <p class="lead">{strings.home.thesis}</p>
-    <p class="hero__entries">
-      <a class="btn" href="#prologue">{strings.home.entryStory}</a>
-      <a class="btn btn--ghost" href={`${base}catalog/`}>{strings.home.entryCatalog}</a>
-    </p>
-    <p class="muted hero__cue">{works.length} произведений · {scenes.length} единиц анализа · {entries.length} значений словаря</p>
+    <p class="muted hero__cue">{strings.home.scrollCue}</p>
     <div class="hero__tasks">
       <p class="hero__tasks-title">{strings.home.tasksTitle}</p>
       <ul>
@@ -39,7 +33,7 @@ const entries = codebookFile().entries;
     </div>
   </header>
 
-  <StoryScroll client:load {steps} {works} {scenes} {entries} {base} {chapterMedia} />
+  <StoryScroll client:load {steps} {works} {scenes} {entries} {base} />
 
   <section class="catalog-teaser" aria-labelledby="catalog-teaser-title">
     <h2 id="catalog-teaser-title">{strings.catalogSummary.title}</h2>
@@ -75,14 +69,7 @@ const entries = codebookFile().entries;
     margin: 0 0 0.4rem;
   }
   .lead { font-size: 1.15rem; max-width: 44rem; }
-  .hero__question {
-    font-size: clamp(2rem, 5vw, 3rem);
-    line-height: 1.15;
-    max-width: 22ch;
-    margin-bottom: 0.75rem;
-  }
-  .hero__entries { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.1rem 0 0.6rem; }
-  .hero__cue { margin-top: 0.4rem; font-size: 0.9rem; }
+  .hero__cue { margin-top: 1rem; font-size: 0.9rem; }
   .hero__tasks {
     margin-top: 1.25rem;
     padding: 0.9rem 1.1rem;

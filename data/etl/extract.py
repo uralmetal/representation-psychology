@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import pandas as pd
@@ -34,10 +33,6 @@ FIELD_MAP = {
 }
 
 SINGLE = {"space_type", "ethical_violation", "stigma_level"}
-
-# Кадры фильмов выключены по умолчанию (handoff §10.1): включаются только
-# после поштучной проверки прав — RP_FRAMES=1.
-FRAMES_ENABLED = os.environ.get("RP_FRAMES") == "1"
 
 
 def load_codebook() -> list[dict]:
@@ -76,14 +71,7 @@ def build() -> dict:
     column = {name: index for index, name in enumerate(headers)}
     entries = load_codebook()
     meta = load_works_meta()
-    if FRAMES_ENABLED:
-        frames_map = collect_frames(meta)
-    else:
-        frames_map = {}
-        stale_dir = ROOT / "public" / "frames"
-        if stale_dir.is_dir():
-            for stale in stale_dir.glob("*.webp"):
-                stale.unlink()
+    frames_map = collect_frames(meta)
     by_match = {key(item["match"]): item for item in meta}
     warnings: list[str] = []
     withheld: list[dict] = []

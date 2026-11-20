@@ -5,9 +5,8 @@
     subtitle: string;
     caption: string;
     data: Record<string, unknown>;
-    base: string;
   }
-  let { kind, title, subtitle, caption, data, base }: Props = $props();
+  let { kind, title, subtitle, caption, data }: Props = $props();
 
   const STIGMA_COLOR: Record<string, string> = {
     high: 'var(--stigma-high)',
@@ -23,25 +22,14 @@
     analysis_unit: string;
     stigma: string | null;
   }
-  interface NamedCount {
-    id: string;
-    label: string;
-    count: number;
-  }
-  interface MatrixData {
+  const points = $derived((data.points as Point[]) ?? []);
+  const counts = $derived((data.counts as { id: string; label: string; count: number }[]) ?? []);
+  const matrix = $derived(data.matrix as {
     rows: { id: string; label: string }[];
     cols: { id: string; label: string }[];
     cells: { row: string; col: string; count: number }[];
-  }
-  interface VizGroup {
-    label: string;
-    units: number;
-    counts?: NamedCount[];
-    tropes?: NamedCount[];
-    matrix?: MatrixData;
-  }
-  const points = $derived((data.points as Point[]) ?? []);
-  const groups = $derived((data.groups as VizGroup[]) ?? []);
+  } | undefined);
+  const tropes = $derived((data.tropes as { id: string; label: string; count: number }[]) ?? []);
 
   const W = 720;
   const H = 260;
@@ -64,37 +52,28 @@
     return { x, y, ticks, x0, x1 };
   });
 
-  function unitWord(n: number): string {
-    const mod10 = n % 10;
-    const mod100 = n % 100;
-    if (mod10 === 1 && mod100 !== 11) return 'единица';
-    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'единицы';
-    return 'единиц';
+  const maxCount = $derived(Math.max(1, ...counts.map((c) => c.count)));
+  const barW = $derived(kind === 'ethics-counts' ? 200 : 280);
+
+  function wrapLabel(label: string, max = 30): string[] {
+    if (label.length <= max) return [label];
+    const words = label.split(' ');
+    const lines: string[] = [];
+    let cur = '';
+    for (const w of words) {
+      if ((cur + ' ' + w).trim().length > max) {
+        lines.push(cur.trim());
+        cur = w;
+      } else {
+        cur = (cur + ' ' + w).trim();
+      }
+    }
+    if (cur) lines.push(cur);
+    return lines.slice(0, 2);
   }
 
-  function barPct(count: number, units: number): number {
-    return units > 0 ? Math.round((count / units) * 100) : 0;
-  }
-
-  function cellCount(matrix: MatrixData | undefined, row: string, col: string) {
+  function cellCount(row: string, col: string) {
     return matrix?.cells.find((c) => c.row === row && c.col === col)?.count ?? 0;
-  }
-
-  function unitValue(groupLabel: string): string {
-    return groupLabel === 'Сцены' ? 'scene' : 'work_overall';
-  }
-
-  function catalogHref(groupLabel: string, field: string, value: string, secondField?: string, secondValue?: string): string {
-    const params = new URLSearchParams({ unit: unitValue(groupLabel), [field]: value });
-    if (secondField && secondValue) params.set(secondField, secondValue === 'none' ? '__none__' : secondValue);
-    return `${base}catalog/?${params.toString()}`;
-  }
-
-  function countField(): string {
-    if (kind === 'archetype-counts') return 'therapist_archetype';
-    if (kind === 'ethics-counts') return 'ethical_violation';
-    if (kind === 'stigma-counts') return 'stigma_level';
-    return 'utterance_types';
   }
 </script>
 
@@ -102,176 +81,119 @@
   <h3 class="viz-title">{title}</h3>
   {#if subtitle}<p class="muted small">{subtitle}</p>{/if}
 
+  {#if kind === 'ethics-counts' && counts.length}
+    <p class="viz-ethics-counts">
+      {#each counts as c}{c.label}: <strong>{c.count}</strong>{c.id !== counts[counts.length - 1].id ? ' · ' : ''}{/each}
+    </p>
+  {/if}
+
   {#if timeline}
     {@const tl = timeline!}
-    {@const scenePts = points.filter((p) => p.analysis_unit === 'scene')}
-    {@const overallPts = points.filter((p) => p.analysis_unit === 'work_overall')}
-    {#each [
-      { label: 'Сцены', pts: scenePts, kind: 'circle' },
-      { label: 'Произведения целиком', pts: overallPts, kind: 'rect' },
-    ] as grp}
-      {#if grp.pts.length}
-        <h4 class="viz-sub">{grp.label} · {grp.pts.length} {unitWord(grp.pts.length)}</h4>
-        <div class="only-wide">
-        <svg viewBox="0 0 {W} {H}" role="img" aria-label="{title} — {grp.label}">
-          <title>{title} — {grp.label}</title>
-          {#each tl.ticks as t}
-            <line x1={tl.x(t)} y1={PAD.t} x2={tl.x(t)} y2={H - PAD.b} stroke="var(--border)" stroke-width="1" />
-            <text x={tl.x(t)} y={H - PAD.b + 16} fill="var(--text-dim)" font-size="11" text-anchor="middle">{t}</text>
-          {/each}
-          {#each ['low', 'medium', 'high'] as level}
-            <text x={PAD.l - 8} y={tl.y(level) + 4} fill="var(--text-dim)" font-size="11" text-anchor="end">
-              {{ low: 'Низкий', medium: 'Средний', high: 'Высокий' }[level]}
-            </text>
-            <line x1={PAD.l} y1={tl.y(level)} x2={W - PAD.r} y2={tl.y(level)} stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4" />
-          {/each}
-          {#each grp.pts as p}
-            {@const cx = tl.x(p.year)}
-            {@const cy = tl.y(p.stigma)}
-            {#if grp.kind === 'circle'}
-              <circle cx={cx} cy={cy} r="6" fill={STIGMA_COLOR[p.stigma ?? 'medium'] ?? 'var(--scene)'} stroke="var(--bg)" stroke-width="1.5">
-                <title>{p.title} ({p.year})</title>
-              </circle>
-            {:else}
-              <rect x={cx - 5} y={cy - 5} width="10" height="10" fill={STIGMA_COLOR[p.stigma ?? 'medium'] ?? 'var(--overall)'} stroke="var(--bg)" stroke-width="1.5">
-                <title>{p.title} ({p.year})</title>
-              </rect>
-            {/if}
-          {/each}
-        </svg>
-        </div>
-      {/if}
-    {/each}
-    <p class="only-narrow muted small">На узком экране данные этой диаграммы доступны в таблице ниже.</p>
-    <table class="viz-timeline-table">
+    <svg viewBox="0 0 {W} {H}" role="img" aria-label={title}>
+      <title>{title}</title>
+      {#each tl.ticks as t}
+        <line x1={tl.x(t)} y1={PAD.t} x2={tl.x(t)} y2={H - PAD.b} stroke="var(--border)" stroke-width="1" />
+        <text x={tl.x(t)} y={H - PAD.b + 18} fill="var(--text-dim)" font-size="11" text-anchor="middle">{t}</text>
+      {/each}
+      {#each ['low', 'medium', 'high'] as level, i}
+        <text x={PAD.l - 8} y={tl.y(level) + 4} fill="var(--text-dim)" font-size="11" text-anchor="end">
+          {{ low: 'Низкий', medium: 'Средний', high: 'Высокий' }[level]}
+        </text>
+        <line x1={PAD.l} y1={tl.y(level)} x2={W - PAD.r} y2={tl.y(level)} stroke="var(--border)" stroke-width="1" stroke-dasharray="3 4" />
+      {/each}
+      {#each points as p}
+        {@const cx = tl.x(p.year)}
+        {@const cy = tl.y(p.stigma)}
+        {#if p.analysis_unit === 'scene'}
+          <circle cx={cx} cy={cy} r="6" fill={STIGMA_COLOR[p.stigma ?? 'medium'] ?? 'var(--scene)'} stroke="var(--bg)" stroke-width="1.5">
+            <title>{p.title} ({p.year})</title>
+          </circle>
+        {:else}
+          <rect x={cx - 5} y={cy - 5} width="10" height="10" fill={STIGMA_COLOR[p.stigma ?? 'medium'] ?? 'var(--overall)'} stroke="var(--bg)" stroke-width="1.5">
+            <title>{p.title} ({p.year})</title>
+          </rect>
+        {/if}
+      {/each}
+      <g class="viz-legend" transform="translate({W - 200}, 10)">
+        <circle cx="6" cy="7" r="5" fill="var(--scene)" />
+        <text x="16" y="11" fill="var(--text-dim)" font-size="11">сцена</text>
+        <rect x="62" y="2" width="10" height="10" fill="var(--overall)" />
+        <text x="78" y="11" fill="var(--text-dim)" font-size="11">произведение целиком</text>
+      </g>
+    </svg>
+    <table>
       <caption>{caption}</caption>
-      <thead><tr><th scope="col">Произведение</th><th scope="col">Год</th><th scope="col">Единица</th><th scope="col">Стигма</th></tr></thead>
+      <thead><tr><th>Произведение</th><th>Год</th><th>Единица</th><th>Стигма</th></tr></thead>
       <tbody>
         {#each points as p}
           <tr>
-            <td><a href={`${base}scene/${p.id}/`}>{p.title}</a></td><td>{p.year}</td>
-            <td>{p.analysis_unit === 'scene' ? 'сцена' : p.analysis_unit === 'work_overall' ? 'произведение целиком' : p.analysis_unit}</td>
+            <td>{p.title}</td><td>{p.year}</td>
+            <td>{p.analysis_unit === 'scene' ? 'сцена' : 'целиком'}</td>
             <td>{p.stigma ?? '—'}</td>
           </tr>
         {/each}
       </tbody>
     </table>
-  {:else if groups.length}
-    {#each groups as g}
-      <h4 class="viz-sub">{g.label} · {g.units} {unitWord(g.units)}</h4>
-
-      {#if g.counts?.length}
-        {#if kind === 'ethics-counts'}
-          <p class="viz-ethics-counts">
-            {#each g.counts as c}{c.label}: <strong>{c.count}</strong>{c.id !== g.counts[g.counts.length - 1].id ? ' · ' : ''}{/each}
-          </p>
-        {/if}
-        <ul class="viz-hbars" aria-label="{title} — {g.label}">
-          {#each g.counts as c}
-            {@const pct = barPct(c.count, g.units)}
-            <li class="viz-hbars__row">
-              <span class="viz-hbars__label"><a href={catalogHref(g.label, countField(), c.id)}>{c.label}</a></span>
-              <span class="viz-hbars__track" aria-hidden="true"><span class="viz-hbars__fill" style:width="{pct}%"></span></span>
-              <span class="viz-hbars__val">{c.count}/{g.units} · {pct}%</span>
-            </li>
-          {/each}
-        </ul>
-        <table>
-          <caption>{g.label}</caption>
-          <thead><tr><th>Значение</th><th>Число единиц</th></tr></thead>
-          <tbody>
-            {#each g.counts as c}<tr><td><a href={catalogHref(g.label, countField(), c.id)}>{c.label}</a></td><td>{c.count}</td></tr>{/each}
-          </tbody>
-        </table>
-      {/if}
-
-      {#if g.tropes?.length}
-        <h4 class="viz-sub">Визуальные тропы · {g.label}</h4>
-        <table>
-          <caption>Визуальные тропы — {g.label}</caption>
-          <thead><tr><th>Троп</th><th>Число единиц</th></tr></thead>
-          <tbody>
-            {#each g.tropes as t}<tr><td><a href={catalogHref(g.label, 'visual_tropes', t.id)}>{t.label}</a></td><td>{t.count}</td></tr>{/each}
-          </tbody>
-        </table>
-      {/if}
-
-      {#if g.matrix}
-        <div class="only-wide">
-        <table class="matrix">
-          <caption>{g.label}</caption>
-          <thead>
-            <tr><th>Архетип \ Пространство</th>{#each g.matrix.cols as c}<th>{c.label}</th>{/each}</tr>
-          </thead>
-          <tbody>
-            {#each g.matrix.rows as r}
-              <tr>
-                <th>{r.label}</th>
-                {#each g.matrix.cols as c}
-                  {@const n = cellCount(g.matrix, r.id, c.id)}
-                  <td class="matrix__cell" style:background-color={n ? `color-mix(in srgb, var(--accent) ${Math.min(80, n * 25)}%, transparent)` : 'transparent'}>
-                    {#if n}<a href={catalogHref(g.label, 'therapist_archetype', r.id, 'space_type', c.id)} aria-label={`${r.label}, ${c.label}: ${n} ${unitWord(n)}; открыть единицы`}>{n}</a>{:else}0{/if}
-                  </td>
-                {/each}
-              </tr>
+  {:else if matrix}
+    <table class="matrix">
+      <caption>{caption}</caption>
+      <thead>
+        <tr><th>Архетип \ Пространство</th>{#each matrix.cols as c}<th>{c.label}</th>{/each}</tr>
+      </thead>
+      <tbody>
+        {#each matrix.rows as r}
+          <tr>
+            <th>{r.label}</th>
+            {#each matrix.cols as c}
+              {@const n = cellCount(r.id, c.id)}
+              <td class="matrix__cell" style:background-color={n ? `color-mix(in srgb, var(--accent) ${Math.min(80, n * 25)}%, transparent)` : 'transparent'}>
+                {n || ''}
+              </td>
             {/each}
-          </tbody>
-        </table>
-        </div>
-        <ul class="matrix-list only-narrow">
-          {#each g.matrix.rows as r}
-            {@const cells = g.matrix.cols
-              .map((c) => ({ col: c, n: cellCount(g.matrix, r.id, c.id) }))
-              .filter((x) => x.n > 0)}
-            {#if cells.length}
-              <li class="matrix-list__row">
-                <strong>{r.label}</strong>
-                <ul>
-                  {#each cells as x}<li><a href={catalogHref(g.label, 'therapist_archetype', r.id, 'space_type', x.col.id)}>{x.col.label} — {x.n} {unitWord(x.n)}</a></li>{/each}
-                </ul>
-              </li>
-            {:else}
-              <li class="matrix-list__row"><strong>{r.label}</strong> — нет сочетаний</li>
-            {/if}
-          {/each}
-        </ul>
-        <p class="only-narrow muted small">Показаны только ненулевые сочетания; отсутствующие — 0.</p>
-      {/if}
-    {/each}
-    <p class="viz-note muted small">{caption}</p>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  {:else}
+    <svg viewBox="0 0 720 {Math.max(120, counts.length * 44 + 30)}" role="img" aria-label={title}>
+      <title>{title}</title>
+      {#each counts as c, i}
+        {@const y = 20 + i * 44}
+        {#each wrapLabel(c.label) as line, li}
+          <text x="0" y={y + 10 + li * 13} fill="var(--text)" font-size="11.5">{line}</text>
+        {/each}
+        <rect x={barW} y={y} width={(c.count / maxCount) * (W - barW - 50)} height="18" fill="var(--accent)">
+          <title>{c.label}: {c.count}</title>
+        </rect>
+        <text x={barW + (c.count / maxCount) * (W - barW - 50) + 6} y={y + 14} fill="var(--text-dim)" font-size="12">{c.count}</text>
+      {/each}
+    </svg>
+    <table>
+      <caption>{caption}</caption>
+      <thead><tr><th>Значение</th><th>Число единиц</th></tr></thead>
+      <tbody>
+        {#each counts as c}<tr><td>{c.label}</td><td>{c.count}</td></tr>{/each}
+      </tbody>
+    </table>
+    {#if tropes.length}
+      <h4 class="viz-sub">Визуальные тропы</h4>
+      <table>
+        <thead><tr><th>Троп</th><th>Число единиц</th></tr></thead>
+        <tbody>
+          {#each tropes as t}<tr><td>{t.label}</td><td>{t.count}</td></tr>{/each}
+        </tbody>
+      </table>
+    {/if}
   {/if}
+
+  <p class="viz-caption">{caption}</p>
 </div>
 
 <style>
   .viz-title { margin-top: 0; }
-  .viz-timeline-table { table-layout: fixed; }
-  .viz-timeline-table th,
-  .viz-timeline-table td { overflow-wrap: anywhere; }
-  .viz-timeline-table th:nth-child(1),
-  .viz-timeline-table td:nth-child(1) { width: 38%; }
-  .viz-timeline-table th:nth-child(2),
-  .viz-timeline-table td:nth-child(2) { width: 12%; }
-  .viz-timeline-table th:nth-child(3),
-  .viz-timeline-table td:nth-child(3) { width: 30%; }
-  .viz-timeline-table th:nth-child(4),
-  .viz-timeline-table td:nth-child(4) { width: 20%; }
   .viz-ethics-counts { margin: 0.25rem 0 0.75rem; font-size: 0.95rem; }
   .viz-legend text { font-family: var(--font); }
   .viz-sub { margin: 1rem 0 0.25rem; font-size: 0.95rem; }
-  .viz-note { margin-top: 0.75rem; }
   .matrix td, .matrix th { text-align: center; }
   .matrix__cell { min-width: 3.5rem; }
-  .viz-hbars { list-style: none; margin: 0.5rem 0 0.75rem; padding: 0; display: grid; gap: 0.5rem; }
-  .viz-hbars__row { display: grid; grid-template-columns: minmax(8rem, 14rem) 1fr auto; align-items: center; gap: 0.6rem; }
-  .viz-hbars__label { font-size: 0.9rem; line-height: 1.25; }
-  .viz-hbars__track { display: block; height: 0.9rem; background: color-mix(in srgb, var(--accent) 10%, transparent); border-radius: 3px; overflow: hidden; }
-  .viz-hbars__fill { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
-  .viz-hbars__val { font-size: 0.85rem; color: var(--text-dim); white-space: nowrap; }
-  .matrix-list { list-style: none; margin: 0.5rem 0 0.75rem; padding: 0; display: grid; gap: 0.75rem; }
-  .matrix-list__row > ul { margin: 0.25rem 0 0; padding-left: 1.1rem; }
-  .matrix-list__row li { margin: 0.15rem 0; }
-  @media (max-width: 40rem) {
-    .viz-hbars__row { grid-template-columns: 1fr; gap: 0.25rem; }
-    .viz-hbars__val { white-space: normal; }
-  }
 </style>

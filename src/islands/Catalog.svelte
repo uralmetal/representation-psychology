@@ -1,18 +1,6 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { strings } from '../lib/i18n';
   import type { CodebookEntry, Scene, Work } from '../lib/types';
-
-  function param(name: string): string | null {
-    if (typeof window === 'undefined') return null;
-    return new URLSearchParams(window.location.search).get(name);
-  }
-  function numParam(name: string): number | null {
-    const v = param(name);
-    if (v == null || v === '') return null;
-    const n = Number(v);
-    return Number.isFinite(n) ? n : null;
-  }
 
   interface Props {
     works: Work[];
@@ -74,88 +62,38 @@
     return v ? [v] : [];
   }
 
-  // Начальное состояние — дефолтное, чтобы SSR и гидратация совпадали;
-  // параметры URL применяются в onMount.
   let q = $state('');
   let format = $state('all');
-  let unit = $state('all');
-  let sort = $state('year');
   let yearFrom = $state<number | null>(null);
   let yearTo = $state<number | null>(null);
   let filters = $state<Record<string, string>>(
     Object.fromEntries(CATS.map((c) => [c.key, ''])),
   );
 
-  // paramsApplied защищает от гонки: эффект записи URL не должен сработать
-  // (и стереть query) раньше, чем onMount прочитает параметры.
-  let paramsApplied = $state(false);
-  onMount(() => {
-    const p = new URLSearchParams(window.location.search);
-    q = p.get('q') ?? '';
-    format = p.get('format') ?? 'all';
-    unit = p.get('unit') ?? 'all';
-    sort = p.get('sort') ?? 'year';
-    yearFrom = numParam('year_from');
-    yearTo = numParam('year_to');
-    filters = {
-      ...filters,
-      ...Object.fromEntries(CATS.map((c) => [c.key, p.get(c.key) ?? ''])),
-    };
-    paramsApplied = true;
-  });
-
-  $effect(() => {
-    if (typeof window === 'undefined' || !paramsApplied) return;
-    const p = new URLSearchParams();
-    if (q.trim()) p.set('q', q.trim());
-    if (format !== 'all') p.set('format', format);
-    if (unit !== 'all') p.set('unit', unit);
-    if (sort !== 'year') p.set('sort', sort);
-    if (Number.isFinite(yearFrom)) p.set('year_from', String(yearFrom));
-    if (Number.isFinite(yearTo)) p.set('year_to', String(yearTo));
-    for (const cfg of CATS) {
-      if (filters[cfg.key]) p.set(cfg.key, filters[cfg.key]);
-    }
-    const qs = p.toString();
-    history.replaceState(null, '', `${window.location.pathname}${qs ? `?${qs}` : ''}`);
-  });
-
   const filtered = $derived(
-    rows
-      .filter((row) => {
-        const w = row.work;
-        if (format !== 'all' && w?.format !== format) return false;
-        if (unit !== 'all' && row.scene.analysis_unit !== unit) return false;
-        const from = Number.isFinite(yearFrom) ? (yearFrom as number) : null;
-        const to = Number.isFinite(yearTo) ? (yearTo as number) : null;
-        if (from != null && (w?.year_start ?? 0) < from) return false;
-        if (to != null && (w?.year_end ?? 9999) > to) return false;
-        const needle = q.trim().toLowerCase();
-        if (needle) {
-          const hay = [
-            w?.title, w?.original_title, w?.country.join(' '), w?.genres.join(' '),
-            row.scene.timecode, row.scene.description, row.scene.scene_function.join(' '),
-          ].join(' ').toLowerCase();
-          if (!hay.includes(needle)) return false;
-        }
-        for (const cfg of CATS) {
-          const sel = filters[cfg.key];
-          if (!sel) continue;
-          const vals = valuesOf(row, cfg);
-          if (sel === '__none__' ? vals.length > 0 : !vals.includes(sel)) return false;
-        }
-        return true;
-      })
-      .sort((a, b) => {
-        if (sort === 'title') {
-          return (a.work?.title ?? a.scene.work_id).localeCompare(
-            b.work?.title ?? b.scene.work_id,
-            'ru',
-          );
-        }
-        return (a.work?.year_start ?? 0) - (b.work?.year_start ?? 0)
-          || (a.work?.title ?? '').localeCompare(b.work?.title ?? '', 'ru');
-      }),
+    rows.filter((row) => {
+      const w = row.work;
+      if (format !== 'all' && w?.format !== format) return false;
+      const from = Number.isFinite(yearFrom) ? (yearFrom as number) : null;
+      const to = Number.isFinite(yearTo) ? (yearTo as number) : null;
+      if (from != null && (w?.year_start ?? 0) < from) return false;
+      if (to != null && (w?.year_end ?? 9999) > to) return false;
+      const needle = q.trim().toLowerCase();
+      if (needle) {
+        const hay = [
+          w?.title, w?.original_title, w?.country.join(' '), w?.genres.join(' '),
+          row.scene.timecode, row.scene.description, row.scene.scene_function.join(' '),
+        ].join(' ').toLowerCase();
+        if (!hay.includes(needle)) return false;
+      }
+      for (const cfg of CATS) {
+        const sel = filters[cfg.key];
+        if (!sel) continue;
+        const vals = valuesOf(row, cfg);
+        if (sel === '__none__' ? vals.length > 0 : !vals.includes(sel)) return false;
+      }
+      return true;
+    }),
   );
 
   let compareIds = $state<string[]>([]);
@@ -165,9 +103,6 @@
       : [...compareIds, id];
   }
   const compareRows = $derived(rows.filter((r) => compareIds.includes(r.scene.id)));
-  const compareMixed = $derived(
-    new Set(compareRows.map((r) => r.scene.analysis_unit)).size > 1,
-  );
 
   function compareKey(row: Row, cat: string): string {
     const cfg = CATS.find((c) => c.cat === cat)!;
@@ -177,15 +112,6 @@
     if (compareRows.length < 2) return false;
     const first = compareKey(compareRows[0], cat);
     return compareRows.every((r) => compareKey(r, cat) === first);
-  }
-
-  function rememberReturn() {
-    if (typeof window === 'undefined') return;
-    try {
-      sessionStorage.setItem('rp:return-url', window.location.href);
-    } catch {
-      /* sessionStorage недоступен */
-    }
   }
 
   function years(w: Work | undefined): string {
@@ -260,21 +186,6 @@
       <span>{strings.catalog.yearTo}</span>
       <input type="number" min="1900" max="2100" bind:value={yearTo} />
     </label>
-    <label class="catalog__field">
-      <span>{strings.catalog.unit}</span>
-      <select bind:value={unit}>
-        <option value="all">{strings.catalog.unitAll}</option>
-        <option value="scene">{strings.catalog.unitScene}</option>
-        <option value="work_overall">{strings.catalog.unitOverall}</option>
-      </select>
-    </label>
-    <label class="catalog__field">
-      <span>Сортировка</span>
-      <select bind:value={sort}>
-        <option value="year">{strings.catalog.sortYear}</option>
-        <option value="title">{strings.catalog.sortTitle}</option>
-      </select>
-    </label>
     {#each CATS as cfg}
       <label class="catalog__field">
         <span>{catLabel.get(cfg.cat) ?? cfg.cat}</span>
@@ -302,18 +213,14 @@
   {#if compareIds.length >= 2}
     <div class="catalog__compare">
       <h3>{strings.catalog.compareTitle}</h3>
-      {#if compareMixed}
-        <p class="catalog__mixed" role="alert">{strings.catalog.compareMixed}</p>
-        <p><button type="button" class="btn btn--ghost btn--sm" onclick={() => (compareIds = [])}>{strings.catalog.clearCompare}</button></p>
-      {:else}
       <p class="muted small">{strings.catalog.compareHint}</p>
-      <div class="catalog-table-wrap catalog-table--compare-wrap">
+      <div class="catalog-table-wrap">
         <table class="catalog-table catalog-table--compare">
           <thead>
             <tr>
               <th scope="col"><span class="sr-only">{strings.catalog.compare}</span></th>
               {#each compareRows as row}
-                <th scope="col">{row.work?.title ?? row.scene.work_id}</th>
+                <th>{row.work?.title ?? row.scene.work_id}</th>
               {/each}
             </tr>
           </thead>
@@ -342,7 +249,7 @@
             <tr>
               <th scope="row">{strings.catalog.timecode}</th>
               {#each compareRows as row}
-                <td><a href="{base}scene/{row.scene.id}/" onclick={rememberReturn}>{row.scene.timecode}</a></td>
+                <td><a href="{base}scene/{row.scene.id}/">{row.scene.timecode}</a></td>
               {/each}
             </tr>
             <tr>
@@ -359,7 +266,6 @@
           {strings.catalog.clearCompare}
         </button>
       </p>
-      {/if}
     </div>
   {/if}
 
@@ -394,14 +300,17 @@
                 />
               </td>
               <td>
-                <a href="{base}work/{row.scene.work_id}/" onclick={rememberReturn}>{row.work?.title ?? row.scene.work_id}</a>
+                {#if row.work?.frames?.[0]}
+                  <img class="catalog__thumb" src="{base}{row.work.frames[0]}" alt="" loading="lazy" />
+                {/if}
+                <a href="{base}work/{row.scene.work_id}/">{row.work?.title ?? row.scene.work_id}</a>
                 <div class="muted small">{years(row.work)} · {row.work?.country.join(', ')}</div>
               </td>
               <td class="small">{row.work?.format === 'tv_series' ? 'сериал' : 'фильм'}</td>
               <td class="small">
                 {row.scene.analysis_unit === 'scene' ? strings.catalog.unitScene : strings.catalog.unitOverall}
               </td>
-              <td class="small"><a href="{base}scene/{row.scene.id}/" onclick={rememberReturn}>{row.scene.timecode}</a></td>
+              <td class="small"><a href="{base}scene/{row.scene.id}/">{row.scene.timecode}</a></td>
               <td class="small catalog__desc" title={row.scene.description}>
                 {trunc(row.scene.description)}
                 {#if row.scene.scene_function.length}
@@ -418,7 +327,7 @@
                       {#if e}
                         <a href="{base}codebook/#{e.id}">{e.label}</a>
                       {:else}
-                        <span class="catalog__ood" title={strings.catalog.outOfDictionary}>{v}</span>
+                        {v}
                       {/if}
                     {/each}
                   {:else}
@@ -437,63 +346,6 @@
           {/each}
         </tbody>
       </table>
-    </div>
-
-    <div class="catalog-cards" aria-label="Результаты каталога">
-      {#each filtered as row (row.scene.id)}
-        <article class="catalog-card">
-          <div class="catalog-card__top">
-            <label class="catalog-card__compare">
-              <input
-                type="checkbox"
-                checked={compareIds.includes(row.scene.id)}
-                onchange={() => toggleCompare(row.scene.id)}
-                aria-label="{strings.catalog.compare}: {row.work?.title ?? row.scene.id}"
-              />
-              <span>{strings.catalog.compare}</span>
-            </label>
-            <span class="catalog-card__unit">
-              {row.scene.analysis_unit === 'scene' ? strings.catalog.unitScene : strings.catalog.unitOverall}
-            </span>
-          </div>
-          <h3><a href="{base}work/{row.scene.work_id}/" onclick={rememberReturn}>{row.work?.title ?? row.scene.work_id}</a></h3>
-          <p class="muted small">{years(row.work)} · {row.work?.country.join(', ')}</p>
-          <p class="catalog-card__description">{row.scene.description}</p>
-          <p class="small"><strong>{strings.catalog.timecode}:</strong> <a href="{base}scene/{row.scene.id}/" onclick={rememberReturn}>{row.scene.timecode || '—'}</a></p>
-          <dl class="catalog-card__fields">
-            {#each CATS as cfg}
-              {@const vals = valuesOf(row, cfg)}
-              <div>
-                <dt>{catLabel.get(cfg.cat) ?? cfg.cat}</dt>
-                <dd>
-                  {#if vals.length}
-                    {#each vals as v, i}
-                      {#if i > 0}<span>, </span>{/if}
-                      {@const e = entryOf(cfg.cat, v)}
-                      {#if e}
-                        <a href="{base}codebook/#{e.id}">{e.label}</a>
-                      {:else}
-                        <span class="catalog__ood" title={strings.catalog.outOfDictionary}>{v}</span>
-                      {/if}
-                    {/each}
-                  {:else}
-                    <span class="muted">{strings.catalog.noCode}</span>
-                  {/if}
-                </dd>
-              </div>
-            {/each}
-          </dl>
-          {#if row.scene.note || Object.keys(row.scene.field_notes ?? {}).length}
-            <details class="catalog-card__notes">
-              <summary>{strings.catalog.notes}</summary>
-              {#if row.scene.note}<p>{row.scene.note}</p>{/if}
-              {#each Object.entries(row.scene.field_notes ?? {}) as [field, note]}
-                <p><strong>{FIELD_LABELS[field] ?? field}:</strong> {note}</p>
-              {/each}
-            </details>
-          {/if}
-        </article>
-      {/each}
     </div>
   {/if}
 </div>
@@ -541,45 +393,7 @@
     border-radius: 8px;
   }
   .catalog__compare h3 { margin-top: 0; }
-  .catalog__mixed {
-    padding: 0.6rem 0.8rem;
-    border-left: 3px solid var(--orange);
-    background: var(--orange-soft);
-    border-radius: 4px;
-    font-size: 0.9rem;
-  }
-  .catalog__ood {
-    border-bottom: 1px dashed var(--orange);
-    cursor: help;
-  }
   .catalog-table-wrap { overflow-x: auto; }
-  .catalog-cards { display: none; }
-  .catalog-card {
-    padding: 1rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-card);
-    min-width: 0;
-  }
-  .catalog-card h3 { margin: 0.45rem 0 0.15rem; font-size: 1.05rem; }
-  .catalog-card p { margin: 0.35rem 0; }
-  .catalog-card__top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
-  .catalog-card__compare { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; }
-  .catalog-card__unit {
-    display: inline-block;
-    padding: 0.2rem 0.45rem;
-    border-radius: 4px;
-    background: var(--accent-soft);
-    font-size: 0.75rem;
-  }
-  .catalog-card__description { line-height: 1.45; }
-  .catalog-card__fields { margin: 0.75rem 0 0; display: grid; gap: 0.55rem; }
-  .catalog-card__fields > div { display: grid; grid-template-columns: minmax(6.5rem, 0.8fr) minmax(0, 1.5fr); gap: 0.5rem; }
-  .catalog-card__fields dt { color: var(--text-dim); font-size: 0.78rem; }
-  .catalog-card__fields dd { margin: 0; overflow-wrap: anywhere; font-size: 0.85rem; }
-  .catalog-card__notes { margin-top: 0.75rem; font-size: 0.82rem; }
-  .catalog-card__notes summary { cursor: pointer; font-weight: 600; }
-  .catalog-card__notes p { overflow-wrap: anywhere; }
   .catalog-table { min-width: 60rem; }
   .catalog-table--compare { min-width: 0; width: 100%; }
   .catalog-table--compare tr.is-same td,
@@ -587,15 +401,15 @@
   tr.is-selected td { background: var(--accent-soft); }
   .catalog__desc { max-width: 16rem; }
   .catalog__fn { margin-top: 0.2rem; font-size: 0.78rem; }
-  @media (max-width: 760px) {
-    .catalog-table-wrap:not(.catalog-table--compare-wrap) { display: none; }
-    .catalog-cards { display: grid; gap: 0.75rem; }
-    .catalog__filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; }
-    .catalog__search { grid-column: 1 / -1; width: 100%; min-width: 0; box-sizing: border-box; }
-    .catalog__field { min-width: 0; }
-    .catalog__field select, .catalog__field input { max-width: none; width: 100%; min-width: 0; box-sizing: border-box; }
-    .catalog__meta { flex-wrap: wrap; }
-    .catalog__compare { overflow-x: auto; }
+  .catalog__thumb {
+    display: block;
+    width: 4.5rem;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    margin-bottom: 0.3rem;
   }
   .sr-only {
     position: absolute;

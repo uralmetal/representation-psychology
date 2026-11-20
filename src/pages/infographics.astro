@@ -14,7 +14,7 @@ const ORDER = [
   'archetype-counts',
   'space-matrix',
   'ethics-counts',
-  'stigma-counts',
+  'stigma-timeline',
   'utterance-counts',
 ];
 const specs = ORDER.map((id) => vizSpec(id, works, scenes, entries)).filter(
@@ -30,7 +30,6 @@ const specs = ORDER.map((id) => vizSpec(id, works, scenes, entries)).filter(
     <section class="infographic" id={spec.kind}>
       <Viz
         client:visible
-        base={import.meta.env.BASE_URL}
         kind={spec.kind}
         title={spec.title}
         subtitle={spec.subtitle}

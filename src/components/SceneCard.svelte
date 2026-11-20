@@ -24,6 +24,8 @@
     return e ? `${base}codebook/#${e.id}` : '#';
   }
 
+  const ethicsLabel: Record<string, string> = { yes: 'Да', partial: 'Частично', no: 'Нет' };
+  const stigmaLabel: Record<string, string> = { high: 'Высокий', medium: 'Средний', low: 'Низкий' };
   const stigmaClass: Record<string, string> = { high: 'stigma-high', medium: 'stigma-medium', low: 'stigma-low' };
 
   const unitLabel = $derived(scene.analysis_unit === 'scene' ? 'сцена' : 'произведение целиком');
@@ -55,27 +57,19 @@
       <dd>
         {#if scene.space_type}
           {@const e = entry('space_type', scene.space_type)}
-          {#if e}
-            <a href={codeHref(e)}>{e.label}</a>
-          {:else}
-            <span class="ood" title="значение вне словаря">{scene.space_type}</span>
-          {/if}
+          <a href={codeHref(e)}>{e?.label ?? scene.space_type}</a>
         {:else}
-          <span class="muted">Нет кода</span>
+          <span class="muted">в словаре нет</span>
         {/if}
       </dd>
     </div>
     <div>
       <dt>Архетип</dt>
       <dd>
-        {#if scene.therapist_archetype.length}
-          {#each scene.therapist_archetype as a}
-            {@const e = entry('therapist_archetype', a)}
-            {#if e}<a href={codeHref(e)}>{e.label}</a>{:else}<span class="ood" title="значение вне словаря">{a}</span>{/if}{' '}
-          {/each}
-        {:else}
-          <span class="muted">Нет кода</span>
-        {/if}
+        {#each scene.therapist_archetype as a}
+          {@const e = entry('therapist_archetype', a)}
+          <a href={codeHref(e)}>{e?.label ?? a}</a>{' '}
+        {/each}
       </dd>
     </div>
     <div>
@@ -83,9 +77,9 @@
       <dd>
         {#if scene.ethical_violation}
           {@const e = entry('ethical_violation', scene.ethical_violation)}
-          {#if e}<a href={codeHref(e)}>{e.label}</a>{:else}<span class="ood" title="значение вне словаря">{scene.ethical_violation}</span>{/if}
+          <a href={codeHref(e)}>{e?.label ?? ethicsLabel[scene.ethical_violation]}</a>
         {:else}
-          <span class="muted">Нет кода</span>
+          <span class="muted">—</span>
         {/if}
       </dd>
     </div>
@@ -95,36 +89,28 @@
         {#if scene.stigma_level}
           {@const e = entry('stigma_level', scene.stigma_level)}
           <span aria-hidden="true">●</span>{' '}
-          {#if e}<a href={codeHref(e)}>{e.label}</a>{:else}<span class="ood" title="значение вне словаря">{scene.stigma_level}</span>{/if}
+          <a href={codeHref(e)}>{e?.label ?? stigmaLabel[scene.stigma_level]}</a>
         {:else}
-          <span class="muted">Нет кода</span>
+          <span class="muted">—</span>
         {/if}
       </dd>
     </div>
     <div>
       <dt>Типы реплик</dt>
       <dd>
-        {#if scene.utterance_types.length}
-          {#each scene.utterance_types as u}
-            {@const e = entry('utterance_type', u)}
-            {#if e}<a href={codeHref(e)}>{e.label}</a>{:else}<span class="ood" title="значение вне словаря">{u}</span>{/if}{' '}
-          {/each}
-        {:else}
-          <span class="muted">Нет кода</span>
-        {/if}
+        {#each scene.utterance_types as u}
+          {@const e = entry('utterance_type', u)}
+          <a href={codeHref(e)}>{e?.label ?? u}</a>{' '}
+        {/each}
       </dd>
     </div>
     <div>
       <dt>Визуальные тропы</dt>
       <dd>
-        {#if scene.visual_tropes.length}
-          {#each scene.visual_tropes as t}
-            {@const e = entry('visual_trope', t)}
-            {#if e}<a href={codeHref(e)}>{e.label}</a>{:else}<span class="ood" title="значение вне словаря">{t}</span>{/if}{' '}
-          {/each}
-        {:else}
-          <span class="muted">Нет кода</span>
-        {/if}
+        {#each scene.visual_tropes as t}
+          {@const e = entry('visual_trope', t)}
+          <a href={codeHref(e)}>{e?.label ?? t}</a>{' '}
+        {/each}
       </dd>
     </div>
     <div class="scene-fields__wide">

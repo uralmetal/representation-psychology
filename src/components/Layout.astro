@@ -1,7 +1,6 @@
 ---
 import { strings } from '../lib/i18n';
-import { metaFile, worksFile } from '../lib/data';
-import { getChapters } from '../lib/chapters';
+import { metaFile } from '../lib/data';
 import '../styles/global.css';
 
 interface Props {
@@ -12,7 +11,6 @@ interface Props {
 const { title, description } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const meta = metaFile();
-const corpusContext = `${getChapters().length} глав · ${worksFile().works.length} произведений`;
 const pageTitle = title === strings.siteTitle ? title : `${title} — ${strings.siteTitle}`;
 const desc = description ?? strings.tagline;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -52,7 +50,6 @@ const isCurrent = (href: string) =>
     <header class="site-header">
       <div class="site-header__inner">
         <a class="site-header__title" href={`${base}`}>{strings.siteTitle}</a>
-        <span class="site-header__context">{corpusContext}</span>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
           {strings.common.menu}
         </button>

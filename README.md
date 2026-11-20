@@ -1,6 +1,6 @@
 # Репрезентация психологии в кино
 
-Статический сайт цифрового гуманитарного прототипа об экранных репрезентациях психологической помощи и связанных с ней профессиональных ролей. Девять произведений, девять единиц анализа, словарь категорий и интерактивная история из семи глав.
+Статический сайт DH-прототипа: как кино и сериалы репрезентируют профессию психолога. Девять закодированных произведений, словарь категорий и seven-glavная история.
 
 Сайт собирается как project site для GitHub Pages с базовым путём `/representation-psychology/`.
 
@@ -8,11 +8,9 @@
 
 ```bash
 npm install
-npm run dev     # проверка медиареестра + ETL + astro dev
+npm run dev     # ETL + astro dev (localhost:4321/representation-psychology/)
 npm run data    # только ETL: xlsx → public/data/*.json + отчёт валидации
-npm run validate:media # проверка медиареестра и запрета непроверенной публикации
-npm run test:media # регрессионные тесты медиавалидатора
-npm run build   # проверка медиареестра + ETL + astro build → dist/
+npm run build   # ETL + astro build → dist/
 npm run preview # предпросмотр dist/
 ```
 
@@ -20,20 +18,15 @@ Python-часть требует `.venv` с `requirements.txt` или систе
 
 ## Структура
 
-- `materials/` — исходные документы и исходные медиаматериалы; в сборку не входят.
-- `materials/media/` — правила учёта, проверка и очередь фотографий/кадров.
-- `data/media-assets.yml` — реестр кандидатов и утверждённых изображений.
+- `materials/` — исходные документы (план, словарь, таблица кодирования, история проекта). В сборку не входят.
 - `data/source/` — `coding.xlsx` (без имён кодеров), `codebook.yml`, `works.yml`.
 - `data/etl/` — извлечение, нормализация, валидация, отчёт.
 - `data/schemas/` — JSON Schema для публикуемых файлов.
 - `data/out/` — непубликуемые артефакты (`withheld.json`), в git не входит.
 - `public/data/` — сгенерированные `works.json`, `scenes.json`, `codebook.json`, `meta.json`, `validation-report.json`.
-- `public/media/` — только индивидуально проверенные и утверждённые изображения; сборка отклоняет непроверенные/незарегистрированные файлы.
 - `src/content/chapters/` — семь глав истории в markdown.
 - `src/pages/`, `src/components/`, `src/islands/` — сайт на Astro + точечные Svelte-островки.
 
 Обновление корпуса: заменить `data/source/coding.xlsx`, выполнить `npm run data`, проверить `validation-report.json`, затем `npm run build`.
-
-Перед добавлением фотографий и кадров прочитать `materials/media/README.md` и `materials/design/03-final-design-handoff.md` §10.1. Статус `candidate` или `pending_review` никогда не означает разрешение на публикацию.
 
 Подробности модели данных — в `DATA.md`. Лицензии — в `LICENSE`, `LICENSE-CONTENT.md`, `LICENSE-DATA.md`.

@@ -6,11 +6,9 @@
   "description": "Репрезентация психологии в кино — статический DH-сайт прототипа",
   "scripts": {
     "data": "sh scripts/etl.sh",
-    "validate:media": "python3 scripts/validate_media.py",
-    "dev": "npm run data && npm run validate:media && astro dev",
-    "build": "sh scripts/etl.sh && npm run validate:media && astro build",
-    "preview": "astro preview",
-    "test:media": "python3 -m unittest discover -s tests -v"
+    "dev": "npm run data && astro dev",
+    "build": "sh scripts/etl.sh && astro build",
+    "preview": "astro preview"
   },
   "dependencies": {
     "@astrojs/svelte": "^9.1.4",

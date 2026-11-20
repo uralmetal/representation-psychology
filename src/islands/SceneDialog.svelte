@@ -14,8 +14,6 @@
   let scenes = $state<Scene[]>([]);
   let entries = $state<CodebookEntry[]>([]);
   let loaded = $state(false);
-  let loadError = $state(false);
-  let pendingHref = $state('');
   let returnFocus: HTMLElement | null = null;
 
   const scene = $derived(scenes.find((s) => s.id === currentId));
@@ -23,15 +21,10 @@
 
   async function ensureData() {
     if (loaded) return;
-    const get = (url: string) =>
-      fetch(url).then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-      });
     const [w, s, c] = await Promise.all([
-      get(`${base}data/works.json`),
-      get(`${base}data/scenes.json`),
-      get(`${base}data/codebook.json`),
+      fetch(`${base}data/works.json`).then((r) => r.json()),
+      fetch(`${base}data/scenes.json`).then((r) => r.json()),
+      fetch(`${base}data/codebook.json`).then((r) => r.json()),
     ]);
     works = w.works;
     scenes = s.scenes;
@@ -46,23 +39,8 @@
     const id = link.dataset.scene;
     if (!id) return;
     returnFocus = link;
-    pendingHref = link.href;
     currentId = id;
-    loadError = false;
-    void ensureData()
-      .catch(() => {
-        loadError = true;
-      })
-      .finally(() => dialog?.showModal());
-  }
-
-  function retry() {
-    loadError = false;
-    void ensureData()
-      .catch(() => {
-        loadError = true;
-      })
-      .finally(() => dialog?.showModal());
+    void ensureData().then(() => dialog?.showModal());
   }
 
   function onClose() {
@@ -88,14 +66,7 @@
       ×
     </button>
     <h2 id="scene-dialog-title">{work?.title ?? 'Карточка единицы'}</h2>
-    {#if loadError}
-      <p class="muted">Не удалось загрузить данные корпуса.</p>
-      <p>
-        <button type="button" class="btn btn--ghost btn--sm" onclick={retry}>Повторить</button>
-        {' '}
-        <a href={pendingHref}>Открыть страницу записи</a>
-      </p>
-    {:else if scene}
+    {#if scene}
       <SceneCard {scene} {work} {entries} {base} />
     {:else if loaded}
       <p class="muted">Единица не найдена.</p>

@@ -1,9 +1,7 @@
 ---
 import SceneCard from '../../components/SceneCard.svelte';
 import Layout from '../../components/Layout.astro';
-import MediaFigure from '../../components/MediaFigure.svelte';
 import { strings } from '../../lib/i18n';
-import { mediaForScene } from '../../lib/media';
 import { codebookFile, scenesFile, worksFile } from '../../lib/data';
 import type { Scene } from '../../lib/types';
 
@@ -15,70 +13,22 @@ const base = import.meta.env.BASE_URL;
 const { item: scene } = Astro.props;
 const workItem = worksFile().works.find((w) => w.id === scene.work_id);
 const entries = codebookFile().entries;
-const media = mediaForScene(scene.id);
 ---
 
 <Layout title={workItem?.title ?? scene.id} description={scene.description.slice(0, 160)}>
-  <p><a href={`${base}`} data-back data-base={base}>← {strings.nav.story}</a></p>
+  <p><a href={`${base}`} data-back>← {strings.nav.story}</a></p>
   <script is:inline>
     (() => {
-      document.addEventListener('click', (event) => {
-        const target = event.target;
-        const item = target instanceof Element ? target.closest('[data-return]') : null;
-        if (!item) return;
-        try { sessionStorage.setItem('rp:return-url', window.location.href); } catch {}
-      });
       const link = document.querySelector('[data-back]');
       if (!link) return;
       try {
-        const base = link.dataset.base ?? '/';
-        const backKey = `rp:back-url:${window.location.pathname}`;
-        const safeUrl = (raw) => {
-          if (!raw) return null;
-          const parsed = new URL(raw, window.location.origin);
-          return parsed.origin === window.location.origin && parsed.pathname.startsWith(base)
-            ? parsed.href
-            : null;
-        };
-
-        const incoming = sessionStorage.getItem('rp:return-url');
-        const incomingUrl = safeUrl(incoming);
-        if (incoming) {
-          if (incomingUrl) sessionStorage.setItem(backKey, incomingUrl);
-          sessionStorage.removeItem('rp:return-url');
-        }
-
-        const backUrl = incomingUrl ?? safeUrl(sessionStorage.getItem(backKey));
-        if (backUrl) {
-          link.setAttribute('href', backUrl);
-          link.addEventListener('click', () => sessionStorage.removeItem(backKey), { once: true });
-        } else {
-          const anchor = sessionStorage.getItem('rp:last-anchor');
-          if (anchor) link.setAttribute('href', `${link.getAttribute('href')}#${anchor}`);
-        }
+        const anchor = sessionStorage.getItem('rp:last-anchor');
+        if (anchor) link.setAttribute('href', `${link.getAttribute('href')}#${anchor}`);
       } catch {}
     })();
   </script>
   <SceneCard {scene} work={workItem} {entries} {base} />
-  {media.length > 0 && (
-    <section class="scene-media" aria-labelledby="scene-media-title">
-      <h2 id="scene-media-title">Кадры и фотографии к единице анализа</h2>
-      {media.map((asset) => (
-        <MediaFigure
-          {asset}
-          {base}
-          workTitle={workItem?.title ?? scene.work_id}
-          workHref={`${base}work/${scene.work_id}/`}
-          analysisUnitLabel={scene.timecode}
-        />
-      ))}
-    </section>
-  )}
   {workItem && (
-    <p><a href={`${base}work/${workItem.id}/`} data-return>Все единицы: {workItem.title}</a></p>
+    <p><a href={`${base}work/${workItem.id}/`}>Все единицы: {workItem.title}</a></p>
   )}
 </Layout>
-
-<style>
-  .scene-media { margin-top: 2rem; }
-</style>

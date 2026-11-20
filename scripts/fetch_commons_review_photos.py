@@ -57,7 +57,7 @@ def fetch_file(title: str) -> dict:
             raise RuntimeError(f"Image HTTP {response.status}")
         validate_url(response.geturl())
         content = response.read(MAX_BYTES + 1)
-    if len(content) != size or sha1_base36(content) != expected_sha1:
+    if len(content) != size or hashlib.sha1(content).hexdigest() != expected_sha1:
         raise ValueError(f"Size/SHA-1 verification failed for {title}")
     if not content.startswith(b"\xff\xd8\xff") or not content.endswith(b"\xff\xd9"):
         raise ValueError(f"Invalid JPEG signature: {title}")
@@ -66,7 +66,7 @@ def fetch_file(title: str) -> dict:
     return {
         "file": title, "commons_title": f"File:{title}",
         "description_url": f"https://commons.wikimedia.org/wiki/File:{urllib.parse.quote(title)}",
-        "mime": info["mime"], "size": size, "commons_sha1_base36": expected_sha1,
+        "mime": info["mime"], "size": size, "commons_sha1_hex": expected_sha1,
         "sha256": hashlib.sha256(content).hexdigest(),
         "review_scope": "internal visual/editorial review only; not legal approval",
     }

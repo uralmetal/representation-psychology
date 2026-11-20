@@ -85,7 +85,7 @@ function approvedAssets(): ApprovedMediaAsset[] {
 
 /** Work-level photos/stills belong on the work detail page, not duplicated on every scene. */
 export function mediaForWork(workId: string): ApprovedMediaAsset[] {
-  return approvedAssets().filter((asset) => asset.work_id === workId && !asset.scene_id);
+  return approvedAssets().filter((asset) => asset.work_id === workId && !asset.scene_id && !asset.chapter_anchor);
 }
 
 /** Scene-specific frames are shown only on the matching analysis-unit page. */

@@ -16,6 +16,23 @@ FILES = (
     "Puerta_Consultorio_Freud.jpg",
     "Freuds_Wartezimmer_in_der_Berggasse_19.jpg",
 )
+PROVENANCE = {
+    "Freud_anuncio_consultorio.jpg": {
+        "creator": "Marjorie Apel",
+        "license": "CC BY-SA 3.0",
+        "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+    },
+    "Puerta_Consultorio_Freud.jpg": {
+        "creator": "Marjorie Apel",
+        "license": "CC BY-SA 3.0",
+        "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+    },
+    "Freuds_Wartezimmer_in_der_Berggasse_19.jpg": {
+        "creator": "Siesta",
+        "license": "CC BY-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    },
+}
 
 
 def sha1_matches(data: bytes, expected_hex: str) -> bool:
@@ -96,6 +113,7 @@ def fetch_file(title: str) -> dict:
         "file": title,
         "commons_title": f"File:{title}",
         "description_url": f"https://commons.wikimedia.org/wiki/File:{urllib.parse.quote(title)}",
+        **PROVENANCE[title],
         "mime": info["mime"],
         "size": size,
         "commons_sha1_hex": expected_sha1,

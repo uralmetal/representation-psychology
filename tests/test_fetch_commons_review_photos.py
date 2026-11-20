@@ -24,7 +24,7 @@ class CommonsReviewFetcherTests(unittest.TestCase):
         for url in (
             "http://upload.wikimedia.org/example.jpg",
             "https://commons.wikimedia.org/example.jpg",
-            "https://example.com/example.jpg",
+            "https://example.com/example.jpg",\n            "https://upload.wikimedia.org:444/example.jpg",\n            "https://user@upload.wikimedia.org/example.jpg",
         ):
             with self.subTest(url=url), self.assertRaises(ValueError):
                 MODULE.validate_url(url)

@@ -34,7 +34,15 @@ const media = mediaForScene(scene.id);
   {media.length > 0 && (
     <section class="scene-media" aria-labelledby="scene-media-title">
       <h2 id="scene-media-title">Кадры и фотографии к единице анализа</h2>
-      {media.map((asset) => <MediaFigure asset={asset} {base} />)}
+      {media.map((asset) => (
+        <MediaFigure
+          {asset}
+          {base}
+          workTitle={workItem?.title ?? scene.work_id}
+          workHref={`${base}work/${scene.work_id}/`}
+          analysisUnitLabel={scene.timecode}
+        />
+      ))}
     </section>
   )}
   {workItem && (

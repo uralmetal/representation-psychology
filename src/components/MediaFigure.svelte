@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ApprovedMediaAsset } from '../lib/media';
+  import type { PublicMediaAsset } from '../lib/media';
 
   interface Props {
     asset: ApprovedMediaAsset;
@@ -18,7 +18,7 @@
     analysisUnitLabel = null,
     chapterLabel = null,
   }: Props = $props();
-  const imageSrc = `${base.replace(/\/$/, '')}${asset.public_path}`;
+  const imageSrc = asset.image_url ?? `${base.replace(/\/$/, '')}${asset.public_path ?? ''}`;
   const kindLabel = asset.kind === 'film_still' ? 'Кадр из произведения' : 'Фотография';
 </script>
 
@@ -51,13 +51,17 @@
         <strong>Аналитическая связь:</strong> {asset.analysis_purpose}
       </p>
     {/if}
-    <p class="media-figure__attribution">
-      {asset.attribution}
-      · <a href={asset.source_url} target="_blank" rel="noopener noreferrer">Источник</a>
-      {#if asset.license && asset.license_url}
-        · <a href={asset.license_url} target="_blank" rel="noopener noreferrer">{asset.license}</a>
-      {/if}
-    </p>
+    {#if asset.attribution || asset.source_url || (asset.license && asset.license_url)}
+      <p class="media-figure__attribution">
+        {asset.attribution}
+        {#if asset.source_url}
+          · <a href={asset.source_url} target="_blank" rel="noopener noreferrer">Источник</a>
+        {/if}
+        {#if asset.license && asset.license_url}
+          · <a href={asset.license_url} target="_blank" rel="noopener noreferrer">{asset.license}</a>
+        {/if}
+      </p>
+    {/if}
   </figcaption>
 </figure>
 

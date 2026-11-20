@@ -19,12 +19,28 @@ const years = workItem.year_start === workItem.year_end ? String(workItem.year_s
 ---
 
 <Layout title={workItem.title} description={workItem.description.slice(0, 160)}>
-  <p><a href={base} data-back>← {strings.siteTitle}</a></p>
+  <p><a href={base} data-back data-base={base}>← {strings.siteTitle}</a></p>
   <script is:inline>
     (() => {
+      document.querySelectorAll('[data-return]').forEach((item) => {
+        item.addEventListener('click', () => {
+          try { sessionStorage.setItem('rp:return-url', window.location.href); } catch {}
+        });
+      });
       const link = document.querySelector('[data-back]');
       if (!link) return;
       try {
+        const returnUrl = sessionStorage.getItem('rp:return-url');
+        if (returnUrl) {
+          const parsed = new URL(returnUrl, window.location.origin);
+          const base = link.dataset.base ?? '/';
+          if (parsed.origin === window.location.origin && parsed.pathname.startsWith(base)) {
+            link.setAttribute('href', returnUrl);
+            sessionStorage.removeItem('rp:return-url');
+            return;
+          }
+          sessionStorage.removeItem('rp:return-url');
+        }
         const anchor = sessionStorage.getItem('rp:last-anchor');
         if (anchor) link.setAttribute('href', `${link.getAttribute('href')}#${anchor}`);
       } catch {}
@@ -55,7 +71,7 @@ const years = workItem.year_start === workItem.year_end ? String(workItem.year_s
   <ul>
     {scenes.map((s) => (
       <li>
-        <a href={`${base}scene/${s.id}/`}>{s.timecode}</a>
+        <a href={`${base}scene/${s.id}/`} data-return>{s.timecode}</a>
         <span class="muted small"> — {s.description.slice(0, 140)}{s.description.length > 140 ? '…' : ''}</span>
       </li>
     ))}

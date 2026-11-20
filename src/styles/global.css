@@ -160,7 +160,7 @@ th { background: var(--bg-elev); }
 .viz-caption { color: var(--text-dim); font-size: 0.85rem; margin-top: 0.5rem; }
 
 .only-narrow { display: none; }
-@media (max-width: 44rem) {
+@media (max-width: 52rem) {
   .only-wide { display: none !important; }
   .only-narrow { display: block; }
 }

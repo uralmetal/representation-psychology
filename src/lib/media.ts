@@ -21,6 +21,8 @@ export interface MediaAssetRecord {
   screen_time_verified?: boolean;
   proposed_scene_id?: string | null;
   analysis_purpose?: string | null;
+  /** Narrative chapter where this approved asset supports a specific analytical thesis. */
+  chapter_anchor?: string | null;
   alt?: string | null;
   caption?: string | null;
   attribution?: string | null;
@@ -89,4 +91,9 @@ export function mediaForWork(workId: string): ApprovedMediaAsset[] {
 /** Scene-specific frames are shown only on the matching analysis-unit page. */
 export function mediaForScene(sceneId: string): ApprovedMediaAsset[] {
   return approvedAssets().filter((asset) => asset.scene_id === sceneId);
+}
+
+/** Only assets explicitly attached to a chapter appear in the narrative; never infer placements. */
+export function mediaForChapter(chapterAnchor: string): ApprovedMediaAsset[] {
+  return approvedAssets().filter((asset) => asset.chapter_anchor === chapterAnchor);
 }

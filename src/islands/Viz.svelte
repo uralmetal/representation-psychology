@@ -86,7 +86,7 @@
 
   function catalogHref(groupLabel: string, field: string, value: string, secondField?: string, secondValue?: string): string {
     const params = new URLSearchParams({ unit: unitValue(groupLabel), [field]: value });
-    if (secondField && secondValue) params.set(secondField, secondValue);
+    if (secondField && secondValue) params.set(secondField, secondValue === 'none' ? '__none__' : secondValue);
     return `${base}catalog/?${params.toString()}`;
   }
 

@@ -139,6 +139,17 @@ class MediaValidatorTests(unittest.TestCase):
         self.write_manifest(self.base_asset(chapter_anchor="space"))
         validator.main()
 
+    def test_chapter_and_scene_placements_are_mutually_exclusive(self) -> None:
+        self.write_manifest(self.base_asset(chapter_anchor="space", scene_id="demo-scene"))
+        with self.assertRaises(SystemExit):
+            validator.main()
+
+    def test_approved_photo_with_valid_chapter_anchor_passes(self) -> None:
+        self.public_media.mkdir(parents=True)
+        (self.public_media / "example.jpg").write_bytes(b"test fixture")
+        self.write_manifest(self.approved_photo(chapter_anchor="space"))
+        validator.main()
+
     def test_non_https_source_blocks_build(self) -> None:
         self.write_manifest(self.base_asset(source_url="http://example.org/image.jpg"))
         with self.assertRaises(SystemExit):

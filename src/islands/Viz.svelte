@@ -143,9 +143,9 @@
       {/if}
     {/each}
     <p class="only-narrow muted small">На узком экране данные этой диаграммы доступны в таблице ниже.</p>
-    <table>
+    <table class="viz-timeline-table">
       <caption>{caption}</caption>
-      <thead><tr><th>Произведение</th><th>Год</th><th>Единица</th><th>Стигма</th></tr></thead>
+      <thead><tr><th scope="col">Произведение</th><th scope="col">Год</th><th scope="col">Единица</th><th scope="col">Стигма</th></tr></thead>
       <tbody>
         {#each points as p}
           <tr>
@@ -244,6 +244,17 @@
 
 <style>
   .viz-title { margin-top: 0; }
+  .viz-timeline-table { table-layout: fixed; }
+  .viz-timeline-table th,
+  .viz-timeline-table td { overflow-wrap: anywhere; }
+  .viz-timeline-table th:nth-child(1),
+  .viz-timeline-table td:nth-child(1) { width: 38%; }
+  .viz-timeline-table th:nth-child(2),
+  .viz-timeline-table td:nth-child(2) { width: 12%; }
+  .viz-timeline-table th:nth-child(3),
+  .viz-timeline-table td:nth-child(3) { width: 30%; }
+  .viz-timeline-table th:nth-child(4),
+  .viz-timeline-table td:nth-child(4) { width: 20%; }
   .viz-ethics-counts { margin: 0.25rem 0 0.75rem; font-size: 0.95rem; }
   .viz-legend text { font-family: var(--font); }
   .viz-sub { margin: 1rem 0 0.25rem; font-size: 0.95rem; }

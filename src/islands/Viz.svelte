@@ -5,8 +5,9 @@
     subtitle: string;
     caption: string;
     data: Record<string, unknown>;
+    base: string;
   }
-  let { kind, title, subtitle, caption, data }: Props = $props();
+  let { kind, title, subtitle, caption, data, base }: Props = $props();
 
   const STIGMA_COLOR: Record<string, string> = {
     high: 'var(--stigma-high)',
@@ -78,6 +79,23 @@
   function cellCount(matrix: MatrixData | undefined, row: string, col: string) {
     return matrix?.cells.find((c) => c.row === row && c.col === col)?.count ?? 0;
   }
+
+  function unitValue(groupLabel: string): string {
+    return groupLabel === 'Сцены' ? 'scene' : 'work_overall';
+  }
+
+  function catalogHref(groupLabel: string, field: string, value: string, secondField?: string, secondValue?: string): string {
+    const params = new URLSearchParams({ unit: unitValue(groupLabel), [field]: value });
+    if (secondField && secondValue) params.set(secondField, secondValue);
+    return `${base}catalog/?${params.toString()}`;
+  }
+
+  function countField(): string {
+    if (kind === 'archetype-counts') return 'therapist_archetype';
+    if (kind === 'ethics-counts') return 'ethical_violation';
+    if (kind === 'stigma-counts') return 'stigma_level';
+    return 'utterance_types';
+  }
 </script>
 
 <div class="viz-block">
@@ -131,7 +149,7 @@
       <tbody>
         {#each points as p}
           <tr>
-            <td>{p.title}</td><td>{p.year}</td>
+            <td><a href={`${base}scene/${p.id}/`}>{p.title}</a></td><td>{p.year}</td>
             <td>{p.analysis_unit === 'scene' ? 'сцена' : p.analysis_unit === 'work_overall' ? 'произведение целиком' : p.analysis_unit}</td>
             <td>{p.stigma ?? '—'}</td>
           </tr>
@@ -152,7 +170,7 @@
           {#each g.counts as c}
             {@const pct = barPct(c.count, g.units)}
             <li class="viz-hbars__row">
-              <span class="viz-hbars__label">{c.label}</span>
+              <span class="viz-hbars__label"><a href={catalogHref(g.label, countField(), c.id)}>{c.label}</a></span>
               <span class="viz-hbars__track" aria-hidden="true"><span class="viz-hbars__fill" style:width="{pct}%"></span></span>
               <span class="viz-hbars__val">{c.count}/{g.units} · {pct}%</span>
             </li>
@@ -162,7 +180,7 @@
           <caption>{g.label}</caption>
           <thead><tr><th>Значение</th><th>Число единиц</th></tr></thead>
           <tbody>
-            {#each g.counts as c}<tr><td>{c.label}</td><td>{c.count}</td></tr>{/each}
+            {#each g.counts as c}<tr><td><a href={catalogHref(g.label, countField(), c.id)}>{c.label}</a></td><td>{c.count}</td></tr>{/each}
           </tbody>
         </table>
       {/if}
@@ -173,7 +191,7 @@
           <caption>Визуальные тропы — {g.label}</caption>
           <thead><tr><th>Троп</th><th>Число единиц</th></tr></thead>
           <tbody>
-            {#each g.tropes as t}<tr><td>{t.label}</td><td>{t.count}</td></tr>{/each}
+            {#each g.tropes as t}<tr><td><a href={catalogHref(g.label, 'visual_tropes', t.id)}>{t.label}</a></td><td>{t.count}</td></tr>{/each}
           </tbody>
         </table>
       {/if}
@@ -192,7 +210,7 @@
                 {#each g.matrix.cols as c}
                   {@const n = cellCount(g.matrix, r.id, c.id)}
                   <td class="matrix__cell" style:background-color={n ? `color-mix(in srgb, var(--accent) ${Math.min(80, n * 25)}%, transparent)` : 'transparent'}>
-                    {n || ''}
+                    {#if n}<a href={catalogHref(g.label, 'therapist_archetype', r.id, 'space_type', c.id)} aria-label={`${r.label}, ${c.label}: ${n} ${unitWord(n)}; открыть единицы`}>{n}</a>{:else}0{/if}
                   </td>
                 {/each}
               </tr>
@@ -209,7 +227,7 @@
               <li class="matrix-list__row">
                 <strong>{r.label}</strong>
                 <ul>
-                  {#each cells as x}<li>{x.col.label} — {x.n} {unitWord(x.n)}</li>{/each}
+                  {#each cells as x}<li><a href={catalogHref(g.label, 'therapist_archetype', r.id, 'space_type', x.col.id)}>{x.col.label} — {x.n} {unitWord(x.n)}</a></li>{/each}
                 </ul>
               </li>
             {:else}

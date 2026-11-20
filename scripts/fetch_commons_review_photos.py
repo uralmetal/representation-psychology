@@ -166,7 +166,7 @@ def fetch_file(title: str) -> dict:
 
     if len(content) != size or not sha1_matches(content, expected_sha1):
         raise ValueError(f"Size/SHA-1 verification failed for {title}")
-    if not content.startswith(b"\\xff\\xd8\\xff") or not content.endswith(b"\\xff\\xd9"):
+    if not content.startswith(b"\xff\xd8\xff") or not content.endswith(b"\xff\xd9"):
         raise ValueError(f"Invalid JPEG signature: {title}")
 
     OUT.mkdir(parents=True, exist_ok=True)
@@ -208,7 +208,7 @@ def copy_local_png_candidate(
     if not 0 < size <= MAX_BYTES:
         raise ValueError(f"Unsafe candidate size for {asset_id}: {size}")
     content = source.read_bytes()
-    if len(content) != size or not content.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+    if len(content) != size or not content.startswith(b"\x89PNG\r\n\x1a\n"):
         raise ValueError(f"Invalid PNG file: {asset_id}")
 
     relative_destination = Path("local-film-stills") / destination_name
@@ -249,7 +249,7 @@ def main() -> None:
         "files": files,
     }
     (OUT / "manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n",
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     print(f"Collected {len(manifest['files'])} assets for internal visual review.")

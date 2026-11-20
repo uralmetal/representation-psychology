@@ -28,9 +28,12 @@ class MediaValidatorTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.manifest = self.root / "data" / "media-assets.yml"
         self.public_data = self.root / "public" / "data"
+        self.chapters_dir = self.root / "src" / "content" / "chapters"
         self.public_media = self.root / "public" / "media"
         self.manifest.parent.mkdir(parents=True)
         self.public_data.mkdir(parents=True)
+        self.chapters_dir.mkdir(parents=True)
+        self.chapters_dir.joinpath("01-space.md").write_text("---\nanchor: space\n---\n", encoding="utf-8")
         self.public_data.joinpath("works.json").write_text(
             json.dumps({"works": [{"id": "demo-work"}]}), encoding="utf-8"
         )
@@ -43,6 +46,7 @@ class MediaValidatorTests(unittest.TestCase):
             patch.object(validator, "MANIFEST", self.manifest),
             patch.object(validator, "PUBLIC_DATA", self.public_data),
             patch.object(validator, "PUBLIC_MEDIA", self.public_media),
+            patch.object(validator, "CHAPTERS_DIR", self.chapters_dir),
         )
         for item in self.patches:
             item.start()
@@ -125,6 +129,15 @@ class MediaValidatorTests(unittest.TestCase):
         self.write_manifest(self.base_asset(), self.base_asset())
         with self.assertRaises(SystemExit):
             validator.main()
+
+    def test_unknown_chapter_anchor_blocks_build(self) -> None:
+        self.write_manifest(self.base_asset(chapter_anchor="missing-chapter"))
+        with self.assertRaises(SystemExit):
+            validator.main()
+
+    def test_valid_chapter_anchor_is_accepted(self) -> None:
+        self.write_manifest(self.base_asset(chapter_anchor="space"))
+        validator.main()
 
     def test_non_https_source_blocks_build(self) -> None:
         self.write_manifest(self.base_asset(source_url="http://example.org/image.jpg"))

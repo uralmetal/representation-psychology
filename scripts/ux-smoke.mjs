@@ -26,10 +26,27 @@ async function waitForServer() {
 async function assertNoHorizontalOverflow(page, route, width) {
   await page.setViewportSize({ width, height: 850 });
   await page.goto(new URL(route, base).href);
-  const dimensions = await page.evaluate(() => ({
-    viewport: document.documentElement.clientWidth,
-    document: document.documentElement.scrollWidth,
-  }));
+  const dimensions = await page.evaluate(() => {
+    const viewport = document.documentElement.clientWidth;
+    const offenders = [...document.body.querySelectorAll('*')]
+      .map((el) => {
+        const rect = el.getBoundingClientRect();
+        const style = getComputedStyle(el);
+        return {
+          tag: el.tagName.toLowerCase(),
+          className: typeof el.className === 'string' ? el.className : '',
+          left: Math.round(rect.left),
+          right: Math.round(rect.right),
+          width: Math.round(rect.width),
+          scrollWidth: el.scrollWidth,
+          overflowX: style.overflowX,
+        };
+      })
+      .filter((item) => item.width > 0 && (item.right > viewport + 1 || item.left < -1))
+      .sort((a, b) => b.right - a.right)
+      .slice(0, 20);
+    return { viewport, document: document.documentElement.scrollWidth, offenders };
+  });
   assert.ok(
     dimensions.document <= dimensions.viewport + 1,
     `Horizontal overflow at ${width}px on ${route}: ${JSON.stringify(dimensions)}`,

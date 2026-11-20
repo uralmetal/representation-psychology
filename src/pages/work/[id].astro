@@ -22,10 +22,11 @@ const years = workItem.year_start === workItem.year_end ? String(workItem.year_s
   <p><a href={base} data-back data-base={base}>← {strings.siteTitle}</a></p>
   <script is:inline>
     (() => {
-      document.querySelectorAll('[data-return]').forEach((item) => {
-        item.addEventListener('click', () => {
-          try { sessionStorage.setItem('rp:return-url', window.location.href); } catch {}
-        });
+      document.addEventListener('click', (event) => {
+        const target = event.target;
+        const item = target instanceof Element ? target.closest('[data-return]') : null;
+        if (!item) return;
+        try { sessionStorage.setItem('rp:return-url', window.location.href); } catch {}
       });
       const link = document.querySelector('[data-back]');
       if (!link) return;

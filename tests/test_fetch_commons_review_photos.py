@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import unittest
 from pathlib import Path
 
@@ -10,10 +11,11 @@ SPEC.loader.exec_module(MODULE)
 
 class CommonsReviewFetcherTests(unittest.TestCase):
     def test_sha1_comparison_uses_hexadecimal_api_value(self):
-        import hashlib
         payload = b"representation-psychology"
-        self.assertEqual(hashlib.sha1(payload).hexdigest(), hashlib.sha1(payload).hexdigest())
-        self.assertEqual(len(hashlib.sha1(payload).hexdigest()), 40)
+        expected = "548d72783ae1e4f1275bd8e54d0abaebd077b89b"
+        self.assertEqual(hashlib.sha1(payload).hexdigest(), expected)
+        self.assertTrue(MODULE.sha1_matches(payload, expected))
+        self.assertFalse(MODULE.sha1_matches(payload, "0" * 40))
 
     def test_accepts_only_upload_wikimedia_https(self):
         MODULE.validate_url("https://upload.wikimedia.org/wikipedia/commons/a/a1/example.jpg")

@@ -25,3 +25,9 @@ jobs:
       - run: npm ci
       - run: npm run test:media
       - run: npm run build
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false playwright
+      - name: Install Chromium browser
+        run: npx playwright install chromium
+      - name: Run browser UX smoke tests
+        run: node scripts/ux-smoke.mjs

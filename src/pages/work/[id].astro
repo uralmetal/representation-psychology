@@ -31,19 +31,31 @@ const years = workItem.year_start === workItem.year_end ? String(workItem.year_s
       const link = document.querySelector('[data-back]');
       if (!link) return;
       try {
-        const returnUrl = sessionStorage.getItem('rp:return-url');
-        if (returnUrl) {
-          const parsed = new URL(returnUrl, window.location.origin);
-          const base = link.dataset.base ?? '/';
-          if (parsed.origin === window.location.origin && parsed.pathname.startsWith(base)) {
-            link.setAttribute('href', returnUrl);
-            sessionStorage.removeItem('rp:return-url');
-            return;
-          }
+        const base = link.dataset.base ?? '/';
+        const backKey = `rp:back-url:${window.location.pathname}`;
+        const safeUrl = (raw) => {
+          if (!raw) return null;
+          const parsed = new URL(raw, window.location.origin);
+          return parsed.origin === window.location.origin && parsed.pathname.startsWith(base)
+            ? parsed.href
+            : null;
+        };
+
+        const incoming = sessionStorage.getItem('rp:return-url');
+        const incomingUrl = safeUrl(incoming);
+        if (incoming) {
+          if (incomingUrl) sessionStorage.setItem(backKey, incomingUrl);
           sessionStorage.removeItem('rp:return-url');
         }
-        const anchor = sessionStorage.getItem('rp:last-anchor');
-        if (anchor) link.setAttribute('href', `${link.getAttribute('href')}#${anchor}`);
+
+        const backUrl = incomingUrl ?? safeUrl(sessionStorage.getItem(backKey));
+        if (backUrl) {
+          link.setAttribute('href', backUrl);
+          link.addEventListener('click', () => sessionStorage.removeItem(backKey), { once: true });
+        } else {
+          const anchor = sessionStorage.getItem('rp:last-anchor');
+          if (anchor) link.setAttribute('href', `${link.getAttribute('href')}#${anchor}`);
+        }
       } catch {}
     })();
   </script>

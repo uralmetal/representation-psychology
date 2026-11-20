@@ -249,6 +249,7 @@
 <style>
   .story-layout {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
   }
 
@@ -299,6 +300,8 @@
   .step__evidence-more .step__evidence { margin-top: 0.75rem; }
 
   .story-toc {
+    min-width: 0;
+    max-width: 100%;
     padding: 0.9rem 1.1rem;
     background: var(--bg-elev);
     border: 1px solid var(--border);
@@ -312,6 +315,8 @@
     color: var(--text-dim);
   }
   .story-toc__list {
+    min-width: 0;
+    max-width: 100%;
     list-style: none;
     margin: 0;
     padding: 0;

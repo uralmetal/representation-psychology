@@ -104,6 +104,25 @@ try {
   await page.locator('a[data-back]').click();
   await page.waitForURL(/\/catalog\//);
 
+  // Owner-requested media is rendered on work pages and in the relevant chapter.
+  await page.goto(new URL('work/dangerous-method/', base).href);
+  const workImages = page.locator('.work-media img');
+  assert.equal(await workImages.count(), 2, 'The Dangerous Method page should show its two selected stills');
+  const workImageMetadata = await workImages.evaluateAll((images) =>
+    images.map((img) => ({ src: img.getAttribute('src'), alt: img.getAttribute('alt') })),
+  );
+  assert.ok(workImageMetadata.every((item) => item.src?.startsWith('https://') && item.alt?.trim()),
+    'Published stills should use HTTPS image URLs and non-empty alt text');
+
+  await page.goto(new URL('#space', base).href);
+  const chapterImages = page.locator('#space .step__media img');
+  assert.equal(await chapterImages.count(), 3, 'The Space chapter should show three historical photographs');
+  const chapterImageMetadata = await chapterImages.evaluateAll((images) =>
+    images.map((img) => ({ src: img.getAttribute('src'), alt: img.getAttribute('alt') })),
+  );
+  assert.ok(chapterImageMetadata.every((item) => item.src?.startsWith('https://') && item.alt?.trim()),
+    'Published photographs should use HTTPS image URLs and non-empty alt text');
+
   // Reduced-motion preference is respected by global styles.
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(base);

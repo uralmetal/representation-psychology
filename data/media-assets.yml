@@ -4,17 +4,18 @@ version: 1
 assets:
   - id: analyze-this-still-01
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: analyze-this
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Анализируй это» (1999) кадр 1.jpg"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%C2%AB%D0%90%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7%D0%B8%D1%80%D1%83%D0%B9%20%D1%8D%D1%82%D0%BE%C2%BB%20(1999)%20%D0%BA%D0%B0%D0%B4%D1%80%201.jpg"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Портрет специалиста и интерьер; слабее показывает взаимодействие, требуется проверить, связан ли кадр с анализируемой сценой. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "Мужчина сидит в кресле в комнате с книжными полками и рабочей мебелью; руки сложены перед собой."
-    caption: "Черновая подпись: кандидатный кадр из «Анализируй это». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из «Анализируй это» (1999): мужчина сидит в кресле в комнате с книжными полками и рабочей мебелью. Иллюстрирует интерьер и портретную композицию; конкретный эпизод не указан."
     attribution: null
     legal_basis: null
     legal_review:
@@ -84,17 +85,18 @@ assets:
       reviewed_at: null
   - id: dangerous-method-still-01
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: dangerous-method
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 1.webp"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%C2%AB%D0%9E%D0%BF%D0%B0%D1%81%D0%BD%D1%8B%D0%B9%20%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%C2%BB%20(2011)%20%D0%BA%D0%B0%D0%B4%D1%80%201.webp"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Глубина резкости и расположение участников могут показывать дистанцию и институциональную асимметрию. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "Женщина находится на переднем плане клинического помещения; мужчина сидит в глубине кадра."
-    caption: "Черновая подпись: кандидатный кадр из «Опасный метод». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из «Опасного метода» (2011): женщина находится на переднем плане клинического помещения, мужчина сидит в глубине кадра. Иллюстрирует глубину пространства и взаимное расположение участников."
     attribution: null
     legal_basis: null
     legal_review:
@@ -104,17 +106,18 @@ assets:
       reviewed_at: null
   - id: dangerous-method-still-02
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: dangerous-method
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/«Опасный метод» (2011) кадр 2.jpg"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%C2%AB%D0%9E%D0%BF%D0%B0%D1%81%D0%BD%D1%8B%D0%B9%20%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%C2%BB%20(2011)%20%D0%BA%D0%B0%D0%B4%D1%80%202.jpg"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Потенциально показывает наблюдение и фиксацию реакции пациентки в клинической встрече. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "Женщина сидит на переднем плане и держит пальцы у рта; мужчина в тёмном костюме позади неё делает записи в блокноте."
-    caption: "Черновая подпись: кандидатный кадр из «Опасный метод». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из «Опасного метода» (2011): женщина сидит на переднем плане, мужчина позади неё делает записи в блокноте. Иллюстрирует наблюдение и фиксацию происходящего в клинической обстановке."
     attribution: null
     legal_basis: null
     legal_review:
@@ -184,17 +187,18 @@ assets:
       reviewed_at: null
   - id: en-therapie-still-02
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: en-therapie
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/В терапии (2021-2022) кадр 2.jpg"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%D0%92%20%D1%82%D0%B5%D1%80%D0%B0%D0%BF%D0%B8%D0%B8%20(2021-2022)%20%D0%BA%D0%B0%D0%B4%D1%80%202.jpg"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Показывает разные позиции участников и использование дивана; важно сопоставить с тезисом главы, не представлять положение как универсальную норму. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "Мужчина сидит в кресле рядом с женщиной, лежащей на диване; вокруг видны книжные полки и домашняя обстановка."
-    caption: "Черновая подпись: кандидатный кадр из «В терапии». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из сериала «В терапии» (2021–2022): мужчина сидит в кресле рядом с женщиной, лежащей на диване. Показывает разные позиции участников в пространстве кабинета."
     attribution: null
     legal_basis: null
     legal_review:
@@ -244,17 +248,18 @@ assets:
       reviewed_at: null
   - id: web-therapy-still-01
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: web-therapy
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Веб‑терапия (2011) кадр 1.jpeg"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%D0%92%D0%B5%D0%B1%E2%80%91%D1%82%D0%B5%D1%80%D0%B0%D0%BF%D0%B8%D1%8F%20(2011)%20%D0%BA%D0%B0%D0%B4%D1%80%201.jpeg"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Наглядно показывает интерфейс видеосвязи; по описанию S2E1 Camilla — консультант Кипа, а не клиент Фионы. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "На экране Mac видны два окна Skype: слева окно Fiona Wallice, справа — Camilla Bowner."
-    caption: "Черновая подпись: кандидатный кадр из «Веб-терапия». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из сериала «Веб-терапия» (2011): на экране компьютера открыты два окна Skype. Иллюстрирует интерфейс дистанционной консультации."
     attribution: null
     legal_basis: null
     legal_review:
@@ -324,17 +329,18 @@ assets:
       reviewed_at: null
   - id: sopranos-still-01
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: sopranos
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 1.jpg"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%D0%9A%D0%BB%D0%B0%D0%BD%20%D0%A1%D0%BE%D0%BF%D1%80%D0%B0%D0%BD%D0%BE%20(1999-2007)%20%D0%BA%D0%B0%D0%B4%D1%80%201.jpg"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Чётко показывает организацию терапевтического пространства и взаимную дистанцию. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "Два человека сидят в креслах друг напротив друга в кабинете; между ними низкий стеклянный стол."
-    caption: "Черновая подпись: кандидатный кадр из «Клан Сопрано». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из сериала «Клан Сопрано» (1999–2007): два человека сидят в креслах друг напротив друга; между ними расположен низкий стеклянный стол. Показывает организацию кабинета и дистанцию между участниками."
     attribution: null
     legal_basis: null
     legal_review:
@@ -364,17 +370,18 @@ assets:
       reviewed_at: null
   - id: sopranos-still-03
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: sopranos
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 3.jpg"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%D0%9A%D0%BB%D0%B0%D0%BD%20%D0%A1%D0%BE%D0%BF%D1%80%D0%B0%D0%BD%D0%BE%20(1999-2007)%20%D0%BA%D0%B0%D0%B4%D1%80%203.jpg"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Сильный пример пространственной дистанции и статусной композиции кабинета. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "Широкий план кабинета: женщина и мужчина сидят далеко друг от друга по разные стороны низкого стола."
-    caption: "Черновая подпись: кандидатный кадр из «Клан Сопрано». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из сериала «Клан Сопрано» (1999–2007): широкий план кабинета, где женщина и мужчина сидят по разные стороны низкого стола. Показывает пространственную дистанцию и композицию кабинета."
     attribution: null
     legal_basis: null
     legal_review:
@@ -384,17 +391,18 @@ assets:
       reviewed_at: null
   - id: sopranos-still-04
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: sopranos
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Клан Сопрано (1999-2007) кадр 4.jpg"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%D0%9A%D0%BB%D0%B0%D0%BD%20%D0%A1%D0%BE%D0%BF%D1%80%D0%B0%D0%BD%D0%BE%20(1999-2007)%20%D0%BA%D0%B0%D0%B4%D1%80%204.jpg"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Ракурс через плечо собеседника и выделение специалиста; может служить примером визуальной иерархии. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "Женщина сидит в кресле, скрестив ноги; на переднем плане видна размытая фигура собеседника."
-    caption: "Черновая подпись: кандидатный кадр из «Клан Сопрано». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из сериала «Клан Сопрано» (1999–2007): женщина сидит в кресле, на переднем плане видна размытая фигура собеседника. Показывает ракурс через плечо и визуальное выделение одного участника."
     attribution: null
     legal_basis: null
     legal_review:
@@ -404,17 +412,18 @@ assets:
       reviewed_at: null
   - id: mr-robot-still-01
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: mr-robot
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Мистер Робот (2015-2019) кадр 1.jpg"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%D0%9C%D0%B8%D1%81%D1%82%D0%B5%D1%80%20%D0%A0%D0%BE%D0%B1%D0%BE%D1%82%20(2015-2019)%20%D0%BA%D0%B0%D0%B4%D1%80%201.jpg"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Сильный общий план кабинета и пространственного разделения участников. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "В кабинете мужчина сидит на диване слева, женщина — в кресле справа; между ними большое свободное пространство."
-    caption: "Черновая подпись: кандидатный кадр из «Мистер Робот». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из сериала «Мистер Робот» (2015–2019): мужчина сидит на диване слева, женщина — в кресле справа; между ними остаётся большое свободное пространство. Показывает планировку кабинета и дистанцию."
     attribution: null
     legal_basis: null
     legal_review:
@@ -464,17 +473,18 @@ assets:
       reviewed_at: null
   - id: the-undoing-still-01
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: the-undoing
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Отыграть назад (2020) кадр 1.jpg"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%D0%9E%D1%82%D1%8B%D0%B3%D1%80%D0%B0%D1%82%D1%8C%20%D0%BD%D0%B0%D0%B7%D0%B0%D0%B4%20(2020)%20%D0%BA%D0%B0%D0%B4%D1%80%201.jpg"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Может показывать конфигурацию парной сессии, но эпизод и роли участников не подтверждены. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "На переднем плане виден затылок человека с кудрявыми волосами; напротив на диване сидят два мужчины."
-    caption: "Черновая подпись: кандидатный кадр из «Отыграть назад». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из сериала «Отыграть назад» (2020): на переднем плане виден затылок человека, напротив на диване сидят два мужчины. Иллюстрирует конфигурацию участников и организацию пространства."
     attribution: null
     legal_basis: null
     legal_review:
@@ -544,17 +554,18 @@ assets:
       reviewed_at: null
   - id: cuckoos-nest-still-03
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: cuckoos-nest
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 3.png"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%D0%9F%D1%80%D0%BE%D0%BB%D0%B5%D1%82%D0%B0%D1%8F%20%D0%BD%D0%B0%D0%B4%20%D0%B3%D0%BD%D0%B5%D0%B7%D0%B4%D0%BE%D0%BC%20%D0%BA%D1%83%D0%BA%D1%83%D1%88%D0%BA%D0%B8%20(1975)%20%D0%BA%D0%B0%D0%B4%D1%80%203.png"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Сильный общий план групповой сцены, показывает расположение участников и центральную позицию ведущей. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "Группа людей сидит полукругом в комнате; несколько человек поднимают руки, в центре сидит женщина в медицинской форме."
-    caption: "Черновая подпись: кандидатный кадр из «Пролетая над гнездом кукушки». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из фильма «Пролетая над гнездом кукушки» (1975): группа людей сидит полукругом, несколько человек поднимают руки; женщина в медицинской форме находится в центральной части кадра. Показывает организацию групповой сцены."
     attribution: null
     legal_basis: null
     legal_review:
@@ -564,17 +575,18 @@ assets:
       reviewed_at: null
   - id: cuckoos-nest-still-04
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: cuckoos-nest
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Пролетая над гнездом кукушки (1975) кадр 4.png"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%D0%9F%D1%80%D0%BE%D0%BB%D0%B5%D1%82%D0%B0%D1%8F%20%D0%BD%D0%B0%D0%B4%20%D0%B3%D0%BD%D0%B5%D0%B7%D0%B4%D0%BE%D0%BC%20%D0%BA%D1%83%D0%BA%D1%83%D1%88%D0%BA%D0%B8%20(1975)%20%D0%BA%D0%B0%D0%B4%D1%80%204.png"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Сильный материал для обсуждения контроля, групповой динамики и пространства институции. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "Широкий план комнаты: женщина в медицинской форме сидит напротив группы людей, расположенных по кругу."
-    caption: "Черновая подпись: кандидатный кадр из «Пролетая над гнездом кукушки». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из фильма «Пролетая над гнездом кукушки» (1975): женщина в медицинской форме сидит напротив группы людей, расположенных по кругу. Показывает расстановку участников и организацию институционального пространства."
     attribution: null
     legal_basis: null
     legal_review:
@@ -624,17 +636,18 @@ assets:
       reviewed_at: null
   - id: de-gales-hus-still-02
     kind: film_still
-    status: candidate
+    status: published_by_request
     work_id: de-gales-hus
     scene_id: null
     screen_time_reference: null
     source_file: "materials/new_materials/Кадры из фильмов/Сумасшедший дом (2008) кадр 2.jpg"
     public_path: null
+    image_url: "https://raw.githubusercontent.com/uralmetal/representation-psychology/main/materials/new_materials/%D0%9A%D0%B0%D0%B4%D1%80%D1%8B%20%D0%B8%D0%B7%20%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2/%D0%A1%D1%83%D0%BC%D0%B0%D1%81%D1%88%D0%B5%D0%B4%D1%88%D0%B8%D0%B9%20%D0%B4%D0%BE%D0%BC%20(2008)%20%D0%BA%D0%B0%D0%B4%D1%80%202.jpg"
     source_url: null
     creator_or_rightsholder: null
     analysis_purpose: "Предварительная аналитическая гипотеза: Может показывать институциональную/групповую обстановку, но связь с заявленной единицей анализа не подтверждена. Принадлежность к конкретному эпизоду и единице анализа не подтверждена; требуется сверка с оригиналом произведения."
     alt: "Три человека сидят в ряд у больших окон в помещении с простыми стульями."
-    caption: "Черновая подпись: кандидатный кадр из «Сумасшедший дом». Конкретный эпизод и точный таймкод этого файла пока не подтверждены; до отдельной проверки публично не использовать."
+    caption: "Кадр из фильма «Сумасшедший дом» (2008): три человека сидят в ряд у больших окон в помещении с простыми стульями. Иллюстрирует групповую/институциональную обстановку."
     attribution: null
     legal_basis: null
     legal_review:
@@ -699,13 +712,14 @@ assets:
 
   - id: freud-waiting-room-2016
     kind: photograph
-    status: pending_review
+    status: published_by_request
     work_id: dangerous-method
     analysis_unit: work_overall
     chapter_anchor: space
     scene_id: null
     source_file: null
     public_path: null
+    image_url: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Freuds_Wartezimmer_in_der_Berggasse_19.jpg"
     source_url: "https://commons.wikimedia.org/wiki/File:Freuds_Wartezimmer_in_der_Berggasse_19.jpg"
     source_date: "31 марта 2016 года."
     source_notes: "Собственная фотография автора Siesta; на странице файла указана лицензия CC BY-SA 4.0. Снимок сделан в Berggasse 19, Вена. Это фотография 2016 года, а не исторический снимок начала XX века."
@@ -752,13 +766,14 @@ assets:
 
   - id: freud-practice-notice-1891
     kind: photograph
-    status: pending_review
+    status: published_by_request
     work_id: dangerous-method
     analysis_unit: work_overall
     chapter_anchor: space
     scene_id: null
     source_file: null
     public_path: null
+    image_url: "https://upload.wikimedia.org/wikipedia/commons/a/aa/Freud_anuncio_consultorio.jpg"
     source_url: "https://commons.wikimedia.org/wiki/File:Freud_anuncio_consultorio.jpg"
     source_date: "Фотография сделана 12 июня 2010 года; изображённое объявление относится к 1891 году."
     source_notes: "Автор страницы Commons — Marjorie Apel; в описании указано, что это её собственная фотография исторического объявления о начале приёма Фрейда по адресу Berggasse 19. Текст объявления и его историческая атрибуция требуют сверки с музейным/архивным источником."
@@ -779,13 +794,14 @@ assets:
 
   - id: freud-consulting-room-door-2010
     kind: photograph
-    status: pending_review
+    status: published_by_request
     work_id: dangerous-method
     analysis_unit: work_overall
     chapter_anchor: space
     scene_id: null
     source_file: null
     public_path: null
+    image_url: "https://upload.wikimedia.org/wikipedia/commons/6/62/Puerta_Consultorio_Freud.jpg"
     source_url: "https://commons.wikimedia.org/wiki/File:Puerta_Consultorio_Freud.jpg"
     source_date: "12 июня 2010 года."
     source_notes: "Собственная фотография Marjorie Apel; карточка Wikimedia Commons описывает входную дверь в кабинет Фрейда по адресу Berggasse 19. Это современная фотография места, не исторический снимок времён Фрейда и не изображение декораций фильма."

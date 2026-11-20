@@ -193,6 +193,7 @@
             {@const spec = vizSpec(s.viz, works, scenes, entries)}
             {#if spec}
               <Viz
+                base={base}
                 kind={spec.kind}
                 title={spec.title}
                 subtitle={spec.subtitle}

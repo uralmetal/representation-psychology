@@ -70,7 +70,7 @@ class CommonsReviewFetcherTests(unittest.TestCase):
         sleep.assert_called_once_with(7)
 
     def test_copies_local_png_into_review_artifact_with_checksum(self):
-        payload = b"\\x89PNG\\r\\n\\x1a\\nreview-only"
+        payload = b"\x89PNG\r\n\x1a\nreview-only"
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             source = root / "candidate.png"
@@ -90,7 +90,7 @@ class CommonsReviewFetcherTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             outside = root.parent / "outside.png"
-            outside.write_bytes(b"\\x89PNG\\r\\n\\x1a\\n")
+            outside.write_bytes(b"\x89PNG\r\n\x1a\n")
             with self.assertRaises(ValueError):
                 MODULE.copy_local_png_candidate(
                     "../outside.png", "test-asset", "analyze-this",

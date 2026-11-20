@@ -6,12 +6,13 @@ anchor: space
 viz: space-matrix
 scene_ids:
   - cuckoos-nest-unit
+  - de-gales-hus-unit
+  - dangerous-method-unit
   - sopranos-unit
+  - the-undoing-unit
   - analyze-this-unit
   - en-therapie-unit
-  - dangerous-method-unit
   - mr-robot-unit
-  - the-undoing-unit
 ---
 
 Пространство взаимодействия задаёт отношение к помощи и профессиональной власти ещё до первой реплики. В словаре пять типов пространств. Не все единицы корпуса описывают отдельную сессию: часть строк относится к произведению целиком.
